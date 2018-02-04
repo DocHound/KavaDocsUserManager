@@ -21,8 +21,17 @@ namespace KavaDocsUserManager.Business
             Configuration = config;
         }
 
+        public bool CreateOrganization(Organization organization)
+        {
+            Context.Organizations.Add(organization);
 
+            if (!Validate(organization))
+                return false;
 
+            return Save();
+        }
+    
+        
         public bool AddRepositoryToOrganization(Guid organizationId, Guid repositoryId)
         {
 

@@ -592,6 +592,9 @@ namespace Westwind.Data.EfCore
         /// 
         /// If entity is not passed on SaveChanges is called
         /// </summary>
+        /// <remarks>
+        /// For raw saving without pre-/post processing use SaveChanges()
+        /// </remarks>
         /// <returns></returns>
         public bool Save(TEntity entity = null)
         {
@@ -634,6 +637,60 @@ namespace Westwind.Data.EfCore
             return true;
         }
 
+
+        /// <summary>
+        /// Wrapper around the Context.SaveChanges that doesn't throw.
+        /// Use this for multiple data operations that are not explicitly
+        /// saving single instances and bypassed validation.
+        /// </summary>
+        /// <remarks>
+        /// For validation and pre/post-processing hooks use the Save method.
+        /// </remarks>
+        /// <returns>number of records affected. -1 for failure.</returns>
+        public int SaveChanges()
+        {
+            int result = -1;
+            try
+            {
+                result = Context.SaveChanges();
+                if (result == -1)
+                    return -1;
+            }
+            catch (Exception ex)
+            {
+                SetError(ex.GetBaseException());
+                return -1;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Wrapper around the Context.SaveChanges that doesn't throw.
+        /// Use this for multiple data operations that are not explicitly
+        /// saving single instances and bypassed validation.
+        /// </summary>
+        /// <remarks>
+        /// For validation and pre/post-processing hooks use the Save method.
+        /// </remarks>
+        /// <returns>number of records affected. -1 for failure.</returns>
+        public async Task<int> SaveChangesAsync()
+        {
+            int result = -1;
+            try
+            {
+                result = await Context.SaveChangesAsync();
+                if (result == -1)
+                    return -1;
+            }
+            catch (Exception ex)
+            {
+                SetError(ex.GetBaseException());
+                return -1;
+            }
+
+            return result;
+        }
 
 
         /// <summary>

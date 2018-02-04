@@ -48,14 +48,6 @@ namespace KavaDocsUserManager.Business.Tests
             Assert.IsNotNull(orgId);
 
             orgBus.AddRepositoryToOrganization(orgId, repoId);
-
-            //var userId = TestHelper.UserId2;
-            //var repoBus = TestHelper.GetRepositoryBusiness();
-
-            //var firstId = repoBus.Context.Repositories.Select(r => r.Id).FirstOrDefault();
-            //Console.WriteLine(firstId);
-
-            //Assert.IsTrue(repoBus.AddContributorToRepository(firstId, userId));
         }
         
     }
