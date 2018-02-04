@@ -13,8 +13,15 @@ namespace KavaDocsUserManager.Business.Tests
         [Test]
         public void GetUserTest()
         {
-            //var context = TestHelper.GetContext();
-            //context.Database.ExecuteSqlCommand("drop table users; drop table repositories; drop table organizations");
+            string sqlDrop = @"
+drop table UserRepositories
+drop table OrganizationRepositories
+drop table users
+drop table Repositories
+drop table Organizations
+";
+            var ctx = TestHelper.GetContext();
+            ctx.Database.ExecuteSqlCommand(sqlDrop);
 
             var userBus = TestHelper.GetUserBusiness();
 
@@ -60,6 +67,20 @@ namespace KavaDocsUserManager.Business.Tests
             Assert.IsTrue(userBus.DeleteRepository(map.RepositoryId),userBus.ErrorMessage);
         }
 
+
+        [Test]
+        public void AuthenticateUserTest()
+        {
+            var userBus = TestHelper.GetUserBusiness();
+
+            var user = userBus.AuthenticateAndRetrieveUser("rstrahL@west-wind.com","testing");
+            Assert.IsNotNull(user);
+            Assert.AreEqual(user.Email, "rstrahl@west-wind.com");
+
+
+            Assert.IsTrue(userBus.AuthenticateUser("rstrahL@west-wind.com", "testing"),userBus.ErrorMessage);                       
+
+        }
 
     }
 }

@@ -34,12 +34,10 @@ namespace KavaDocsUserManager.Business
         
         public bool AddRepositoryToOrganization(Guid organizationId, Guid repositoryId)
         {
-
             if (Context.OrganizationRepositories
                 .Any(or => or.OrganizationId == organizationId && or.RepositoryId == repositoryId))
                 return true; // already exists
                 
-
             var organization = Context.Organizations.FirstOrDefault(o => o.Id == organizationId);
             if (organization == null)
             {
