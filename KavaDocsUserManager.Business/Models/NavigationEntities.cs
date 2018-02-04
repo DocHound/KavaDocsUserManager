@@ -14,9 +14,9 @@ namespace KavaDocsUserManager.Business.Models
     //    //public Organization Organization { get; set; }
     //}
 
-    public class UserRepository
+    public class RepositoryUser
     {
-        public UserRepository()
+        public RepositoryUser()
         {
             Id = Guid.NewGuid();
         }
@@ -24,8 +24,10 @@ namespace KavaDocsUserManager.Business.Models
 
         public Guid Id { get; set; }
 
-        [ForeignKey("User")]
+        public bool IsOwner { get; set; }
 
+
+        [ForeignKey("User")]
         public Guid UserId { get; set; }
         public User User { get; set; }
 
@@ -33,24 +35,26 @@ namespace KavaDocsUserManager.Business.Models
         public Guid RepositoryId { get; set; }
 
         public Repository Respository { get; set; }
-    }
-
-    public class RepositoryContributor
-    {
-        public RepositoryContributor()
-        {
-            Id = Guid.NewGuid();
-        }
-        public Guid Id { get; set; }
-
-        public Guid RepositoryId { get; set; }
-        public Guid Respository { get; set; }
-
-
-        public Guid ContributorId { get; set; }
-
-        public Guid Contributor { get; set; }
 
     }
+
+    //public class RepositoryContributor
+    //{
+    //    public RepositoryContributor()
+    //    {
+    //        Id = Guid.NewGuid();
+    //    }
+    //    public Guid Id { get; set; }
+        
+    //    [ForeignKey("Repository")]
+    //    public Guid RepositoryId { get; set; }
+    //    public Repository Respository { get; set; }
+
+
+    //    [ForeignKey("User")]
+    //    public Guid UserId { get; set; }
+    //    public User User { get; set; }
+
+    //}
 
 }

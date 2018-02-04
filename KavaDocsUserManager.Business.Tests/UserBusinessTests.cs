@@ -18,18 +18,18 @@ namespace KavaDocsUserManager.Business.Tests
 
             var userBus = TestHelper.GetUserBusiness();
 
-            var id = new Guid("11111111-0589-4951-ad11-dae7fb1566cb");  
+            var id = TestHelper.UserId1;
             var user = userBus.GetUser(id);
 
             Assert.IsNotNull(user);
         }
 
         [Test]
-        public void AddRepositoryToUser()
+        public void AddRepositoryToUserTest()
         {
             var userBus = TestHelper.GetUserBusiness();
 
-            var id = new Guid("11111111-0589-4951-ad11-dae7fb1566cb");
+            var id = TestHelper.UserId1;
             var user = userBus.Load(id);
 
             Assert.IsNotNull(user);
@@ -43,21 +43,21 @@ namespace KavaDocsUserManager.Business.Tests
                 Settings = "{ \"RepositoryType\": \"GitHubRaw\", \"GitHubMasterUrl\":  \"https://raw.githubusercontent.com/RickStrahl/MarkdownMonster/master/Docs/\" }"
             };
 
-            userBus.AddRepositoryToUser(user.Id, repo);
+            userBus.CreateRepositoryForUser(user.Id, repo);
 
             
             Assert.IsTrue(userBus.Save(), userBus.ErrorMessage);
         }
 
         [Test]
-        public void RemoveRepositoryToUser()
+        public void RemoveRepositoryToUserTest()
         {
             var userBus = TestHelper.GetUserBusiness();
 
-            var map = userBus.Context.UsersRepositories.FirstOrDefault();
+            var map = userBus.Context.UserRepositories.FirstOrDefault();
 
 
-            Assert.IsTrue(userBus.RemoveRepositoryFromUser(map.UserId, map.RepositoryId),userBus.ErrorMessage);
+            Assert.IsTrue(userBus.DeleteRepository(map.RepositoryId),userBus.ErrorMessage);
         }
 
 

@@ -4,11 +4,13 @@ using System.Security.Cryptography;
 using System.Text;
 using KavaDocsUserManager.Business.Configuration;
 using KavaDocsUserManager.Business.Models;
+using Microsoft.EntityFrameworkCore;
 using Westwind.Data.EfCore;
 using Westwind.Utilities;
 
 namespace KavaDocsUserManager.Business
 {
+
     public class UserBusiness : EntityFrameworkBusinessObject<KavaDocsContext, User>
     {
         private KavaDocsConfiguration Configuration;
@@ -84,7 +86,9 @@ namespace KavaDocsUserManager.Business
         /// <returns></returns>
         public User GetUser(Guid id)
         {
-            return Context.Users.FirstOrDefault(usr => usr.Id == id);
+            return Context.Users
+                    .Include(b=> b.Repositories)                    
+                    .FirstOrDefault(usr => usr.Id == id);
         }
 
         /// <summary>
@@ -165,45 +169,52 @@ namespace KavaDocsUserManager.Business
 
 
         /// <summary>
-        /// Adds a repository to 
+        /// Creates a new repository for a given user
         /// </summary>
         /// <param name="id"></param>
         /// <param name="repository"></param>
         /// <returns></returns>
-        public bool AddRepositoryToUser(Guid userId, Repository repository)
+        public bool CreateRepositoryForUser(Guid userId, Repository repository)
         {
             var user = Context.Users.FirstOrDefault(u=> u.Id == userId);
             if (user == null)
                 return false;
-                        
-            var map = new UserRepository()
+
+            // already attached - just return
+            if (Context.UserRepositories.Any(ur => ur.UserId == userId && ur.RepositoryId == repository.Id))
+                return true;
+
+            var map = new RepositoryUser()
             {
-                UserId = user.Id, Respository = repository
+                UserId = user.Id,
+                Respository = repository,
+                IsOwner = true
             };
             user.Repositories.Add(map);
             
             return Save();
         }
 
-        public bool RemoveRepositoryFromUser(Guid userId, Guid repoId)
-        {
-            var user = Context.Users.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-                return false;
 
+        /// <summary>
+        /// Deletes a repository
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="repoId"></param>
+        /// <returns></returns>
+        public bool DeleteRepository(Guid repoId)
+        {
             var repo = Context.Repositories.FirstOrDefault(r => r.Id == repoId);
             if (repo == null)
             {
                 SetError("Invalid repository to remove.");
                 return false;
             }
+
+            var userRepo = Context.UserRepositories.FirstOrDefault(m=> m.RepositoryId == repoId);
+            Context.UserRepositories.Remove(userRepo);
             
-            var map = Context.UsersRepositories.FirstOrDefault(m => m.RepositoryId == repoId && m.UserId == userId);
-            if (map != null)
-            {
-                Context.UsersRepositories.Remove(map);
-                Context.Repositories.Remove(repo);
-            }
+            Context.Remove(repo);
 
             AutoValidate = false;
             return Save();

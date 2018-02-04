@@ -13,6 +13,9 @@ namespace KavaDocsUserManager.Business.Tests
 
         public static KavaDocsConfiguration Configuration { get; set; } = KavaDocsConfiguration.Current;
         
+        public static Guid UserId1 { get; set; } = new Guid("11111111-0589-4951-ad11-dae7fb1566cb");
+        public static Guid UserId2 { get; set; } = new Guid("22222222-0589-4951-ad11-dae7fb1566cb");
+
         public static KavaDocsContext GetContext()
         {
             var options = new DbContextOptionsBuilder<KavaDocsContext>()
@@ -23,6 +26,7 @@ namespace KavaDocsUserManager.Business.Tests
             DatabaseCreator.EnsureKavaDocsData(ctx);
             return ctx;
         }
+        
 
         public static UserBusiness GetUserBusiness()
         {

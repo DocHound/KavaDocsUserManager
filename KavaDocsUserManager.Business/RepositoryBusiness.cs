@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using KavaDocsUserManager.Business.Configuration;
 using KavaDocsUserManager.Business.Models;
+using Microsoft.EntityFrameworkCore;
 using Westwind.Data.EfCore;
 using Westwind.Utilities;
 
@@ -32,7 +33,101 @@ namespace KavaDocsUserManager.Business
 
             return true;
         }
-        
+
+        public Repository GetRepository(Guid id)
+        {
+            return Context.Repositories
+                .Include("Users")
+                .Include("Contributors")
+                .FirstOrDefault(r => r.Id == id);
+        }
+
+
+        public bool AddContributorToRepository(Guid repoId, Guid userId)
+        {
+            var repo = Context.Repositories.FirstOrDefault(u => u.Id == repoId);
+            if (repo == null)
+            {
+                SetError("Respositor to add user to doesn't exist.");
+                return false;
+            }
+
+            var user = Context.Users.FirstOrDefault(u => u.Id == userId);
+            if (user == null)
+            {
+                SetError("User to add to repository doesn't exist.");
+                return false;
+            }                
+            
+            if(Context.UserRepositories.Any(c => c.RepositoryId == repoId && c.UserId == userId))            
+                return true; // already an owner or contributor
+
+            var map = new RepositoryUser()
+            {
+                RepositoryId = repo.Id,                
+                UserId = user.Id,
+                IsOwner = false
+            };
+            repo.Users.Add(map);
+
+            //// already a contributor
+            //if (Context.RepositoryUser.Any(c => c.RepositoryId == repoId && c.UserId == userId))
+            //    return true;
+
+            //// User is the owner
+            //if (Context.UserRepositories.Any(c => c.RepositoryId == repoId && c.UserId == userId))
+            //    return true;
+
+            //var map = new RepositoryContributor()
+            //{
+            //    RepositoryId = repo.Id,
+            //    UserId = user.Id
+            //};
+            //repo.Contributors.Add(map);
+
+            return Save();
+        }
+
+
+        //public bool RemoveContributorFromRepository(Guid repoId, Guid contributorId)
+        //{
+        //    var repo = Context.Repositories.FirstOrDefault(u => u.Id == repoId);
+        //    if (repo == null)
+        //        return false;
+
+        //    var contrib = Context.Contributors.FirstOrDefault(r => r.Id == contributorId);
+        //    if (contrib == null)
+        //        return false;
+
+        //    var map = Context.RepositoryContributors
+        //            .FirstOrDefault(m => m.RepositoryId == repoId && m.ContributorId == contributorId);
+        //    if (map != null)
+        //    {
+        //        Context.RepositoryContributors.Remove(map);
+        //        Context.Contributors.Remove(contrib);
+        //    }
+
+        //    AutoValidate = false;
+        //    return Save();
+        //}
+
+
+        public bool DeleteRepository(Guid repoId)
+        {
+
+            // remove users for that repository
+            var users = Context.UserRepositories.Where(u => u.Id == repoId);
+            Context.UserRepositories.RemoveRange(users);
+
+            var repo = Context.Repositories.FirstOrDefault(r => r.Id == repoId);
+            if (repo != null)
+                Context.Repositories.Remove(repo);
+
+            AutoValidate = false;
+            return Save();
+
+        }
+
         public string SafeRepositoryName(string title)
         {            
             if (string.IsNullOrEmpty(title))

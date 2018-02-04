@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Text;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace KavaDocsUserManager.Business.Models
 {
+
+    [DebuggerDisplay("{UserDisplayName}")]
     public class User
     {
         public User()
         {
             Id = Guid.NewGuid();
-            Repositories = new List<UserRepository>();
+            Repositories = new List<RepositoryUser>();
         }
 
         public Guid Id { get; set; }
 
+        [Required]
         public string UserDisplayName { get; set; }
 
         [Required]
@@ -42,7 +46,7 @@ namespace KavaDocsUserManager.Business.Models
         [XmlIgnore]
         private string _password;
 
-        public List<UserRepository> Repositories { get; set; }
+        public List<RepositoryUser> Repositories { get; set; }
 
         //public List<UserOrganization> Organizations { get; set; }
 
