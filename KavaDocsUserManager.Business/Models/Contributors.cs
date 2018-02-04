@@ -5,7 +5,7 @@ using System.Text;
 
 namespace KavaDocsUserManager.Business.Models
 {
-    public class Contributors
+    public class Contributor
     {
         public Guid Id { get; set; }
 

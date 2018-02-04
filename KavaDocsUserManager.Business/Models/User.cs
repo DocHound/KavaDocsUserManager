@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace KavaDocsUserManager.Business.Models
 {
@@ -10,9 +12,7 @@ namespace KavaDocsUserManager.Business.Models
         public User()
         {
             Id = Guid.NewGuid();
-
-            Repositories = new List<Repository>();
-            Organizations = new List<Organization>();
+            Repositories = new List<UserRepository>();
         }
 
         public Guid Id { get; set; }
@@ -32,12 +32,23 @@ namespace KavaDocsUserManager.Business.Models
 
         public bool IsAdmin { get; set; }
 
-        public List<Repository> Repositories { get; set; }
+        [JsonIgnore]
+        [Required]
+        public string Password
+        {
+            get { return _password; }
+            set => _password = UserBusiness.HashPassword(value, Id.ToString());
+        }
+        [XmlIgnore]
+        private string _password;
 
-        public List<Organization> Organizations { get; set; }
+        public List<UserRepository> Repositories { get; set; }
+
+        //public List<UserOrganization> Organizations { get; set; }
 
     }
 
+ 
 
-    
+
 }

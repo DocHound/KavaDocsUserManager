@@ -1,8 +1,6 @@
-﻿using System;
-using KavaDocsUserManager.Business.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace KavaDocsUserManagerBusiness
+namespace KavaDocsUserManager.Business.Models
 {
     public class KavaDocsContext : DbContext
     {
@@ -39,19 +37,33 @@ namespace KavaDocsUserManagerBusiness
 
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Repository> Repository { get; set; }
+        public DbSet<Repository> Repositories { get; set; }
 
-        public DbSet<Repository> Organizations { get; set; }
+        //public DbSet<Repository> Organizations { get; set; }
 
-        public DbSet<Contributors> Contributors { get; set; }
+        //public DbSet<Contributor> Contributors { get; set; }
+
+        public DbSet<UserRepository> UsersRepositories { get; set; }
 
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
 
-            //builder.Entity<User>()
-            //    .HasIndex(b => b.Created);
+            //modelBuilder.Entity<UserRepository>()
+            //    .HasKey(b => new { b.UserId, b.RepositoryId });
+            
+            //modelBuilder.Entity<UserRepository>()
+            //    .HasOne(b=> b.User)
+            //    .WithMany(p => p.Repositories)
+            //    .HasForeignKey(pc => pc.UserId);
+
+            //modelBuilder.Entity<UserRepository>()
+            //    .HasOne(b => b.Respository)
+            //    .WithMany(b => b.Users)
+            //    .HasForeignKey(b => b.RepositoryId);
+
+
         }
 
     }

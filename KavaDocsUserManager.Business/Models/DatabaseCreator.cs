@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using KavaDocsUserManagerBusiness;
 
 namespace KavaDocsUserManager.Business.Models
 {
@@ -30,6 +29,28 @@ namespace KavaDocsUserManager.Business.Models
             }
             if (!hasData)
                 throw new InvalidOperationException("No data found and no data created...");
+
+            hasData = context.Users.Any();
+            if (!hasData)
+            {
+                context.Users.AddRange(new[]
+                {
+                    new User()
+                    {
+                        Id=new Guid("11111111-0589-4951-ad11-dae7fb1566cb"),                        
+                        Email="rstrahl@west-wind.com", Password = "wwind", UserDisplayName="RickStrahl",
+                        FirstName = "Rick", LastName = "Strahl", Company="Westwind", IsAdmin = true
+                    },
+                    new User()
+                    {
+                        Id=new Guid("22222222-0589-4951-ad11-dae7fb1566cb"),
+                        Email="megger@eps-software.com", Password = "wwind", UserDisplayName="MarkusEgger",
+                        FirstName = "Markus", LastName = "Egger", Company="EPS Software", IsAdmin = true
+                    },
+                });
+                
+                context.SaveChanges();
+            }
 
             return true;
         }

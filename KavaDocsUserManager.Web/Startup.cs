@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using KavaDocsUserManager.Business.Configuration;
 using KavaDocsUserManager.Business.Models;
-using KavaDocsUserManagerBusiness;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

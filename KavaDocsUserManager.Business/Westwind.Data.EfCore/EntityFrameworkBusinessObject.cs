@@ -166,8 +166,7 @@ namespace Westwind.Data.EfCore
         /// </summary>
         public Exception ErrorException { get; set; }
 
-        #region CRUD operations
-
+        #region Create and Load
         /// <summary>
         /// Creates a new instance of the entity type 
         /// associated to this Repo
@@ -199,7 +198,7 @@ namespace Westwind.Data.EfCore
             return entity;
         }
 
-        #region Load Async
+        
         /// <summary>
         /// Loads an entity by id. Default implementation returns only
         /// the base entity without relationships loaded.
@@ -488,7 +487,7 @@ namespace Westwind.Data.EfCore
         }
         #endregion
 
-
+        #region Saving and Deleting
         /// <summary>
         /// Saves changes to the repo
         /// </summary>
@@ -714,7 +713,25 @@ namespace Westwind.Data.EfCore
         }
         #endregion
 
+        #region Helpers
 
+        /// <summary>
+        /// Determines whether the entity being added is a new entry.
+        /// 
+        /// The entity should belong to a context, if it doesn't 
+        /// null is returned.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public bool? IsNewEntity(TEntity entity)
+        {
+            var entry = Context.Entry(entity);
+            if (entry == null || entry.State == EntityState.Detached)
+                return null;
+
+            return entry.State == EntityState.Added;
+        }
+        #endregion
 
         #region validation
 
@@ -724,10 +741,12 @@ namespace Westwind.Data.EfCore
         /// this method to indicate success or failure.
         /// </summary>
         /// <param name="entity"></param>
+        /// <param name="isNewUser">Pass in optionally to specify whether the item validated is a new item</param>
         /// <returns></returns>
         public virtual bool Validate(TEntity entity)
         {
             ValidationErrors.Clear();
+
 
             bool isValid = OnValidate(entity);
             if (!isValid)
