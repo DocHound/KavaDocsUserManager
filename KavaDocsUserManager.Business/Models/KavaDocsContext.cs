@@ -43,7 +43,7 @@ namespace KavaDocsUserManager.Business.Models
 
         public DbSet<RepositoryUser> UserRepositories { get; set; }
 
-        //public DbSet<RepositoryContributor> RepositoryContributors { get; set; }
+        public DbSet<OrganizationRepository> OrganizationRepositories { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

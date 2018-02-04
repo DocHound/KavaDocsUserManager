@@ -38,5 +38,9 @@ namespace KavaDocsUserManager.Business.Tests
             return new RepositoryBusiness(GetContext(), KavaDocsConfiguration.Current);
         }
 
+        public static OrganizationBusiness GetOrganizationBusiness()
+        {
+            return new OrganizationBusiness(GetContext(), KavaDocsConfiguration.Current);
+        }
     }
 }

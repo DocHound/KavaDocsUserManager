@@ -16,6 +16,7 @@ namespace KavaDocsUserManager.Business.Models
         {
             Id = Guid.NewGuid();
             Repositories = new List<RepositoryUser>();
+            IsActive = true;
         }
 
         public Guid Id { get; set; }
@@ -35,6 +36,8 @@ namespace KavaDocsUserManager.Business.Models
         public DateTime Created { get; set; } = DateTime.UtcNow;
 
         public bool IsAdmin { get; set; }
+
+        public bool IsActive { get; set; }
 
         [JsonIgnore]
         [Required]
