@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KavaDocsUserManager.Business;
 using KavaDocsUserManager.Business.Configuration;
 using KavaDocsUserManager.Business.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -47,6 +48,18 @@ namespace KavaDocsUserManager
                 });
             });
 
+            services.AddTransient<UserBusiness>();
+            services.AddTransient<RepositoryBusiness>();
+            services.AddTransient<OrganizationBusiness>();
+
+            Task.Run(() =>
+            {
+                // preload data on separate thread if possible
+                var ctx = KavaDocsContext.GetWeblogContext(config.ConnectionString);
+                DatabaseCreator.EnsureKavaDocsData(ctx);
+                ctx.Users.Any(p => p.Id == Guid.NewGuid());
+            });
+
             // set up and configure Authentication - make sure to call .UseAuthentication()
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -56,23 +69,15 @@ namespace KavaDocsUserManager
                     o.LogoutPath = "/account/logout";
                 });
 
-
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, 
             IHostingEnvironment env, 
-            KavaDocsConfiguration config,
-            KavaDocsContext context)
+            KavaDocsConfiguration config)
+
         {
-
-            Task.Run(() =>
-            {
-                DatabaseCreator.EnsureKavaDocsData(context);               
-                context.Users.Any(p => p.Id == Guid.NewGuid());
-            });
-
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();

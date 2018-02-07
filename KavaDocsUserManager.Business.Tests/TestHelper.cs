@@ -9,9 +9,9 @@ namespace KavaDocsUserManager.Business.Tests
 {
     public class TestHelper
     {
-        public static string ConnectionString { get; set; } = "server=.;database=KavaDocs;integrated security=true;";
+        //public static string ConnectionString { get; set; } = "server=.;database=KavaDocs;integrated security=true;";
 
-        //public static string ConnectionString { get; set; } = "Server=tcp:kavadocs.database.windows.net,1433;Initial Catalog=kavadocs;Persist Security Info=False;User ID=kavadocs;Password=McbhhUA0FMddt9Qmz77Ogb2A4eiL8F;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        public static string ConnectionString { get; set; } = "Server=tcp:kavadocs.database.windows.net,1433;Initial Catalog=kavadocs;Persist Security Info=False;User ID=kavadocs;Password=McbhhUA0FMddt9Qmz77Ogb2A4eiL8F;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         public static KavaDocsConfiguration Configuration { get; set; } = KavaDocsConfiguration.Current;
         

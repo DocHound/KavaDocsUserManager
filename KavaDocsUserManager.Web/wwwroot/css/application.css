@@ -1,0 +1,116 @@
+﻿html {
+    font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.5em;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5 {
+    /*font-family: Trebuchet,'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;*/
+    font-weight: 600;
+    margin-top: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+hr {
+    margin: 12px 0;
+}
+
+h1 {
+    font-size: 1.7em;
+    padding-bottom: 10px;
+    color: steelblue;
+    border-bottom: 1px solid #eee;
+}
+
+h2 {
+    color: Steelblue;
+    font-size: 1.45em;
+}
+
+h3 {
+    color: steelblue;
+    font-size: 1.3em;
+}
+
+h4, h5, h6 {
+    color: #2D2A2A;
+    font-size: 1.1em;
+}
+
+h5, h6 {
+    font-size: 1em;
+}
+
+
+
+.navbar-top {
+    position: fixed;    
+
+    background: #282a2f;
+    color: #eee;    
+    top: 0;
+    left: 0;
+    right: 0;        
+}
+.navbar-header {
+    font-weight: bold;
+    font-size: 1.8em;
+    margin: 5px 10px;    
+}
+.navbar-icon {
+    height: 55px;
+}
+.btn {
+    padding: 0.375rem 0.75rem;
+}
+.navbar-links {    
+    height: 70px;
+    font-size: 0.9em;
+}
+    .navbar-links > * {
+        padding: 10px 15px;
+        margin-right: 5px;        
+        margin-top: 3px;
+        color: #bbb;                
+    }
+    .navbar-links > a {        
+        border-radius: 3px;
+        text-decoration: none;
+        color: #eee;
+    }
+    .navbar-links > a:hover {
+        background: #777;
+        color: White
+    }
+
+/* Main body container from layout */
+.body-content {
+    margin-top: 70px;
+}
+
+/* Content container inside of the content pages */
+.content-container {
+    margin: 100px auto 9px;
+}
+
+.page-header-text {
+    margin-bottom: 40px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;    
+}
+
+footer {
+    
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    height: 100px;
+    padding: 20px;
+    margin-top: 20px;
+
+    font-size: 0.8em;
+    background: #444;
+    color: #eee;
+}

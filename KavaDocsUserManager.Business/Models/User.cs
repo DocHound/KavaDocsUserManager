@@ -31,6 +31,8 @@ namespace KavaDocsUserManager.Business.Models
 
         public string LastName { get; set; }
 
+        public string Initials { get; set; }
+
         public string Company { get; set; }
 
         public DateTime Created { get; set; } = DateTime.UtcNow;

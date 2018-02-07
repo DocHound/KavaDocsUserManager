@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using KavaDocsUserManager.Business.Configuration;
 using KavaDocsUserManager.Business.Models;
 using Microsoft.EntityFrameworkCore;
@@ -143,6 +145,13 @@ namespace KavaDocsUserManager.Business
                 return null;
 
             return title;
+        }
+
+        public async Task<List<Repository>> GetRepositoriesForUser(Guid userId)
+        {
+            return await Context.Repositories
+                .Where(r => r.Users.Any(u=> u.Id == userId))
+                .ToListAsync();
         }
     }
 

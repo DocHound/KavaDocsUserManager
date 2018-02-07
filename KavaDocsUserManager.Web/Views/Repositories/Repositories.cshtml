@@ -1,0 +1,23 @@
+﻿@model KavaDocsUserManager.Web.Views.Repositories.RepositoriesListViewModel
+
+@{
+    ViewData["Title"] = "index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-container" style="max-width: 600px">
+    <h1 class="page-header-text">
+        <i class="fa fa-sign-in"></i>
+        &nbsp;Respositories
+    </h1>
+    
+    @foreach (var repo in Model.Repositories)
+    {
+    <div class="repository-list-item">
+        <div class="repository-list-item-title">@repo.Title</div>
+
+        <div class="repository-list-item-content">@repo.Description</div>
+    </div>
+    }
+
+</div>

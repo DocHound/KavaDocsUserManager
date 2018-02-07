@@ -47,8 +47,7 @@ namespace KavaDocsUserManager.Business.Models
                         Email="megger@eps-software.com", Password = "testing", UserDisplayName="MarkusEgger",
                         FirstName = "Markus", LastName = "Egger", Company="EPS Software", IsAdmin = true
                     },
-                });
-                
+                });                
                 context.SaveChanges();
 
 
@@ -89,9 +88,9 @@ namespace KavaDocsUserManager.Business.Models
 
                 repository = new Repository()
                 {
-                    Prefix = "epsdocs",
-                    Settings = "{ \"RepositoryType\": \"VSTSGit\", \"VSTSGit\": \"https://eps-software.visualstudio.com\", \"VSTSProjectName\": \"EPSDocs\", \"VSTSPAT\":  \"ow5y2hwaz5igq5y662hmzx3ixckv475624a4wn57ohlcqd3tdyrq\" }",
-                    Title = "EPS Docs"                    
+                    Prefix = "eps",
+                    Settings = "{ \"RepositoryType\": \"VSTSGit\", \"VSTSInstance\": \"https://eps-software.visualstudio.com\", \"VSTSProjectName\": \"EPSDocs\", \"VSTSPAT\":  \"ow5y2hwaz5igq5y662hmzx3ixckv475624a4wn57ohlcqd3tdyrq\" }",
+                    Title = "EPS Doc"                    
                 };
                 context.Repositories.Add(repository);
 
@@ -107,7 +106,7 @@ namespace KavaDocsUserManager.Business.Models
                 repository = new Repository()
                 {
                     Prefix = "codeframework",
-                    Settings = "{ \"RepositoryType\": \"GitHubRaw\", \"VSTSDocsFolder\": \"Docs\", \"GitHubMasterUrl\":  \"https://raw.githubusercontent.com/MarkusEggerInc/CodeFrameworkDocs/\" }",
+                    Settings = "{ \"RepositoryType\": \"GitHubRaw\", \"GitHubMasterUrl\":  \"https://raw.githubusercontent.com/codeframework/docs/master/\" }",                    
                     Title = "Code Framework Documentation"
                 };
                 context.Repositories.Add(repository);

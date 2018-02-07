@@ -5,26 +5,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using KavaDocsUserManager.Models;
+using Westwind.AspNetCore;
 
-namespace KavaDocsUserManager.Controllers
+namespace KavaDocsUserManager.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : AppBaseController
     {
         public IActionResult Index()
         {
-            return View();
+            var model = CreateViewModel<AppBaseViewModel>();
+            return View(model);
         }
 
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
 
             return View();
         }

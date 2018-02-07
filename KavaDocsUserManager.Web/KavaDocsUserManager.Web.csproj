@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
+    <PackageReference Include="Westwind.AspNetCore" Version="3.0.12" />
+    <PackageReference Include="Westwind.Utilities" Version="3.0.12" />
   </ItemGroup>
 
   <ItemGroup>
@@ -14,7 +17,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\lib\" />
-    <Folder Include="_Code\" />
   </ItemGroup>
 
   <ItemGroup>
