@@ -47,7 +47,8 @@ h5, h6 {
 .navbar-top {
     position: fixed;    
 
-    background: #282a2f;
+    background: #000000;
+    opacity: 0.85;
     color: #eee;    
     top: 0;
     left: 0;
@@ -60,6 +61,7 @@ h5, h6 {
 }
 .navbar-icon {
     height: 55px;
+    padding-left: 10px;
 }
 .btn {
     padding: 0.375rem 0.75rem;
@@ -68,20 +70,25 @@ h5, h6 {
     height: 70px;
     font-size: 0.9em;
 }
-    .navbar-links > * {
+    .navbar-links .btn {
         padding: 10px 15px;
-        margin-right: 5px;        
-        margin-top: 3px;
-        color: #bbb;                
+        margin-right: 5px;
+        margin-top: 10px;
+        color: #bbb;
+        border-radius: 3px !important;
     }
-    .navbar-links > a {        
-        border-radius: 3px;
+    .navbar-links a.btn  {        
+        border-radius: 3px !important;        
         text-decoration: none;
         color: #eee;
     }
-    .navbar-links > a:hover {
+    .navbar-links  a.btn:hover {
         background: #777;
         color: White
+    }
+    .navbar-links .btn-secondary {
+        background: transparent;
+        border: 1px solid transparent;        
     }
 
 /* Main body container from layout */
@@ -92,6 +99,7 @@ h5, h6 {
 /* Content container inside of the content pages */
 .content-container {
     margin: 100px auto 9px;
+    max-width: 1200px;
 }
 
 .page-header-text {
@@ -99,15 +107,19 @@ h5, h6 {
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;    
 }
+    .page-header-text .fa {
+        padding-right: 7px;
+    }
 
-footer {
-    
+    footer {
+    position: fixed;
+
     bottom: 0;
     left: 0;
     right: 0;
 
-    height: 100px;
-    padding: 20px;
+    height: 40px;
+    padding: 8px 20px;
     margin-top: 20px;
 
     font-size: 0.8em;

@@ -26,19 +26,39 @@ namespace KavaDocsUserManager.Web.Views.Repositories
             var appUser = User.GetAppUser();
 
             var userId = User.GetAppUser().UserId;            
-            var repos = await _repoBusiness.GetRepositoriesForUser(userId);
+            var repos = await _repoBusiness.GetRepositoriesForUserAsync(userId);
             if (repos == null)
                 model.ErrorDisplay.ShowError(_repoBusiness.ErrorMessage, "Couldn't load Repositories");
             else
                 model.Repositories = repos;
 
-            return View("Repositories",model);
+            return View("Repositories", model);
+        }
 
+        [HttpGet]
+        public ActionResult Repository(Guid id)
+        {
+            var model = CreateViewModel<RepositoryViewModel>();
+
+            var appUser = User.GetAppUser();
+            
+            var repos = _repoBusiness.GetRepository(id);
+            if (repos == null)
+                model.ErrorDisplay.ShowError(_repoBusiness.ErrorMessage, "Couldn't load Repositories");
+            else
+                model.Repository = repos;
+
+            return View(model);
         }
     }
 
     public class RepositoriesListViewModel : AppBaseViewModel
     {
         public List<Repository> Repositories { get; set; }
+    }
+
+    public class RepositoryViewModel : AppBaseViewModel
+    {
+        public Repository Repository { get; set; }
     }
 }

@@ -30,6 +30,10 @@ namespace KavaDocsUserManager.Business.Models
             if (!hasData)
                 throw new InvalidOperationException("No data found and no data created...");
 
+
+            var rickId = new Guid("11111111-0589-4951-ad11-dae7fb1566cb");
+            var markusId = new Guid("22222222-0589-4951-ad11-dae7fb1566cb");
+
             hasData = context.Users.Any();
             if (!hasData)
             {
@@ -37,13 +41,13 @@ namespace KavaDocsUserManager.Business.Models
                 {
                     new User()
                     {
-                        Id=new Guid("11111111-0589-4951-ad11-dae7fb1566cb"),                        
+                        Id=rickId,                        
                         Email="rstrahl@west-wind.com", Password = "testing", UserDisplayName="RickStrahl",
                         FirstName = "Rick", LastName = "Strahl", Company="Westwind", IsAdmin = true
                     },
                     new User()
                     {
-                        Id=new Guid("22222222-0589-4951-ad11-dae7fb1566cb"),
+                        Id=markusId,
                         Email="megger@eps-software.com", Password = "testing", UserDisplayName="MarkusEgger",
                         FirstName = "Markus", LastName = "Egger", Company="EPS Software", IsAdmin = true
                     },
@@ -62,27 +66,35 @@ namespace KavaDocsUserManager.Business.Models
 
                 var map = new RepositoryUser()
                 {
-                    UserId = new Guid("22222222-0589-4951-ad11-dae7fb1566cb"),
+                    UserId = markusId,
                     RepositoryId = repository.Id,
                     IsOwner = true
                 };
-                context.UserRepositories.Add(map);                
+                context.UserRepositories.Add(map);
+
+                map = new RepositoryUser()
+                {
+                    UserId = rickId,
+                    RepositoryId = repository.Id,
+                    IsOwner = false
+                };
+                context.UserRepositories.Add(map);
                 context.SaveChanges();
 
                 repository = new Repository()
                 {
                     Prefix = "dn2me",
                     Settings = "{ \"RepositoryType\": \"VSTSGit\", \"VSTSInstance\": \"https://eps-software.visualstudio.com\", \"VSTSProjectName\": \"DN2Me\",\"VSTSDocsFolder\": \"Docs\", \"VSTSPAT\":  \"zi6opdawlmm7mvd3xxaycfxgboz2enbxrdmitjj5nawmbg3ldvtq\" }",
-                    Title = "Kava Docs Documentation"
+                    Title = "Doctors near to Me"
                 };
                 context.Repositories.Add(repository);
 
                 map = new RepositoryUser()
                 {
-                    UserId = new Guid("22222222-0589-4951-ad11-dae7fb1566cb"),
+                    UserId = markusId,
                     RepositoryId = repository.Id,
                     IsOwner = true
-                };
+                };                
                 context.UserRepositories.Add(map);
                 context.SaveChanges();
 
@@ -96,7 +108,7 @@ namespace KavaDocsUserManager.Business.Models
 
                 map = new RepositoryUser()
                 {
-                    UserId = new Guid("22222222-0589-4951-ad11-dae7fb1566cb"),
+                    UserId = markusId,
                     RepositoryId = repository.Id,
                     IsOwner = true
                 };
@@ -113,7 +125,7 @@ namespace KavaDocsUserManager.Business.Models
 
                 map = new RepositoryUser()
                 {
-                    UserId = new Guid("22222222-0589-4951-ad11-dae7fb1566cb"),
+                    UserId = markusId,
                     RepositoryId = repository.Id,
                     IsOwner = true
                 };
@@ -131,13 +143,31 @@ namespace KavaDocsUserManager.Business.Models
 
                 map = new RepositoryUser()
                 {
-                    UserId = new Guid("22222222-0589-4951-ad11-dae7fb1566cb"),
+                    UserId = markusId,
                     RepositoryId = repository.Id,
                     IsOwner = true
                 };
                 context.UserRepositories.Add(map);
                 context.SaveChanges();
 
+
+                repository = new Repository()
+                {
+                    Prefix = "markdownmonster",
+                    Settings = "{ \"RepositoryType\": \"GitHubRaw\", \"GitHubMasterUrl\":  \"https://raw.githubusercontent.com/markdownmonster/docs\" }",
+                    Title = "Markdown Monster"
+
+                };
+                context.Repositories.Add(repository);
+
+                map = new RepositoryUser()
+                {
+                    UserId = rickId,
+                    RepositoryId = repository.Id,
+                    IsOwner = true
+                };
+                context.UserRepositories.Add(map);
+                context.SaveChanges();
 
             }
 

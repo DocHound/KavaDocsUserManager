@@ -9,9 +9,10 @@ namespace KavaDocsUserManager.Business.Tests
 {
     [TestFixture]
     public class UserBusinessTests
-    {        
+    {
+
         [Test]
-        public void GetUserTest()
+        public void RegenerateDataTest()
         {
             string sqlDrop = @"
 drop table UserRepositories
@@ -23,6 +24,17 @@ drop table Organizations
             var ctx = TestHelper.GetContext();
             ctx.Database.ExecuteSqlCommand(sqlDrop);
 
+            var userBus = TestHelper.GetUserBusiness();
+
+            var id = TestHelper.UserId1;
+            var user = userBus.GetUser(id);
+
+            Assert.IsNotNull(user);
+        }
+
+        [Test]
+        public void GetUserTest()
+        {
             var userBus = TestHelper.GetUserBusiness();
 
             var id = TestHelper.UserId1;

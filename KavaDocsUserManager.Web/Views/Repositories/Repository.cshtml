@@ -1,0 +1,44 @@
+﻿@model KavaDocsUserManager.Web.Views.Repositories.RepositoryViewModel
+
+@{
+    ViewData["Title"] = "index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var repo = Model.Repository;
+}
+
+<div class="content-container" >
+    <h1 class="page-header-text">
+        <i class="fa fa-archive"></i>
+        @repo.Title
+    </h1>
+    
+    
+    <div style="margin-top: 50px;">
+        @repo.Description
+    </div>
+    
+    
+
+    <pre><code>
+        @repo.Settings
+    </code></pre>
+
+    @if (repo.Users.Count > 0)
+    {
+
+
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action active" style="font-weight: bold;">
+                Contributors
+            </a>
+
+            @foreach (var user in repo.Users)
+            {
+                <a href="@Url.Content("~/Account/"  + user.Id)"
+                   class="user-list-item list-group-item list-group-item-action">
+                    <div class="repository-list-item-title">@user.User.UserDisplayName</div>                    
+                </a>
+            }
+        </div>
+    }
+</div>

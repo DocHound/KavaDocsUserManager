@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using KavaDocsUserManager.Business.Configuration;
 using KavaDocsUserManager.Business.Models;
 using Microsoft.EntityFrameworkCore;
@@ -38,5 +40,32 @@ namespace KavaDocsUserManager.Business.Tests
 
         }
 
+        [Test]
+        public async Task GetRepositoriesForUserTest()
+        {
+            var repoBus = TestHelper.GetRepositoryBusiness();
+
+            var respos = await repoBus.GetRepositoriesForUserAsync(TestHelper.UserId2);
+            Assert.IsNotNull(respos, repoBus.ErrorMessage);
+            Assert.IsTrue(respos.Count > 0);
+        }
+
+        [Test]
+        public async Task GetRepositoriesForUser2Test()
+        {
+            var repoBus = TestHelper.GetRepositoryBusiness();
+
+            var userId = TestHelper.UserId2;
+
+            var repos = repoBus.Context.Repositories
+                .Include(c => c.Users)
+                .Where(r => r.Users.Any(u => u.UserId == userId))
+                .ToList();
+
+            Assert.IsTrue(repos != null && repos.Count > 0, repoBus.ErrorMessage);
+
+        }
     }
+
+    
 }

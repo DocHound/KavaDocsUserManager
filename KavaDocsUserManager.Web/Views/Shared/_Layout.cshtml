@@ -23,6 +23,7 @@
         <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
         <link rel="stylesheet" href="~/css/application.min.css" asp-append-version="true" />
     </environment>
+    @RenderSection("Headers",required: false);
 </head>
 <body>
     
@@ -38,12 +39,11 @@
     <div class="btn-group" role="group" >
         @if (!appUser.IsAuthenticated())
         {
-
-
             <a href="@Url.Action("Login", "Account")" class="btn btn-default">
                 <i class="fa fa-unlock"></i>
                 Sign in
             </a>
+            <div class="btn">or</div>
             <a href="@Url.Action("Login", "Profile")" class="btn btn-default">
                 <i class="fa fa-unlock"></i>
                 Sign up
@@ -59,7 +59,7 @@
 
 
             <button id="btnProfileDropDown" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src="@Gravatar.GetGravatarLink(appUser.Username, 23)"/>
+                <img src="@Gravatar.GetGravatarLink(appUser.Email, 23)"/>
                 @appUser.Username
             </button>
             <div class="dropdown-menu" aria-labelledby="btnProfileDropDown">
@@ -87,7 +87,7 @@
 
 
 <footer>
-    <p>&copy; DocHound, Inc, 2018</p>
+    <p>&copy; KavaDocs Inc, 2018</p>
 </footer>
 
 <environment include="Development">

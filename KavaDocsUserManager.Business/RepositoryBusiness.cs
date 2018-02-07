@@ -39,8 +39,7 @@ namespace KavaDocsUserManager.Business
         public Repository GetRepository(Guid id)
         {
             return Context.Repositories
-                .Include("Users")
-                .Include("Contributors")
+                .Include(r=> r.Users).ThenInclude(ur=> ur.User)
                 .FirstOrDefault(r => r.Id == id);
         }
 
@@ -147,10 +146,11 @@ namespace KavaDocsUserManager.Business
             return title;
         }
 
-        public async Task<List<Repository>> GetRepositoriesForUser(Guid userId)
+        public async Task<List<Repository>> GetRepositoriesForUserAsync(Guid userId)
         {
             return await Context.Repositories
-                .Where(r => r.Users.Any(u=> u.Id == userId))
+                .Include(c=> c.Users)
+                .Where(r => r.Users.Any(u=> u.UserId == userId))                         
                 .ToListAsync();
         }
     }
