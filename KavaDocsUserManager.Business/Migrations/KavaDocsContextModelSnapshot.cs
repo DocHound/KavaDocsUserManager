@@ -125,6 +125,8 @@ namespace KavaDocsUserManager.Business.Migrations
 
                     b.Property<string>("FirstName");
 
+                    b.Property<string>("Initials");
+
                     b.Property<bool>("IsActive");
 
                     b.Property<bool>("IsAdmin");
@@ -136,6 +138,8 @@ namespace KavaDocsUserManager.Business.Migrations
 
                     b.Property<string>("UserDisplayName")
                         .IsRequired();
+
+                    b.Property<string>("ValidationKey");
 
                     b.HasKey("Id");
 

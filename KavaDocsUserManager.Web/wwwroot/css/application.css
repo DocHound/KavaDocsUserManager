@@ -1,58 +1,11 @@
-﻿html {
-    font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    line-height: 1.5em;
-    -webkit-font-smoothing: antialiased;
-}
-
-h1, h2, h3, h4, h5 {
-    /*font-family: Trebuchet,'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;*/
-    font-weight: 600;
-    margin-top: 1.2em;
-    margin-bottom: 0.5em;
-}
-
-hr {
-    margin: 12px 0;
-}
-
-h1 {
-    font-size: 1.7em;
-    padding-bottom: 10px;
-    color: steelblue;
-    border-bottom: 1px solid #eee;
-}
-
-h2 {
-    color: Steelblue;
-    font-size: 1.45em;
-}
-
-h3 {
-    color: steelblue;
-    font-size: 1.3em;
-}
-
-h4, h5, h6 {
-    color: #2D2A2A;
-    font-size: 1.1em;
-}
-
-h5, h6 {
-    font-size: 1em;
-}
-
-
-
-.navbar-top {
-    position: fixed;    
-
+﻿.navbar-top {
+    position: fixed;
     background: #000000;
     opacity: 0.85;
-    color: #eee;    
+    color: #eee;
     top: 0;
     left: 0;
-    right: 0;        
+    right: 0;
 }
 .navbar-header {
     font-weight: bold;
@@ -64,8 +17,11 @@ h5, h6 {
     padding-left: 10px;
 }
 .btn {
-    padding: 0.375rem 0.75rem;
+    padding: 0.50rem 1rem;
+    color: white !important; 
 }
+
+
 .navbar-links {    
     height: 70px;
     font-size: 0.9em;
@@ -100,8 +56,23 @@ h5, h6 {
 .content-container {
     margin: 100px auto 9px;
     max-width: 1200px;
+    padding: 0 30px;
 }
-
+.input-container {
+    padding: 0 30px;
+}
+@media (max-width: 768px) {
+    .content-container {
+        padding: 0 15px;
+    }
+    .navbar-links .btn, .navbar-links a.btn {
+        padding: 10px 8px;
+        margin-right: 2px;
+    }
+    input-container {
+        padding: 0;
+    }
+}
 .page-header-text {
     margin-bottom: 40px;
     border-bottom: 1px solid #eee;

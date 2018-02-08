@@ -11,8 +11,8 @@ using System;
 namespace KavaDocsUserManager.Business.Migrations
 {
     [DbContext(typeof(KavaDocsContext))]
-    [Migration("20180204100014_Initial")]
-    partial class Initial
+    [Migration("20180208020212_initial_database")]
+    partial class initial_database
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -126,6 +126,8 @@ namespace KavaDocsUserManager.Business.Migrations
 
                     b.Property<string>("FirstName");
 
+                    b.Property<string>("Initials");
+
                     b.Property<bool>("IsActive");
 
                     b.Property<bool>("IsAdmin");
@@ -137,6 +139,8 @@ namespace KavaDocsUserManager.Business.Migrations
 
                     b.Property<string>("UserDisplayName")
                         .IsRequired();
+
+                    b.Property<string>("ValidationKey");
 
                     b.HasKey("Id");
 

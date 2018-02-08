@@ -37,9 +37,37 @@ namespace KavaDocsUserManager.Business.Models
 
         public DateTime Created { get; set; } = DateTime.UtcNow;
 
-        public bool IsAdmin { get; set; }
+        
 
-        public bool IsActive { get; set; }
+        public bool IsAdmin
+        {
+            get
+            {
+                if (!IsActive)
+                    return false;
+
+                return _isAdmin;
+            }
+            set { _isAdmin = value; }
+        }
+        private bool _isAdmin;
+
+        public bool IsActive
+        {
+            get
+            {
+                // account has to be validated!
+                if (string.IsNullOrEmpty(ValidationKey))
+                    return false;
+
+                return _isActive;
+            }
+            set { _isActive = value; }
+        }
+        private bool _isActive;
+
+
+        public string ValidationKey { get; set; }
 
         [JsonIgnore]
         [Required]

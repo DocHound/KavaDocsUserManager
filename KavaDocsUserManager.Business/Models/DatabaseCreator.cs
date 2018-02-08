@@ -19,16 +19,34 @@ namespace KavaDocsUserManager.Business.Models
             {
                 // Force database to get hit
                 hasData = context.Users.Any();
+
             }
             catch
             { }
 
             if (!hasData)
             {
-                hasData = context.Database.EnsureCreated(); // just create the schema - no migrations                
+                hasData = false;
+
+                //
+                try
+                {
+                    var count = context.Users.Count();
+                    if (count > 0)
+                        return true;
+
+                    hasData =false;
+                }
+                catch (Exception ex)
+                {
+                    hasData = context.Database
+                        .EnsureCreated(); // just create the schema - no migrations      
+
+                    if (!hasData)
+                        throw new InvalidOperationException("Couldn't create the database...");                    
+                }
             }
-            if (!hasData)
-                throw new InvalidOperationException("No data found and no data created...");
+    
 
 
             var rickId = new Guid("11111111-0589-4951-ad11-dae7fb1566cb");

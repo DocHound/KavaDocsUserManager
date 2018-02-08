@@ -65,8 +65,8 @@ namespace KavaDocsUserManager
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(o =>
                 {
-                    o.LoginPath = "/account/login";
-                    o.LogoutPath = "/account/logout";
+                    o.LoginPath = "/account/signin";
+                    o.LogoutPath = "/account/signout";
                 });
 
             services.AddMvc();

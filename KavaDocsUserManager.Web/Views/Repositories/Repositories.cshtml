@@ -5,27 +5,50 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
 <div class="content-container">
+
+    <a  href="@Url.Action("Repository")" class="btn btn-success float-right">
+        <i class="far fa-check-circle"></i>
+        &nbsp;New Repository
+    </a>
+
     <h1 class="page-header-text">
-        <i class="fa fa-sign-in"></i>
+        <i class="far fa-archive"></i>
         Repositories
     </h1>
 
-
-    <div class="list-group">
-        <a href="#" class="list-group-item list-group-item-action active">
-            Repositories
-        </a>
-        
-        @foreach (var repo in Model.Repositories)
-        {
-
-            <a asp-action="Repository" asp-route-id="@repo.Id"
-               class="repository-list-item list-group-item list-group-item-action">
-                <div class="repository-list-item-title">@repo.Title</div>
-                <div class="repository-list-item-content">@repo.Description</div>
+    @if (Model.Repositories.Count < 1)
+    {
+        <div class="alert alert-info" style="margin: 0 10%;">
+            You don't have any repositories yet. Ready to create one? Click here: &nbsp;&nbsp;     
+            
+                <a href="@Url.Action("Repository")" class="btn btn-success">
+                    <i class="far fa-check-circle"></i>
+                    &nbsp;New Repository
+                </a>
+                        
+        </div>
+    }
+    else
+    {
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action active">
+                <i class="far fa-archive"></i>
+                Repositories
             </a>
-        }
 
-    </div>
+            @foreach (var repo in Model.Repositories)
+            {
+
+                <a asp-action="Repository" asp-route-id="@repo.Id"
+                   class="repository-list-item list-group-item list-group-item-action">
+                    <div class="repository-list-item-title">@repo.Title</div>
+                    <div class="repository-list-item-content">@repo.Description</div>
+                </a>
+            }
+
+        </div>
+    }
 </div>

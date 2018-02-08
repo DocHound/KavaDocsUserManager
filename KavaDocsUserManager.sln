@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KavaDocsUserManager.Web", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KavaDocsUserManager.Business", "KavaDocsUserManager.Business\KavaDocsUserManager.Business.csproj", "{5F34200D-CC68-419A-B6B0-00EF9F404396}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KavaDocsUserManager.Business.Tests", "KavaDocsUserManager.Business.Tests\KavaDocsUserManager.Business.Tests.csproj", "{67D37FB0-12D1-4053-977C-ED4F10023FA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KavaDocsUserManager.Business.Tests", "KavaDocsUserManager.Business.Tests\KavaDocsUserManager.Business.Tests.csproj", "{67D37FB0-12D1-4053-977C-ED4F10023FA0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Westwind.AspNetCore", "..\Westwind.AspNetCore\Westwind.AspNetCore\Westwind.AspNetCore.csproj", "{C9201219-1A4C-4356-AAEB-0873723E61FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{67D37FB0-12D1-4053-977C-ED4F10023FA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67D37FB0-12D1-4053-977C-ED4F10023FA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67D37FB0-12D1-4053-977C-ED4F10023FA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9201219-1A4C-4356-AAEB-0873723E61FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9201219-1A4C-4356-AAEB-0873723E61FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9201219-1A4C-4356-AAEB-0873723E61FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9201219-1A4C-4356-AAEB-0873723E61FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

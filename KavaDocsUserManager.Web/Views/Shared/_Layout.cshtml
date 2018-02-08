@@ -12,73 +12,75 @@
     <title>@ViewData["Title"] - Kava Docs</title>
 
     <environment include="Development">
+        <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome-all.css" />
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="~/css/application-reset.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/application.css" asp-append-version="true" />
     </environment>
     <environment exclude="Development">
+        <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome-all.min.css" />
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="~/css/application-reset.min.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/application.min.css" asp-append-version="true" />
     </environment>
-    @RenderSection("Headers",required: false);
+    @RenderSection("Headers",required: false)
 </head>
 <body>
     
 <nav class="navbar-top">    
-    <div class="navbar-header pull-left" 
+    <div class="navbar-header float-left" 
          style="cursor: pointer" aria-controls="button"
          onclick="window.location = '@Url.Content("~/")'">
         <img src="~/images/KavaDocsHeaderLogo.png" class="navbar-icon"/>
     </div>
 
-    <div class="navbar-links pull-right">
+    <div class="navbar-links float-right">
         
-    <div class="btn-group" role="group" >
-        @if (!appUser.IsAuthenticated())
-        {
-            <a href="@Url.Action("Login", "Account")" class="btn btn-default">
-                <i class="fa fa-unlock"></i>
-                Sign in
-            </a>
-            <div class="btn">or</div>
-            <a href="@Url.Action("Login", "Profile")" class="btn btn-default">
-                <i class="fa fa-unlock"></i>
-                Sign up
-            </a>
-        }
-        else
-        {
-
-            <a href="@Url.Action("Index", "Repositories")" class="btn btn-default">
-                <i class="fa fa-list-alt"></i>
-                Repositories
-            </a>
-
-
-            <button id="btnProfileDropDown" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src="@Gravatar.GetGravatarLink(appUser.Email, 23)"/>
-                @appUser.Username
-            </button>
-            <div class="dropdown-menu" aria-labelledby="btnProfileDropDown">
-                <a href="@Url.Action("Profile", "Account")"
-                   class="dropdown-item">
-                    Your Profile
+        <div class="btn-group" role="group" >
+            @if (!appUser.IsAuthenticated())
+            {
+                <a href="@Url.Action("Signin", "Account")" class="btn btn-default">
+                    <i class="fa fa-unlock"></i>
+                    Sign in
                 </a>
-                <a href="@Url.Action("Logout", "Account")"
-                   class="dropdown-item">
-                    Sign out
+                <div class="btn">or</div>
+                <a href="@Url.Action( "Profile","Account")" class="btn btn-default">
+                    <i class="fa fa-unlock"></i>
+                    Sign up
                 </a>
+            }
+            else
+            {
+
+                <a href="@Url.Action("Index", "Repositories")" class="btn btn-default">
+                    <i class="fa fa-list-alt"></i>
+                    Repositories
+                </a>
+
+
+                <button id="btnProfileDropDown" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="@Gravatar.GetGravatarLink(appUser.Email, 23)"/>
+                    @appUser.Username
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnProfileDropDown">
+                    <a href="@Url.Action("Profile", "Account", new { id=appUser.UserId})"
+                       class="dropdown-item">
+                        Your Profile
+                    </a>
+                    <a href="@Url.Action("Signout", "Account")"
+                       class="dropdown-item">
+                        Sign out
+                    </a>
 
             
-            </div>
-        }
-    </div>
+                </div>
+            }
+        </div>
     </div>
 
-        <div class="clearfix"></div>
+    <div class="clearfix"></div>
 </nav>    
 
 <div class="body-content">

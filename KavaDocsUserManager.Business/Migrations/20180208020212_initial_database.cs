@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace KavaDocsUserManager.Business.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial_database : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,11 +31,13 @@ namespace KavaDocsUserManager.Business.Migrations
                     Created = table.Column<DateTime>(nullable: false),
                     Email = table.Column<string>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
+                    Initials = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     IsAdmin = table.Column<bool>(nullable: false),
                     LastName = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: false),
-                    UserDisplayName = table.Column<string>(nullable: false)
+                    UserDisplayName = table.Column<string>(nullable: false),
+                    ValidationKey = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using KavaDocsUserManager.Business.Models;
 using KavaDocsUserManager.Web;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Westwind.AspNetCore;
+using Westwind.AspNetCore.Security;
 
 namespace KavaDocsUserManager.Web
 {
@@ -31,6 +34,19 @@ namespace KavaDocsUserManager.Web
         public string Username => GetClaim("Username");
         public string Email => GetClaim("Email");
         public bool IsAdmin => HasRole("Admin");
+
+        public static ClaimsIdentity GetClaimsIdentityFromUser(User user )
+        {
+            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+            identity.AddClaim(new Claim("Email", user.Email));
+            identity.AddClaim(new Claim("Username", user.UserDisplayName));
+            identity.AddClaim(new Claim("UserId", user.Id.ToString()));
+
+            if (user.IsAdmin)
+                identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+
+            return identity;
+        }
 
 
     }

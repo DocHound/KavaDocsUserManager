@@ -2,43 +2,97 @@
 
 @{
     ViewData["Title"] = "index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
     var repo = Model.Repository;
+
+   
 }
 
-<div class="content-container" >
+<div class="content-container">
+
+
+    <a asp-action="EditRepository" class="btn btn-success float-right" style="margin-top: -5px;">
+        <i class="far fa-edit"></i>
+        &nbsp;Edit Settings
+    </a>
+
     <h1 class="page-header-text">
-        <i class="fa fa-archive"></i>
+        <i class="far fa-archive"></i>
         @repo.Title
     </h1>
-    
-    
+
     <div style="margin-top: 50px;">
         @repo.Description
     </div>
-    
-    
 
-    <pre><code>
-        @repo.Settings
-    </code></pre>
+    
+    
+    <div class="form-group" style="margin-top: 50px;">
+        <label>Site Domain Prefix</label>
+        <div class="responsive-container">
+            <input type="text" class="form-control" asp-for="Repository.Prefix" style="width: 200px;"/>
+            <div style=" font-weight: bold; font-size: 1.2em;margin-top: 5px;margin-left: 4px;"> .kavadocs.com</div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Repository Configuration Settings</label>
+        <pre><code class="language-json">@Model.SettingsJson</code></pre>
+    </div>
+
+
+    <div class="form-group">
+        <label>Table of Contents <small style="font-weight: normal">(optional)</small></label>
+        <pre><code class="language-json">@Model.TocJson</code></pre>
+    </div>
+
+    
+    <div class="responsive-container">
+        <div class="form-check">
+            <input type="checkbox" asp-for="@repo.IsActive" class="form-check-input with-font" id="IsActive">
+            <label class="form-check-label" for="IsActive">Repository Active</label>
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" asp-for="@repo.IncludeInSearchResults" class="form-check-input with-font" id="IncludeInSearchResults">
+            <label class="form-check-label" for="IncludeInSearchResults">Include in Search Results</label>
+        </div>
+    </div>
+        
+
+    </div>
+
 
     @if (repo.Users.Count > 0)
     {
-
-
-        <div class="list-group">
+        
+        <div class="list-group content-container ">
             <a href="#" class="list-group-item list-group-item-action active" style="font-weight: bold;">
-                Contributors
+                <i class="fa fa-users"></i>
+                Repository Contributors
             </a>
 
             @foreach (var user in repo.Users)
             {
-                <a href="@Url.Content("~/Account/"  + user.Id)"
+                <a href="@Url.Content("~/Account/" + user.Id)"
                    class="user-list-item list-group-item list-group-item-action">
-                    <div class="repository-list-item-title">@user.User.UserDisplayName</div>                    
+                    <div class="repository-list-item-title">@user.User.UserDisplayName</div>
                 </a>
             }
         </div>
     }
 </div>
+
+@section Scripts
+{
+<link href='~/lib/highlightjs/styles/vs2015.css' rel="stylesheet" />
+<script src="~/lib/highlightjs/highlight.pack.js"></script>
+   
+    <script>
+        $("pre code")
+            .each(function (i, block) {
+                hljs.highlightBlock(block);
+            });
+    </script>   
+}
+

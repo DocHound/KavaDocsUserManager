@@ -1,0 +1,134 @@
+﻿
+@model KavaDocsUserManager.Web.Views.Account.ProfileViewModel
+
+<div class="content-container">
+    <h1 class="page-header-text">
+        <i class="fa fa-user-alt"></i>
+        @if (Model.IsNewUser)
+        {
+            <text>Create a new Profile</text>
+        }
+        else
+        {
+            <text>@Model.User.UserDisplayName: Your Profile</text>
+        }
+    </h1>
+        
+
+    <error-display error-display-model="Model.ErrorDisplay">
+    </error-display>
+    
+    <div class="input-container margin-top">
+
+        <form asp-action="Profile">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <i class="fa fa-fw fa-user input-group-text"></i>
+                    </div>
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Enter a Username"
+                           asp-for="User.UserDisplayName"
+                           aria-label="Email"
+                           autocapitalize="off"
+                           autocomplete="off"
+                           spellcheck="false"
+                           autocorrect="off" required />
+                </div>
+                <small>alpha numerics and dashes only and no spaces please.</small>
+            </div>
+
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <i class="fa fa-envelope-open input-group-text"></i>
+                    </div>
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Enter your Email address"
+                           asp-for="User.Email"
+                           aria-label="Email"
+                           title="Please enter a valid email address "
+                           autocapitalize="off"
+                           autocomplete="off"
+                           spellcheck="false"
+                           autocorrect="off" required/>
+                </div>
+                <small>used to verify your email address</small>
+            </div>
+
+
+            <div class="form-group" style="margin-top: 30px;">
+                <div class="responsive-container">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <i class="fa fa-fw fa-user input-group-text"></i>
+                        </div>
+                        <input type="text" class="form-control" placeholder="First name" asp-for="User.FirstName" />
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <i class="fa fa-fw fa-user input-group-text"></i>
+                        </div>
+                        <input type="text" class="form-control" id="txtLastname" asp-for="User.LastName" placeholder="Last name" />
+                    </div>
+                
+                
+
+                
+                </div>            
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <i class="fa fa-users input-group-text"></i>
+                    </div>
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Enter your Company"
+                           asp-for="User.Company"
+                           autocapitalize="off"
+                           autocomplete="off"
+                           spellcheck="false"
+                           autocorrect="off" required/>
+                </div>
+            </div>
+
+      
+        
+            <div class="password-fields" style="display: @(Model.IsNewUser ? "block" : "none")">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <i class="fa fa-fw fa-unlock-alt input-group-text"></i>
+                        </div>
+                        <input class="form-control" type="password" asp-for="Password" placeholder="Enter a Password" required/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <i class="fa fa-fw fa-unlock-alt input-group-text"></i>
+                        </div>
+                        <input class="form-control" asp-for="PasswordConfirm" type="password" placeholder="Confirm Password" required/>
+                    </div>
+                </div>    
+            </div>
+        
+            <p class="password-recovery" style="display:  @(!Model.IsNewUser ? "block" : "none")">
+                    <a href="@Url.Action("PasswordRecovery")">Change your password</a>
+            </p>        
+        
+            <button class="btn-primary btn margin-top" type="submit">
+                <i class="fa fa-check-circle" ></i>
+                Save your Profile
+            </button>
+
+        </form>
+
+    </div>
+</div>

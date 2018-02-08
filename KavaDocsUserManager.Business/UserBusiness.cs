@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using KavaDocsUserManager.Business.Configuration;
 using KavaDocsUserManager.Business.Models;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +38,11 @@ namespace KavaDocsUserManager.Business
             return true;
         }
 
+        protected override void OnAfterCreated(User user)
+        {
+            base.OnAfterCreated(user);
+            user.ValidationKey = DataUtils.GenerateUniqueId(12).ToLower();
+        }
 
         /// <summary>
         /// Authenticates a user by username and password and returns the
@@ -125,7 +132,7 @@ namespace KavaDocsUserManager.Business
                 DataUtils.CopyObjectData(user, curUser);
                 curUser.Id = id;
                 Context.Users.Add(curUser);
-                isNewUser = true;
+                curUser.ValidationKey = DataUtils.GenerateUniqueId(12).ToLower();
             }
             else
             {
@@ -268,6 +275,30 @@ namespace KavaDocsUserManager.Business
 
         #region Validations
 
+        private static Regex _displayNameRegEx = new Regex("^([a-z]|[A-z]|[0-9]|[-])*$");
+        
+        public bool IsValidDisplayName(string displayName)
+        {
+            if (displayName.EndsWith("-") || displayName.StartsWith("-"))
+                return false;
+
+            return _displayNameRegEx.IsMatch(displayName);
+        }
+
+        public bool IsValidEmailAddress(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
         protected override bool OnValidate(User user)
         {
             bool? isNewUser = IsNewEntity(user);
@@ -276,14 +307,25 @@ namespace KavaDocsUserManager.Business
             
             ValidationErrors.Clear();
 
-            if (isNewUser.Value)
-            {
-                if (Context.Users.Any(usr => usr.Email == user.Email))
-                    ValidationErrors.Add("Email address is already in use.");
-            }
+
+            if(!IsValidDisplayName(user.UserDisplayName))
+            ValidationErrors.Add(
+                "Invalid display name. Name should contain no spaces contain: only alpha numeric characters and dashes and can't start or end with a dash.");
+
+            if (Context.Users.Any(usr => usr.Email == user.Email && usr.Id != user.Id))
+                ValidationErrors.Add("Email address is already in use by another user.");
+            
+             if (Context.Users.Any(usr => usr.UserDisplayName == user.UserDisplayName && usr.Id != user.Id))
+                 ValidationErrors.Add("Display name is already in use by another user.");
+
 
             if (string.IsNullOrEmpty(user.Email))
                 ValidationErrors.Add("Email address can't be empty.");
+
+            if (!IsValidEmailAddress(user.Email))
+                ValidationErrors.Add("Invalid email format.");
+
+
 
             if (string.IsNullOrEmpty(user.UserDisplayName))
                 ValidationErrors.Add("User display name nan't be empty.");
