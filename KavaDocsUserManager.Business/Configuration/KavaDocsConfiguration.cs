@@ -24,6 +24,8 @@ namespace KavaDocsUserManager.Business.Configuration
         public string ApplicationBasePath { get; set; } = "/";
 
         public string ApplicationHomeUrl { get; set; } = "/";
+
+        public EmailConfiguration Email { get; set; } = new EmailConfiguration();
     }
 
     public class EmailConfiguration
@@ -36,6 +38,7 @@ namespace KavaDocsUserManager.Business.Configuration
         public string SenderName { get; set; }
         public string SenderEmail { get; set; }
         public string AdminSenderEmail { get; set; }
+        public bool UseSsl { get; set; }
     }
 
 }

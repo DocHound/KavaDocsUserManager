@@ -69,6 +69,12 @@ namespace KavaDocsUserManager.Business
                     return null;
                 }
 
+                if (!user.IsActive)
+                {
+                    SetError("This account is not activated yet. Please activate the account, or reset your password");
+                    return null;
+                }
+
                 string passwordHash = HashPassword(password, user.Id.ToString());
                 if (user.Password != passwordHash && user.Password != password)
                 {
@@ -112,6 +118,22 @@ namespace KavaDocsUserManager.Business
             }
             return Context.Users.FirstOrDefault(usr => usr.Email == email);
         }
+
+        /// <summary>
+        /// Returns a user by its validation Id
+        /// </summary>
+        /// <param name="validationId"></param>
+        /// <returns></returns>
+        public User GetUserByValidationId(string validationId)
+        {
+            if (string.IsNullOrEmpty(validationId))
+            {
+                SetError("Email cannot be blank.");
+                return null;
+            }
+            return Context.Users.FirstOrDefault(usr => usr.ValidationKey == validationId);
+        }
+
 
         /// <summary>
         /// Writes the actual user to the database using 
@@ -194,7 +216,7 @@ namespace KavaDocsUserManager.Business
             var map = new RepositoryUser()
             {
                 UserId = user.Id,
-                Respository = repository,
+                Repository = repository,
                 IsOwner = true
             };
             user.Repositories.Add(map);
@@ -330,11 +352,12 @@ namespace KavaDocsUserManager.Business
             if (string.IsNullOrEmpty(user.UserDisplayName))
                 ValidationErrors.Add("User display name nan't be empty.");
 
-            if (string.IsNullOrEmpty(user.Password))
-                ValidationErrors.Add("Password can't be empty.");
+            if (string.IsNullOrEmpty(user.Password) || user.Password.Length < 5)
+                ValidationErrors.Add("Password should be at least 5 characters long.");
             else
             {
                 // always force password to be updated and hashed even if it was entered as plain text            
+                // this method detects if the password is already encoded
                 user.Password = HashPassword(user.Password, user.Id.ToString());
             }
 
@@ -346,6 +369,81 @@ namespace KavaDocsUserManager.Business
             return true;
         }
 
+        #endregion
+
+        #region Validation and  Password Recovery
+
+        /// <summary>
+        /// Validates an email address and makes the account active
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="validationId"></param>
+        /// <returns></returns>
+        public bool ValidateEmail(string validationId)
+        {
+            var user = GetUserByValidationId(validationId);
+            if (user == null || user.ValidationKey != validationId)
+            {
+                SetError("Invalid email or validation code provided");
+                return false;
+            }
+
+            // clear the validation key
+            user.ValidationKey = null;
+            user.IsActive = true;
+
+            return Save();
+        }
+
+
+        /// <summary>
+        /// Creates a new Recovery Validation Id that can be used to recover
+        /// a password
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>id or null on error</returns>
+        public string CreateRecoveryValidationId(string email)
+        {
+            string validationLink = Guid.NewGuid().ToString("N");
+
+            var user = GetUserByEmail(email);
+            if (user == null)
+                return null;
+            user.ValidationKey = validationLink;            
+
+            if (!Save())
+                return null;
+
+            return validationLink;
+        }
+
+        /// <summary>
+        /// Resets a users password based on an email address and validation key
+        /// </summary>
+        /// <param name="validationId"></param>
+        /// <param name="email"></param>
+        /// <param name="newPassword"></param>
+        /// <returns></returns>
+        public bool RecoverPassword(string validationId, string newPassword)
+        {
+            var user = GetUserByValidationId(validationId);
+
+            if (user == null || user.ValidationKey != validationId)
+            {
+                SetError("Invalid validation code provided");
+                return false;
+            }
+
+            user.Password = newPassword;
+
+            if (!Validate(user))
+                return false;
+
+            user.ValidationKey = null;
+            user.IsActive = true;
+            return Save();
+
+        }
         #endregion
     }
 }

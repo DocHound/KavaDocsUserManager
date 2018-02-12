@@ -34,7 +34,7 @@ namespace KavaDocsUserManager.Business.Models
         [ForeignKey("Repository")]
         public Guid RepositoryId { get; set; }
 
-        public Repository Respository { get; set; }
+        public Repository Repository { get; set; }
 
     }
 

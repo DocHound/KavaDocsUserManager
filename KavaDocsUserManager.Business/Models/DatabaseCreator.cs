@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace KavaDocsUserManager.Business.Models
 {
@@ -27,23 +28,29 @@ namespace KavaDocsUserManager.Business.Models
             if (!hasData)
             {
                 hasData = false;
-
-                //
+                
                 try
                 {
-                    var count = context.Users.Count();
-                    if (count > 0)
+                    if( context.Users.Any())
                         return true;
 
                     hasData =false;
                 }
                 catch (Exception ex)
                 {
-                    hasData = context.Database
-                        .EnsureCreated(); // just create the schema - no migrations      
+                    context.Database.Migrate(); // just create the schema - no migrations      
 
-                    if (!hasData)
-                        throw new InvalidOperationException("Couldn't create the database...");                    
+                    //if (!hasData)
+                    //    throw new InvalidOperationException("Couldn't create the database...");                    
+                    try
+                    {
+                        if (context.Users.Any())
+                            return true;
+                    }
+                    catch
+                    {
+                        throw new InvalidOperationException("Couldn't create database.", ex);
+                    }
                 }
             }
     
@@ -75,10 +82,11 @@ namespace KavaDocsUserManager.Business.Models
 
                 var repository = new Repository()
                 {
+                    Id = new Guid("66666666-6666-6666-ad11-dae7fb1566cb"),
                     Prefix = "docs",
-                    Settings = "{ \"RepositoryType\": \"GitHubRaw\", \"GitHubMasterUrl\":  \"https://raw.githubusercontent.com/DocHound/DocHoundEngine/master/Docs/\" }",
-                    Title="Kava Docs Documentation"                          
-                    
+                    Settings =
+                        "{ \"RepositoryType\": \"GitHubRaw\", \"GitHubMasterUrl\":  \"https://raw.githubusercontent.com/DocHound/DocHoundEngine/master/Docs/\" }",
+                    Title = "Kava Docs Documentation"
                 };
                 context.Repositories.Add(repository);
 
@@ -100,7 +108,7 @@ namespace KavaDocsUserManager.Business.Models
                 context.SaveChanges();
 
                 repository = new Repository()
-                {
+                {                    
                     Prefix = "dn2me",
                     Settings = "{ \"RepositoryType\": \"VSTSGit\", \"VSTSInstance\": \"https://eps-software.visualstudio.com\", \"VSTSProjectName\": \"DN2Me\",\"VSTSDocsFolder\": \"Docs\", \"VSTSPAT\":  \"zi6opdawlmm7mvd3xxaycfxgboz2enbxrdmitjj5nawmbg3ldvtq\" }",
                     Title = "Doctors near to Me"
@@ -171,6 +179,7 @@ namespace KavaDocsUserManager.Business.Models
 
                 repository = new Repository()
                 {
+                    Id = new Guid("55555555-5555-5555-5555-dae7fb1566cb"),
                     Prefix = "markdownmonster",
                     Settings = "{ \"RepositoryType\": \"GitHubRaw\", \"GitHubMasterUrl\":  \"https://raw.githubusercontent.com/markdownmonster/docs\" }",
                     Title = "Markdown Monster"

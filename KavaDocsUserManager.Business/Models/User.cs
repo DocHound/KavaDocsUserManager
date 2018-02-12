@@ -22,17 +22,23 @@ namespace KavaDocsUserManager.Business.Models
         public Guid Id { get; set; }
 
         [Required]
+        [StringLength(50)]
         public string UserDisplayName { get; set; }
 
+        [StringLength(150)]
         [Required]
         public string Email { get; set; }
         
+        [StringLength(80)]
         public string FirstName { get; set; }
 
+        [StringLength(100)]
         public string LastName { get; set; }
 
+        [StringLength(5)]
         public string Initials { get; set; }
 
+        [StringLength(100)]
         public string Company { get; set; }
 
         public DateTime Created { get; set; } = DateTime.UtcNow;
@@ -52,12 +58,12 @@ namespace KavaDocsUserManager.Business.Models
         }
         private bool _isAdmin;
 
-        public bool IsActive
+        public bool IsActive 
         {
             get
             {
                 // account has to be validated!
-                if (string.IsNullOrEmpty(ValidationKey))
+                if (!string.IsNullOrEmpty(ValidationKey))
                     return false;
 
                 return _isActive;
@@ -66,11 +72,13 @@ namespace KavaDocsUserManager.Business.Models
         }
         private bool _isActive;
 
-
+        [StringLength(35)]
         public string ValidationKey { get; set; }
 
+        
         [JsonIgnore]
         [Required]
+        [StringLength(80)]
         public string Password
         {
             get { return _password; }
@@ -79,9 +87,7 @@ namespace KavaDocsUserManager.Business.Models
         [XmlIgnore]
         private string _password;
 
-        public List<RepositoryUser> Repositories { get; set; }
-
-        //public List<UserOrganization> Organizations { get; set; }
+        public List<RepositoryUser> Repositories { get; set; }        
 
     }
 

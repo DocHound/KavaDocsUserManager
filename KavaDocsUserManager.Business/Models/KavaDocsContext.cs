@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace KavaDocsUserManager.Business.Models
 {
@@ -24,9 +25,17 @@ namespace KavaDocsUserManager.Business.Models
 
         public KavaDocsContext(DbContextOptions options) : base(options)
         {
+            Debug.WriteLine("Context Options Constructor");
         }
 
-        public static KavaDocsContext GetWeblogContext(string connectionString)
+        public KavaDocsContext(string connectionString) : base(new DbContextOptionsBuilder<KavaDocsContext>()
+            .UseSqlServer(connectionString)
+            .Options)
+        {
+            Debug.WriteLine("Context Connection String constructor");
+        }
+
+        public static KavaDocsContext GetKavaDocsContext(string connectionString)
         {
             var options = new DbContextOptionsBuilder<KavaDocsContext>()
                 .UseSqlServer(connectionString)

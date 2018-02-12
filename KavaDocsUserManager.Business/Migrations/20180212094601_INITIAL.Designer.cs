@@ -11,8 +11,8 @@ using System;
 namespace KavaDocsUserManager.Business.Migrations
 {
     [DbContext(typeof(KavaDocsContext))]
-    [Migration("20180208020212_initial_database")]
-    partial class initial_database
+    [Migration("20180212094601_INITIAL")]
+    partial class INITIAL
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,7 +52,8 @@ namespace KavaDocsUserManager.Business.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.HasIndex("RepositoryId");
+                    b.HasIndex("RepositoryId")
+                        .IsUnique();
 
                     b.ToTable("OrganizationRepositories");
                 });
@@ -65,11 +66,12 @@ namespace KavaDocsUserManager.Business.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(200);
 
+                    b.Property<string>("Domain")
+                        .HasMaxLength(100);
+
                     b.Property<bool>("IncludeInSearchResults");
 
                     b.Property<bool>("IsActive");
-
-                    b.Property<Guid?>("OrganizationId");
 
                     b.Property<string>("Prefix")
                         .IsRequired()
@@ -86,8 +88,6 @@ namespace KavaDocsUserManager.Business.Migrations
                         .HasMaxLength(100);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
 
                     b.ToTable("Repositories");
                 });
@@ -117,30 +117,38 @@ namespace KavaDocsUserManager.Business.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Company");
+                    b.Property<string>("Company")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime>("Created");
 
                     b.Property<string>("Email")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(150);
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(80);
 
-                    b.Property<string>("Initials");
+                    b.Property<string>("Initials")
+                        .HasMaxLength(5);
 
                     b.Property<bool>("IsActive");
 
                     b.Property<bool>("IsAdmin");
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Password")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(80);
 
                     b.Property<string>("UserDisplayName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(50);
 
-                    b.Property<string>("ValidationKey");
+                    b.Property<string>("ValidationKey")
+                        .HasMaxLength(35);
 
                     b.HasKey("Id");
 
@@ -155,21 +163,14 @@ namespace KavaDocsUserManager.Business.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("KavaDocsUserManager.Business.Models.Repository", "Respository")
-                        .WithMany()
-                        .HasForeignKey("RepositoryId")
+                        .WithOne("Organization")
+                        .HasForeignKey("KavaDocsUserManager.Business.Models.OrganizationRepository", "RepositoryId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("KavaDocsUserManager.Business.Models.Repository", b =>
-                {
-                    b.HasOne("KavaDocsUserManager.Business.Models.Organization", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId");
                 });
 
             modelBuilder.Entity("KavaDocsUserManager.Business.Models.RepositoryUser", b =>
                 {
-                    b.HasOne("KavaDocsUserManager.Business.Models.Repository", "Respository")
+                    b.HasOne("KavaDocsUserManager.Business.Models.Repository", "Repository")
                         .WithMany("Users")
                         .HasForeignKey("RepositoryId")
                         .OnDelete(DeleteBehavior.Cascade);

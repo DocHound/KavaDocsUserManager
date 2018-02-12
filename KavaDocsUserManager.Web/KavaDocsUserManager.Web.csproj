@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\repository.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Westwind.AspNetCore\Westwind.AspNetCore\Westwind.AspNetCore.csproj" />
     <ProjectReference Include="..\KavaDocsUserManager.Business\KavaDocsUserManager.Business.csproj" />
   </ItemGroup>

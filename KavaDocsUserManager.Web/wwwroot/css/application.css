@@ -6,24 +6,30 @@
     top: 0;
     left: 0;
     right: 0;
+    padding: 5px;
+    margin: 0;
+    /* height: navbarheader margin + icon height*/
 }
+/* 
+    Main body container from layout 
+    'zero offset below navbar'
+
+*/
+.body-content {
+    margin: 80px auto 9px;
+}
+
 .navbar-header {
     font-weight: bold;
-    font-size: 1.8em;
-    margin: 5px 10px;    
+    font-size: 1.8em;        
 }
 .navbar-icon {
-    height: 55px;
-    padding-left: 10px;
-}
-.btn {
-    padding: 0.50rem 1rem;
-    color: white !important; 
+    height: 70px;  
+    margin: 5px 10px;
 }
 
 
-.navbar-links {    
-    height: 70px;
+.navbar-links {        
     font-size: 0.9em;
 }
     .navbar-links .btn {
@@ -47,16 +53,12 @@
         border: 1px solid transparent;        
     }
 
-/* Main body container from layout */
-.body-content {
-    margin-top: 70px;
-}
-
 /* Content container inside of the content pages */
 .content-container {
-    margin: 100px auto 9px;
-    max-width: 1200px;
-    padding: 0 30px;
+    margin: 0 auto;
+    padding: 20px 30px;
+
+    max-width: 970px;
 }
 .input-container {
     padding: 0 30px;
@@ -96,4 +98,14 @@
     font-size: 0.8em;
     background: #444;
     color: #eee;
+}
+
+
+
+.code-editing, .code-editing:focus {
+    font-family: Consolas, monospace;
+    background: #333;
+    color: #eee;
+    font-weight: 500 !important;
+    min-height: 102px;
 }

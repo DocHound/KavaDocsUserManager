@@ -35,7 +35,7 @@ namespace KavaDocsUserManager.Business.Tests
             var firstId = repoBus.Context.Repositories.Select(r => r.Id).FirstOrDefault();
             Console.WriteLine(firstId);
 
-            Assert.IsTrue(repoBus.AddContributorToRepository(firstId, userId));
+            Assert.IsNotNull(repoBus.AddContributorToRepository(firstId, userId));
         }
 
 

@@ -22,6 +22,25 @@ namespace KavaDocsUserManager.Business
             Configuration = config;
         }
 
+
+        /// <summary>
+        /// Overrides Create for a repository that also adds a new
+        /// user/owner
+        /// </summary>
+        /// <returns></returns>
+        public Repository CreateRepository(Guid uid)
+        {
+            var repo = Create();
+            if (repo == null)
+                return null;
+
+            var repoUser = new RepositoryUser { RepositoryId = repo.Id, UserId = uid, IsOwner = true };
+            //Context.UserRepositories.Add(repoUser);
+            repo.Users.Add(repoUser);
+
+            return repo;
+        }
+
         protected override bool OnValidate(Repository repo)
         {
             var safeTitle = SafeRepositoryName(repo.Prefix);
@@ -38,32 +57,55 @@ namespace KavaDocsUserManager.Business
 
         public Repository GetRepository(Guid id)
         {
-            return Context.Repositories
+            if (id == Guid.Empty)
+                return null;
+
+            var repo = Context.Repositories
                 .Include(r=> r.Users).ThenInclude(ur=> ur.User)
                 .FirstOrDefault(r => r.Id == id);
+
+            if (repo == null)
+            {
+                SetError("Invalid Repository Id");
+                return null;
+            }
+
+            
+
+            // sort owners to the top
+            if (repo.Users != null && repo.Users.Count > 0)
+                repo.Users = repo.Users.OrderBy(ur => !ur.IsOwner).ToList();
+
+            return repo;
+        }
+
+        public bool IsOwner(Repository repo, Guid userId)
+        {
+            return repo.Users.Any(r => r.IsOwner && r.UserId == userId);
         }
 
 
-        public bool AddContributorToRepository(Guid repoId, Guid userId)
+
+        public RepositoryUser AddContributorToRepository(Guid repoId, Guid userId)
         {
             var repo = Context.Repositories.FirstOrDefault(u => u.Id == repoId);
             if (repo == null)
             {
                 SetError("Respositor to add user to doesn't exist.");
-                return false;
+                return null;
             }
 
             var user = Context.Users.FirstOrDefault(u => u.Id == userId);
             if (user == null)
             {
                 SetError("User to add to repository doesn't exist.");
-                return false;
-            }                
-            
-            if(Context.UserRepositories.Any(c => c.RepositoryId == repoId && c.UserId == userId))            
-                return true; // already an owner or contributor
+                return null;
+            }
 
-            var map = new RepositoryUser()
+            var map = Context.UserRepositories.Include(ur=> ur.User).FirstOrDefault(c => c.RepositoryId == repoId && c.UserId == userId);
+            if (map != null) return map; ; // already an owner or contributor
+
+            map = new RepositoryUser()
             {
                 RepositoryId = repo.Id,                
                 UserId = user.Id,
@@ -86,7 +128,35 @@ namespace KavaDocsUserManager.Business
             //};
             //repo.Contributors.Add(map);
 
-            return Save();
+            if (!Save())
+                return null;
+
+            map.User = user;
+            map.Repository = repo;
+
+            return Context.UserRepositories.Include(ur => ur.User).FirstOrDefault(ur => ur.Id == map.Id);
+        }
+
+        public RepositoryUser AddContributorToRepository(Guid repoId, string username)
+        {
+            if (string.IsNullOrEmpty(username))
+            {
+                SetError("Invalid username");
+                return null;
+            }
+
+            var userId = Context.Users
+                .Where(u => u.UserDisplayName == username)
+                .Select(u => u.Id)
+                .FirstOrDefault();
+
+            if (string.IsNullOrEmpty(username))
+            {
+                SetError("Invalid username");
+                return null;
+            }
+
+            return AddContributorToRepository(repoId, userId);
         }
 
 
@@ -150,9 +220,33 @@ namespace KavaDocsUserManager.Business
         {
             return await Context.Repositories
                 .Include(c=> c.Users)
-                .Where(r => r.Users.Any(u=> u.UserId == userId))                         
+                .Where(r => r.Users.Any(u=> u.UserId == userId))       
+                .OrderBy(r=> r.Users.FirstOrDefault(ur=> !ur.IsOwner))                
                 .ToListAsync();
         }
+
+        public async Task<List<RepositoryUser>> GetUsersForRepositoryAsync(Guid repoId)
+        {
+                var users = await Context.UserRepositories
+                                .Include(c=> c.User)
+                                .Where(rep => rep.RepositoryId == repoId)
+                                .OrderBy(r => r.IsOwner)
+                                .ToListAsync();
+            return users;
+        }
+
+        
+        public bool RemoveUserFromRepository(Guid userId, Guid repoId)
+        {
+            var userRepo = Context.UserRepositories.FirstOrDefault(ur => ur.UserId == userId && ur.RepositoryId == repoId);
+            if (userRepo == null)
+                return true;
+
+            Context.UserRepositories.Remove(userRepo);
+            return Context.SaveChanges() > -1;
+        }
+
+        
     }
 
 }

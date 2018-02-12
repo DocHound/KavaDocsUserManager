@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace KavaDocsUserManager.Business.Models
@@ -26,6 +27,9 @@ namespace KavaDocsUserManager.Business.Models
         [Required]
         [StringLength(50)]
         public string Prefix { get; set; }
+
+        [StringLength(100)]
+        public string Domain { get; set; } = "kavadocs.com";
 
         /// <summary>
         /// The display name of this repository
@@ -73,6 +77,16 @@ namespace KavaDocsUserManager.Business.Models
         /// <summary>
         /// Optional organization that this repository belongs to
         /// </summary>
-        public Organization Organization { get; set; }
+        public OrganizationRepository Organization { get; set; }
+
+        public bool IsUserInRepository(Guid userId)
+        {
+            return Users.Any(ru => ru.UserId == userId);
+        }
+
+        public bool IsOwner(Guid userId)
+        {
+            return Users.Any(ru => ru.UserId == userId && ru.IsOwner);
+        }
     }
 }

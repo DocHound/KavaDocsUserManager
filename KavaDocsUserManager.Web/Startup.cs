@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace KavaDocsUserManager
 {
@@ -35,6 +37,8 @@ namespace KavaDocsUserManager
             Configuration.Bind("KavaDocs", config);
             services.AddSingleton(config);
 
+            KavaDocsConfiguration.Current = config;
+
             services.AddDbContext<KavaDocsContext>(builder =>
             {
                 var connStr = config.ConnectionString;
@@ -55,7 +59,7 @@ namespace KavaDocsUserManager
             Task.Run(() =>
             {
                 // preload data on separate thread if possible
-                var ctx = KavaDocsContext.GetWeblogContext(config.ConnectionString);
+                var ctx = KavaDocsContext.GetKavaDocsContext(config.ConnectionString);
                 DatabaseCreator.EnsureKavaDocsData(ctx);
                 ctx.Users.Any(p => p.Id == Guid.NewGuid());
             });
@@ -63,13 +67,19 @@ namespace KavaDocsUserManager
             // set up and configure Authentication - make sure to call .UseAuthentication()
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                
                 .AddCookie(o =>
                 {
                     o.LoginPath = "/account/signin";
                     o.LogoutPath = "/account/signout";
                 });
 
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(opt =>
+                {
+                    opt.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                    opt.SerializerSettings.Converters.Add(new StringEnumConverter() {CamelCaseText = true});
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

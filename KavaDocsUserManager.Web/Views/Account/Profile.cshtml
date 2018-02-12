@@ -1,5 +1,8 @@
 ﻿
 @model KavaDocsUserManager.Web.Views.Account.ProfileViewModel
+@{
+    ViewData["Title"] = "My Profile";
+}
 
 <div class="content-container">
     <h1 class="page-header-text">
@@ -18,7 +21,7 @@
     <error-display error-display-model="Model.ErrorDisplay">
     </error-display>
     
-    <div class="input-container margin-top">
+    <div class="content-container margin-top">
 
         <form asp-action="Profile">
             <div class="form-group">
@@ -120,7 +123,7 @@
             </div>
         
             <p class="password-recovery" style="display:  @(!Model.IsNewUser ? "block" : "none")">
-                    <a href="@Url.Action("PasswordRecovery")">Change your password</a>
+                    <a href="@Url.Action("PasswordRecoverySendEmail")">Change your password</a>
             </p>        
         
             <button class="btn-primary btn margin-top" type="submit">

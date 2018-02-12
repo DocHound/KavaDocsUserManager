@@ -2,24 +2,30 @@
 @model KavaDocsUserManager.Web.Views.Account.SigninViewModel
 
 @{
+    ViewData["Title"] = "Sign in";
     var appUser = User.GetAppUser();
 
 }
+
+
 
 <div class="content-container" style="max-width: 600px">
     <h1 class="page-header-text">
         <i class="fas fa-sign-in"></i>
         &nbsp;Sign in
     </h1>
-    
-    
-        
-    
-    <form class="panel-body" name="form1" asp-action="Signin">
-        <div class="form-group">            
-            <div class="input-group" >
+
+    <i class="fa fa-warning"></i>
+
+    <error-display error-display-model="Model.ErrorDisplay"></error-display>
+
+    <form name="form1" asp-action="Signin">
+
+        <div class="form-group">
+
+            <div class="input-group">
                 <div class="input-group-prepend">
-                    <i class="fa fa-fw fa-user input-group-text" ></i>
+                    <i class="fa fa-fw fa-user input-group-text"></i>
                 </div>
                 <input type="text"
                        class="form-control"
@@ -29,18 +35,18 @@
                        autocapitalize="off"
                        autocomplete="off"
                        spellcheck="false"
-                       autocorrect="off" required/>
+                       autocorrect="off" required />
             </div>
         </div>
-        
-        
+
+
 
         <div class="form-group">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <i class="fa fa-fw fa-unlock-alt input-group-text" ></i>
+                    <i class="fa fa-fw fa-unlock-alt input-group-text"></i>
                 </div>
-                <input type="password"                       
+                <input type="password"
                        class="form-control"
                        placeholder="Enter your password"
                        asp-for="Password"
@@ -51,29 +57,29 @@
                        required />
             </div>
         </div>
-        
-        
+
+
         <div class="margin-top">
-               <button class="btn btn-primary  "
-                        type="submit"
-                        [disabled]="form1.invalid || form1.pristine">
-                    <i class="fa fa-unlock-alt"></i>
-                    Sign in
-                </button>
-            
-        @if (appUser.IsAuthenticated())
-        {
-            <div class="float-right" *ngIf="!isForgotPassword">
-                <a asp-action="Signout" class="btn btn-default btn-sm float-right" 
-                   style="display: block">
-                    <i class="fa fa-lock-alt"></i>
-                    Sign out
-                </a>
-            </div>
-        }
+            <button class="btn btn-primary  " style="display: block; width: 210px;"
+                    type="submit"
+                    [disabled]="form1.invalid || form1.pristine">
+                <i class="fa fa-unlock-alt"></i>
+                Sign in
+            </button>
+
+            @if (appUser.IsAuthenticated())
+            {
+                <div class="float-right" *ngIf="!isForgotPassword">
+                    <a asp-action="Signout" class="btn btn-default btn-sm float-right"
+                       style="display: block; width: 220px;">
+                        <i class="fa fa-lock-alt"></i>
+                        Sign out
+                    </a>
+                </div>
+            }
         </div>
         <div class="margin-top" *ngIf="!isForgotPassword">
-            <a asp-action="PasswordRecovery">I forgot my password</a>
+            <a asp-action="PasswordRecoverySendEmail">I forgot my password</a>
         </div>
         <hr />
 

@@ -1,52 +1,72 @@
 ﻿@model KavaDocsUserManager.Web.Views.Repositories.RepositoriesListViewModel
 
 @{
-    ViewData["Title"] = "index";
+    ViewData["Title"] = "My Repositories";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Headers
+{
+    <style>
+        .repository-list-item-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+}
 
 
-<div class="content-container">
+<div class="content-container ">
 
-    <a  href="@Url.Action("Repository")" class="btn btn-success float-right">
-        <i class="far fa-check-circle"></i>
+    <a href="@Url.Content("/repositories/new")" class="btn btn-success float-right">
+        <i class="fas fa-plus-circle"></i>
         &nbsp;New Repository
     </a>
 
     <h1 class="page-header-text">
         <i class="far fa-archive"></i>
-        Repositories
+        My Repositories
     </h1>
 
     @if (Model.Repositories.Count < 1)
     {
         <div class="alert alert-info" style="margin: 0 10%;">
-            You don't have any repositories yet. Ready to create one? Click here: &nbsp;&nbsp;     
-            
-                <a href="@Url.Action("Repository")" class="btn btn-success">
-                    <i class="far fa-check-circle"></i>
-                    &nbsp;New Repository
-                </a>
-                        
+            You don't have any repositories yet. Ready to create one? Click here: &nbsp;&nbsp;
+
+            <a href="@Url.Action("Repository")" class="btn btn-success">
+                <i class="far fa-check-circle"></i>
+                &nbsp;New Repository
+            </a>
+
         </div>
     }
     else
     {
-        <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action active">
+
+        <div class="list" style="margin-left: 30px; margin-right: 30px;" >
+            <div href="#" class="list-header">
                 <i class="far fa-archive"></i>
                 Repositories
-            </a>
+            </div>
 
             @foreach (var repo in Model.Repositories)
             {
+                var domain = repo.Prefix + "." + repo.Domain;
 
-                <a asp-action="Repository" asp-route-id="@repo.Id"
-                   class="repository-list-item list-group-item list-group-item-action">
-                    <div class="repository-list-item-title">@repo.Title</div>
+                <div class="repository-list-item list-item hover" onclick="location='@Url.Content($"~/Repository/{repo.Id}")'">
+                    <a href="@Url.Content($"~/repository/{repo.Id}")"
+                       class="repository-list-item-title">@repo.Title</a>
                     <div class="repository-list-item-content">@repo.Description</div>
-                </a>
+
+                    <div>
+                        Browse to:
+                        <a href="http://@(domain)">
+                            @domain
+                        </a>
+                    </div>
+                </div>
             }
 
         </div>

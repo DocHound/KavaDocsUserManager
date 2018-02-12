@@ -10,7 +10,7 @@ h1, h2, h3, h4, h5 {
     font-weight: 600;
     margin-top: 1.2em;
     margin-bottom: 0.5em;
-    color: #555;
+    color: #d50017;
 }
 
 hr {
@@ -18,13 +18,13 @@ hr {
 }
 
 h1 {
-    font-size: 1.8em;
+    font-size: 2em;
     padding-bottom: 10px;    
     border-bottom: 1px solid #eee;
 }
 
 h2 {    
-    font-size: 1.45em;
+    font-size: 1.5em;
 }
 
 h3 {    
@@ -43,9 +43,12 @@ h5, h6 {
 .fa {
     padding-right:7px;
 }
+
+/* Bootstrap customizations */
 .input-group-prepend .fa {
     width: 40px;
 }
+
 
 
 @media(max-width: 767px) {
@@ -63,13 +66,26 @@ h5, h6 {
 .margin-top {
     margin-top: 1em;
 }
+.margin-top-2x {
+    margin-top: 2em;
+}
+.indented {
+    margin-left: 4%;
+    margin-right: 4%;
+}
+
+.indented-2x {
+    margin-left: 8%;
+    margin-right: 8%;
+}
+
 
 .margin-bottom {
     margin-bottom: 1em;
 }
 
 .green-text {
-    color: #669933 !important;
+    color: rgb(22, 191, 22) !important;
 }
 .orange-text {
     color: organge;
@@ -122,11 +138,45 @@ h5, h6 {
     }
 }
 
+.subtle-highlight {
+    background: #fdf2f3;    
+}
+.hover:hover {
+    background: #f8f8f8 !important;
+}
+
+
+
+.list {
+    border: 1px #eee solid;
+    margin-top: 40px;
+    margin-bottom:30px;    
+    border-radius: 4px;
+}
+.list-header {
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 14px;
+    background:#656565;
+    color: #eee;
+    border-radius: 4px 4px 0 0;
+}
+.list-item {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.list-item.alternate {
+    background: #f2f2f2;
+}
+.list-item.active {
+    background: lightsteelblue;
+}
 label {
     font-weight: 600;
     font-size: 1.1em;
 }
-input:not([type=submit]):not([type=button]):not([type=checkbox]):not([type=radio]):not([type='file']), select, textarea {*/
+input:not([type=submit]):not([type=button]):not([type=checkbox]):not([type=radio]):not([type='file']), select, textarea {
 
     font-size: 1.05em !important;
     font-weight: 600 !important;    

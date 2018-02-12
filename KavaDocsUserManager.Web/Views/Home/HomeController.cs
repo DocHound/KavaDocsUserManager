@@ -13,16 +13,14 @@ namespace KavaDocsUserManager.Web.Controllers
     {
         public IActionResult Index()
         {
+            var appUser = User.GetAppUser();
+            if (appUser.IsAuthenticated())            
+                return RedirectToAction("Index", "Repositories");
+            
             var model = CreateViewModel<AppBaseViewModel>();
             return View(model);
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
 
         public IActionResult Error()
         {

@@ -1,98 +1,193 @@
-﻿@model KavaDocsUserManager.Web.Views.Repositories.RepositoryViewModel
+﻿@using KavaDocsUserManager.Web.App
+@model KavaDocsUserManager.Web.Views.Repositories.RepositoryViewModel
 
 @{
-    ViewData["Title"] = "index";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
     var repo = Model.Repository;
-
-   
+    ViewData["Title"] = repo.Title ?? "New Repository";
 }
 
-<div class="content-container">
+   
+    <div id="RepositoryPage" class="content-container">
+       
+        <form asp-action="SaveRepository">
+
+            <h1 class="page-header-text">
+                <i class="far fa-archive"></i>
+                @repo.Title
+            </h1>
+
+            <error-display error-display-model="Model.ErrorDisplay"></error-display>
 
 
-    <a asp-action="EditRepository" class="btn btn-success float-right" style="margin-top: -5px;">
-        <i class="far fa-edit"></i>
-        &nbsp;Edit Settings
-    </a>
-
-    <h1 class="page-header-text">
-        <i class="far fa-archive"></i>
-        @repo.Title
-    </h1>
-
-    <div style="margin-top: 50px;">
-        @repo.Description
-    </div>
-
-    
-    
-    <div class="form-group" style="margin-top: 50px;">
-        <label>Site Domain Prefix</label>
-        <div class="responsive-container">
-            <input type="text" class="form-control" asp-for="Repository.Prefix" style="width: 200px;"/>
-            <div style=" font-weight: bold; font-size: 1.2em;margin-top: 5px;margin-left: 4px;"> .kavadocs.com</div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label>Repository Configuration Settings</label>
-        <pre><code class="language-json">@Model.SettingsJson</code></pre>
-    </div>
+            <div>
+                @repo.Description
+            </div>
 
 
-    <div class="form-group">
-        <label>Table of Contents <small style="font-weight: normal">(optional)</small></label>
-        <pre><code class="language-json">@Model.TocJson</code></pre>
-    </div>
+            <div class="form-group" style="margin-top: 50px;">
+                <label>Title</label>
+                <input type="text" class="form-control"
+                       asp-for="Repository.Title"
+                       placeholder="Title for this Repository" />
+            </div>
 
-    
-    <div class="responsive-container">
-        <div class="form-check">
-            <input type="checkbox" asp-for="@repo.IsActive" class="form-check-input with-font" id="IsActive">
-            <label class="form-check-label" for="IsActive">Repository Active</label>
-        </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea class="form-control"
+                          asp-for="Repository.Description"
+                          placeholder="Title for this Repository">
+                </textarea>
+            </div>
 
-        <div class="form-check">
-            <input type="checkbox" asp-for="@repo.IncludeInSearchResults" class="form-check-input with-font" id="IncludeInSearchResults">
-            <label class="form-check-label" for="IncludeInSearchResults">Include in Search Results</label>
-        </div>
-    </div>
-        
+            <div class="form-group">
+                <label>Prefix and Domain</label>
+                <div class="responsive-container">
+                    <input type="text" class="form-control"
+                           asp-for="Repository.Prefix"
+                           style="width: 200px;"
+                           placeholder="Domain prefix" />
 
-    </div>
+                    <input type="text" asp-for="Repository.Domain"
+                           class="form-control" readonly
+                           placeholder="Kavadocs host domain"
+                           style="margin-left: 8px; width: 300px;" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label></label>
+
+            </div>
+
+            <div class="form-group">
+                
+                
+
+                <label>
+                    Repository Configuration Settings&nbsp;
+                    <a href="http://docs.kavadocs.com/Configuring-Repositories"
+                       title="more info on repository configuration" target="_blank">
+                        <i class="fas fa-info-circle text-info"></i>
+                    </a>
+                </label>
+                @*<pre  ><code id="SettingsJsonPreview"  class="language-json" v-on:mouseenter="editCodeField('SettingsJsonPreview','SettingsJson')">@Model.SettingsJson</code></pre>*@
+                <textarea class="form-control code-editing" id="SettingsJson"
+                          asp-for="SettingsJson"
+                          placeholder="Settings for this repository (JSON format)">
+                </textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Table of Contents <small style="font-weight: normal">(optional)</small></label>
+                @*<pre><code class="language-json">@Model.TocJson</code></pre>*@
+                <textarea class="form-control code-editing"
+                          asp-for="TableOfContentsJson"
+                          placeholder="No table of contents JSON - uses remote _toc.json repository">
+                </textarea>
+            </div>
+
+            <div class="responsive-container">
+                <div class="form-check">
+                    <input type="checkbox" asp-for="Repository.IsActive" class="form-check-input with-font" id="IsActive">
+                    <label class="form-check-label" for="IsActive">Repository Active</label>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" asp-for="Repository.IncludeInSearchResults" class="form-check-input with-font" id="IncludeInSearchResults">
+                    <label class="form-check-label" for="IncludeInSearchResults">Include in Search Results</label>
+                </div>
+            </div>
 
 
-    @if (repo.Users.Count > 0)
-    {
-        
-        <div class="list-group content-container ">
-            <a href="#" class="list-group-item list-group-item-action active" style="font-weight: bold;">
+            <button class="btn btn-primary margin-top-2x" type="submit">
+                <i class="fas fa-check-circle "></i>
+                &nbsp;Save Repository
+            </button>
+            
+            
+            <input type="hidden" asp-for="Repository.Id"/>
+
+        </form>
+
+
+
+        <div class="list indented">
+            <div class="list-header" style="font-weight: bold;">
+
+                <button class="btn btn-secondary btn-sm float-right" 
+                        style="margin-top: -5px;"
+                        v-on:click="newUser.visible=true;">
+                    <i class="fa fa-plus-circle"></i>
+                    Add User
+                </button>
+
+
+
+
                 <i class="fa fa-users"></i>
                 Repository Contributors
-            </a>
-
-            @foreach (var user in repo.Users)
-            {
-                <a href="@Url.Content("~/Account/" + user.Id)"
-                   class="user-list-item list-group-item list-group-item-action">
-                    <div class="repository-list-item-title">@user.User.UserDisplayName</div>
+            </div>
+            <div v-if="newUser.visible">
+                <a v-on:click="newUser.visible = false;" style="display:block; padding: 10px 0"><i class="fa fa-times red-text float-right"></i></a>
+                <div class="list-item responsive-container">
+                    <input type="text" v-model="newUser.username" class="form-control" />
+                    <button class="btn btn-outline-primary" v-on:click="addUserToRepo(repository,newUser.username)">Add</button>
+                </div>
+            </div>
+            <div v-for="user in repository.users"
+                 class="list-item" v-bind:class="{'subtle-highlight': user.isOwner}">
+                <div class="float-right">
+                    <span v-if="user.isOwner">Owner&nbsp;</span>
+                    <a v-on:click="removeUserFromRepo(user.user, repository)">
+                        <i class="fas fa-times-circle red-text"></i>
+                    </a>
+                </div>
+                <a href=""
+                   class="user-list-item ">
+                    {{user.user.userDisplayName}}
                 </a>
-            }
-        </div>
-    }
-</div>
 
-@section Scripts
-{
-<link href='~/lib/highlightjs/styles/vs2015.css' rel="stylesheet" />
-<script src="~/lib/highlightjs/highlight.pack.js"></script>
-   
-    <script>
-        $("pre code")
-            .each(function (i, block) {
-                hljs.highlightBlock(block);
-            });
-    </script>   
-}
+            </div>
+        </div>
+        
+        
+        <input type="hidden" asp-for="Repository.Id" />
+
+        @*<pre><code>{{globals.repository}}</code></pre>*@
+
+
+
+
+    </div>
+        @section Scripts
+        {
+            
+            @{
+                // remove circular reference
+                foreach (var user in Model.Repository.Users)
+                {
+                    user.Repository = null;
+                    user.User.Repositories = null;
+                }
+            }
+
+        <link href='~/lib/highlightjs/styles/vs2015.css' rel="stylesheet" />
+        <script src="~/lib/highlightjs/highlight.pack.js"></script>
+        <script src="~/lib/vue/dist/vue.min.js"></script>
+        <script>
+            $("pre code")
+                .each(function (i, block) {
+                    hljs.highlightBlock(block);
+                });
+        </script>
+        <script>
+    var globals = {
+        repository: @Html.Raw(JsonConvert.SerializeObject(Model.Repository, AppUtils.JsonFormatterSettingsForRecursive))
+    };
+        </script>
+            
+       <script src="~/js/repository.js"></script>
+
+
+        }
 
