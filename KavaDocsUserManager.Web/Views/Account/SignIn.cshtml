@@ -12,10 +12,13 @@
 <div class="content-container" style="max-width: 600px">
     <h1 class="page-header-text">
         <i class="fas fa-sign-in"></i>
-        &nbsp;Sign in
+        Sign in
     </h1>
 
-    <i class="fa fa-warning"></i>
+    <p class="margin-bottom-2x">
+        Please sign into your account to access or create new documentation repositories. 
+        If you don't have an account yet <a href="~/account/profile">create one to get started</a>.
+    </p>
 
     <error-display error-display-model="Model.ErrorDisplay"></error-display>
 
@@ -25,7 +28,7 @@
 
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <i class="fa fa-fw fa-user input-group-text"></i>
+                    <i class="fa fa-fw fa-envelope input-group-text"></i>
                 </div>
                 <input type="text"
                        class="form-control"
@@ -63,7 +66,7 @@
             <button class="btn btn-primary  " style="display: block; width: 210px;"
                     type="submit"
                     [disabled]="form1.invalid || form1.pristine">
-                <i class="fa fa-unlock-alt"></i>
+                <i class="far fa-sign-in" style="font-size: 1.1em"></i>
                 Sign in
             </button>
 

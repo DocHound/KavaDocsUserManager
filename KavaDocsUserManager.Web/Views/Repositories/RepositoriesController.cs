@@ -11,7 +11,7 @@ using Westwind.Utilities;
 namespace KavaDocsUserManager.Web.Views.Repositories
 {
     
-    //[Authorize]
+    [Authorize]
     public class RepositoriesController : AppBaseController
     {
         private readonly RepositoryBusiness _repoBusiness;
@@ -39,6 +39,7 @@ namespace KavaDocsUserManager.Web.Views.Repositories
             return View("Repositories", model);
         }
 
+        [Authorize]
         [Route("Repositories/new")]
         [Route("Repositories/{id}")]
         [Route("Repository/{id?}")]
@@ -48,6 +49,10 @@ namespace KavaDocsUserManager.Web.Views.Repositories
             var model = CreateViewModel<RepositoryViewModel>();
             var appUser = User.GetAppUser();
             bool isNew = id == Guid.Empty;
+
+            // just in case - we can't add unless signed in
+            if (!appUser.IsAuthenticated())            
+                return RedirectToAction("SignIn","Account");            
             
             var repo = _repoBusiness.GetRepository(id);
             if (repo == null)
@@ -90,7 +95,7 @@ namespace KavaDocsUserManager.Web.Views.Repositories
             if (repo == null)
                 repo = _repoBusiness.CreateRepository(User.GetAppUser().UserId);                
 
-            DataUtils.CopyObjectData(model.Repository, repo, "Id,Users");
+            DataUtils.CopyObjectData(model.Repository, repo, "Id,Users,Organization");            
 
             repo.Settings = model.SettingsJson;
             repo.TableOfContents = model.TableOfContentsJson;

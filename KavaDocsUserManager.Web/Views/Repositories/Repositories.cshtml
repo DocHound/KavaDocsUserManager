@@ -20,7 +20,10 @@
 
 <div class="content-container ">
 
-    <a href="@Url.Content("/repositories/new")" class="btn btn-success float-right">
+   
+    <a href="@Url.Content("/repositories/new")" 
+       style="margin-top: 25px;"
+       class="btn btn-success float-right">
         <i class="fas fa-plus-circle"></i>
         &nbsp;New Repository
     </a>
@@ -29,6 +32,8 @@
         <i class="far fa-archive"></i>
         My Repositories
     </h1>
+    
+   
 
     @if (Model.Repositories.Count < 1)
     {

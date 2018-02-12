@@ -64,8 +64,8 @@
     padding: 0 30px;
 }
 @media (max-width: 768px) {
-    .content-container {
-        padding: 0 15px;
+    .content-container {        
+        padding: 1px 15px;
     }
     .navbar-links .btn, .navbar-links a.btn {
         padding: 10px 8px;

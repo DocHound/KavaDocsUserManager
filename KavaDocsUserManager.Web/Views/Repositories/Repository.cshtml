@@ -18,13 +18,23 @@
 
             <error-display error-display-model="Model.ErrorDisplay"></error-display>
 
+            <div class="form-group">
+                <label>Prefix and Domain</label>
+                <div class="responsive-container">
+                    <input type="text" class="form-control"
+                           asp-for="Repository.Prefix"
+                           style="width: 200px;margin-right: 7px"
+                           placeholder="Domain prefix" />
 
-            <div>
-                @repo.Description
+                    <input type="text" asp-for="Repository.Domain"
+                           class="form-control" readonly
+                           placeholder="Kavadocs host domain"
+                           style="width: 300px;" />
+                </div>
             </div>
 
 
-            <div class="form-group" style="margin-top: 50px;">
+            <div class="form-group">
                 <label>Title</label>
                 <input type="text" class="form-control"
                        asp-for="Repository.Title"
@@ -38,20 +48,11 @@
                           placeholder="Title for this Repository">
                 </textarea>
             </div>
-
             <div class="form-group">
-                <label>Prefix and Domain</label>
-                <div class="responsive-container">
-                    <input type="text" class="form-control"
-                           asp-for="Repository.Prefix"
-                           style="width: 200px;"
-                           placeholder="Domain prefix" />
-
-                    <input type="text" asp-for="Repository.Domain"
-                           class="form-control" readonly
-                           placeholder="Kavadocs host domain"
-                           style="margin-left: 8px; width: 300px;" />
-                </div>
+                <label>Tags</label>
+                <input type="text" class="form-control"
+                       asp-for="Repository.Tags"
+                       placeholder="Keyword tags for this repository - comma separated." />
             </div>
 
             <div class="form-group">
@@ -60,8 +61,8 @@
             </div>
 
             <div class="form-group">
-                
-                
+
+
 
                 <label>
                     Repository Configuration Settings&nbsp;
@@ -103,9 +104,9 @@
                 <i class="fas fa-check-circle "></i>
                 &nbsp;Save Repository
             </button>
-            
-            
-            <input type="hidden" asp-for="Repository.Id"/>
+
+
+            <input type="hidden" asp-for="Repository.Id" />
 
         </form>
 

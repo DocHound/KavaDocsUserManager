@@ -145,7 +145,13 @@ namespace KavaDocsUserManager.Web.Views.Account
                 user.ValidationKey = Guid.NewGuid().ToString("N");
             }
 
-            DataUtils.CopyObjectData(model.User, user, "Id,Password,ValidationKey");
+             //DataUtils.CopyObjectData(model.User, user, "Id,Password,IsActive,IsAdmin,ValidationKey,Repositories");
+
+            user.UserDisplayName = model.User.UserDisplayName;
+            user.Email = model.User.Email;
+            user.Company = model.User.Company;
+            user.FirstName = model.User.FirstName;
+            user.LastName = model.User.LastName;
             
             bool validationResult = _userBus.Validate(user);
             if (model.IsNewUser)

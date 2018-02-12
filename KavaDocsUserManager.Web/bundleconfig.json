@@ -1,9 +1,6 @@
-﻿// Configure bundling and minification for the project.
-// More info at https://go.microsoft.com/fwlink/?LinkId=808241
 [
   {
     "outputFileName": "wwwroot/css/site.min.css",
-    // An array of relative input file paths. Globbing patterns supported
     "inputFiles": [
       "wwwroot/css/site.css"
     ]
@@ -13,12 +10,39 @@
     "inputFiles": [
       "wwwroot/js/site.js"
     ],
-    // Optionally specify minification options
     "minify": {
       "enabled": true,
       "renameLocals": true
-    },
-    // Optionally generate .map file
-    "sourceMap": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/application.min.css",
+    "inputFiles": [
+      "wwwroot/css/application.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/application-bootstrap.min.css",
+    "inputFiles": [
+      "wwwroot/css/application-bootstrap.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/application-reset.min.css",
+    "inputFiles": [
+      "wwwroot/css/application-reset.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/application.min.js",
+    "inputFiles": [
+      "wwwroot/js/application.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/Repository.min.js",
+    "inputFiles": [
+      "wwwroot/js/Repository.js"
+    ]
   }
 ]

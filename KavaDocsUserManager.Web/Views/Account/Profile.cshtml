@@ -16,14 +16,20 @@
             <text>@Model.User.UserDisplayName: Your Profile</text>
         }
     </h1>
-        
-
+    
     <error-display error-display-model="Model.ErrorDisplay">
     </error-display>
     
-    <div class="content-container margin-top">
+    <div class="input-container margin-top">
+        
+        <p class="margin-bottom-2x">
+            Please choose a unique user name for your account. The user name is associated with
+            each of your documentation repositories. You also need to provide a valid
+            email address that can be validated to log into your account.
+        </p>
+                
 
-        <form asp-action="Profile">
+        <form asp-action="profile" asp-route-id="Model.User.Id">
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -63,7 +69,7 @@
             </div>
 
 
-            <div class="form-group" style="margin-top: 30px;">
+            <div class="form-group margin-top-2x">
                 <div class="responsive-container">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -78,12 +84,9 @@
                         </div>
                         <input type="text" class="form-control" id="txtLastname" asp-for="User.LastName" placeholder="Last name" />
                     </div>
-                
-                
-
-                
                 </div>            
             </div>
+
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -102,13 +105,14 @@
 
       
         
-            <div class="password-fields" style="display: @(Model.IsNewUser ? "block" : "none")">
+            <div class="password-fields margin-top-2x" style="display: @(Model.IsNewUser ? "block" : "none")">
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <i class="fa fa-fw fa-unlock-alt input-group-text"></i>
                         </div>
-                        <input class="form-control" type="password" asp-for="Password" placeholder="Enter a Password" required/>
+                        <input class="form-control" type="password" 
+                               asp-for="Password" placeholder="Enter a Password"  />
                     </div>
                 </div>
 
@@ -117,7 +121,9 @@
                         <div class="input-group-prepend">
                             <i class="fa fa-fw fa-unlock-alt input-group-text"></i>
                         </div>
-                        <input class="form-control" asp-for="PasswordConfirm" type="password" placeholder="Confirm Password" required/>
+                        <input class="form-control" type="password" 
+                               asp-for="PasswordConfirm" novalidate 
+                               placeholder="Confirm Password"  />
                     </div>
                 </div>    
             </div>
@@ -130,7 +136,8 @@
                 <i class="fa fa-check-circle" ></i>
                 Save your Profile
             </button>
-
+                        
+            <input type="hidden" asp-for="User.Id" />
         </form>
 
     </div>
