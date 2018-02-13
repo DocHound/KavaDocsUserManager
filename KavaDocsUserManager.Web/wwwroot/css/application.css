@@ -1,13 +1,14 @@
 ﻿.navbar-top {
     position: fixed;
-    background: #000000;
-    opacity: 0.85;
+    background: #252525;
+    opacity: 0.95;
     color: #eee;
     top: 0;
     left: 0;
     right: 0;
     padding: 5px;
     margin: 0;
+    z-index: 1000;
     /* height: navbarheader margin + icon height*/
 }
 /* 
@@ -17,6 +18,11 @@
 */
 .body-content {
     margin: 80px auto 9px;
+    transition: margin-top 0.5s;
+}
+.body-content.reduced {
+    margin: 65px auto 9px;
+    
 }
 
 .navbar-header {
@@ -26,6 +32,10 @@
 .navbar-icon {
     height: 70px;  
     margin: 5px 10px;
+    transition: height 0.5s;
+}
+.navbar-icon.reduced {
+    height: 50px;
 }
 
 
@@ -64,6 +74,12 @@
     padding: 0 30px;
 }
 @media (max-width: 768px) {
+    .navbar-icon {
+        height: 50px;
+    }
+    .body-content {
+        margin: 60px auto 9px;
+    }
     .content-container {        
         padding: 1px 15px;
     }

@@ -40,18 +40,18 @@ h5, h6 {
     font-size: 1em;
 }
 
-.fa, .far, .fas, .fal {
-    padding-right:7px;
-}
-
-/* Bootstrap customizations */
-.input-group-prepend .fa {
-    width: 40px;
-}
-
 a {
     font-weight: 600;
 }
+a.dark,a.dark:visited {
+    color: #eee;
+    text-decoration: none;
+}
+    a.dark:hover {
+        color: khaki;
+        text-decoration: none;
+    }
+
 
 @media(max-width: 767px) {
     .hidable {

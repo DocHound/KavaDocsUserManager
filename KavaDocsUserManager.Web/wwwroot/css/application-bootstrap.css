@@ -25,3 +25,15 @@
 .form-control:disabled, .form-control[readonly] {
     background-color: #fdf2f3;    
 }
+
+
+/* font-awesome overrides */
+
+.fa, .far, .fas, .fal {
+    padding-right: 0.2em;
+}
+
+/* Bootstrap customizations */
+.input-group-prepend .fa {
+    width: 40px;
+}
