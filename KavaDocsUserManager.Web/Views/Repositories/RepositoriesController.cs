@@ -6,6 +6,8 @@ using KavaDocsUserManager.Business;
 using KavaDocsUserManager.Business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Westwind.AspNetCore.Errors;
 using Westwind.Utilities;
 
 namespace KavaDocsUserManager.Web.Views.Repositories
@@ -62,6 +64,7 @@ namespace KavaDocsUserManager.Web.Views.Repositories
                     repo = _repoBusiness.Create();
                     repo.Title = "New Documentation Repository";                    
                     model.Repository = repo;
+                    model.IsNewUser = true;
                 }
                 else
                 {
@@ -93,7 +96,10 @@ namespace KavaDocsUserManager.Web.Views.Repositories
 
             var repo = _repoBusiness.GetRepository(model.Repository.Id);
             if (repo == null)
-                repo = _repoBusiness.CreateRepository(User.GetAppUser().UserId);                
+            {
+                repo = _repoBusiness.CreateRepository(User.GetAppUser().UserId);
+                model.IsNewUser = true;
+            }
 
             DataUtils.CopyObjectData(model.Repository, repo, "Id,Users,Organization");            
 
@@ -107,11 +113,21 @@ namespace KavaDocsUserManager.Web.Views.Repositories
                 model.ErrorDisplay.ShowError("Please fix the following");
                 return View("Repository",model);
             }
+
             
+            _repoBusiness.AutoValidate = false;
             if (!_repoBusiness.Save())
                 model.ErrorDisplay.ShowError(_repoBusiness.ErrorMessage, "Couldn't save Repository.");
-            else
+            else            
                 model.ErrorDisplay.ShowSuccess("Repository info saved.");
+
+
+            if (model.IsNewUser)
+            {
+                model.IsNewUser = false;
+                // do a full reload to ensure all dependencies get loaded
+                repo = _repoBusiness.GetRepository(repo.Id);                
+            }
 
             model.Repository = repo;
             SharedRepositoryModelDisplay(model);
@@ -144,49 +160,8 @@ namespace KavaDocsUserManager.Web.Views.Repositories
                 model.IsOwner = _repoBusiness.IsOwner(repo, appUser.UserId);
         }
 
-        [HttpGet]
-        [Route("api/repositories/{repoId}/remove/{userId}")]
-        public bool RemoveUserFromRepository(Guid userId, Guid repoId)
-        {
-            return _repoBusiness.RemoveUserFromRepository(userId,repoId);                        
-        }
-
-        [HttpGet]
-        [Route("api/repositories/{repoId}/add/{userName}")]
-        public RepositoryUser AddUserToRespository(Guid repoId, string userName)
-        {                           
-            var repoUser = _repoBusiness.AddContributorToRepository(repoId, userName);
-            if (repoUser == null)
-                throw new ArgumentException("Invalid username");
-
-            return repoUser;
-        }
-
-
-        [HttpGet]
-        [Route("api/repositories/{repoId}/users")]
-        public async Task<ActionResult> UsersForRepository(Guid repoId)
-        {
-            var list = await _repoBusiness.GetUsersForRepositoryAsync(repoId);
-
-            // fix circular ref
-            foreach (var repoUser in list)
-            {
-                // Why TF are these pulled without an Include?
-                repoUser.User.Repositories = null;
-            }
-
-            return Json(list);
-        }
-
-        [HttpGet]
-        [Route("api/repositories/{repoId}")]
-        public ActionResult GetUserJson(Guid repoId)
-        {
-            return Json(_repoBusiness.GetRepository(repoId));            
-        }
-
     }
+
 
     public class RepositoriesListViewModel : AppBaseViewModel
     {
@@ -203,5 +178,6 @@ namespace KavaDocsUserManager.Web.Views.Repositories
         public string SettingsJson { get; set; }
 
         public string TableOfContentsJson { get; set; }
+        public bool IsNewUser { get; set; }
     }
 }

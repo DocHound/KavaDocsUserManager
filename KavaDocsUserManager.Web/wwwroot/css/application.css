@@ -17,7 +17,7 @@
 
 */
 .body-content {
-    margin: 80px auto 9px;
+    margin: 80px auto 50px;
     transition: margin-top 0.5s;
 }
 .body-content.reduced {

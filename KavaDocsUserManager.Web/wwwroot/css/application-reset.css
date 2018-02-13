@@ -65,6 +65,9 @@ a.dark,a.dark:visited {
     }
 }
 
+.right-align {
+    text-align: right;
+}
 .margin-top {
     margin-top: 1em;
 }
@@ -89,7 +92,17 @@ a.dark,a.dark:visited {
     margin-left: 8%;
     margin-right: 8%;
 }
+@media(max-width: 768px) {
+    .indented {
+        margin-left: 2%;
+        margin-right: 2%;
+    }
 
+    .indented-2x {
+        margin-left:4%;
+        margin-right:4%;
+    }
+}
 
 .green-text {
     color: rgb(22, 191, 22) !important;
@@ -160,6 +173,7 @@ a.dark,a.dark:visited {
     margin-bottom:30px;    
     border-radius: 4px;
 }
+
 .list-header {
     font-size: 1.1em;
     font-weight: 600;

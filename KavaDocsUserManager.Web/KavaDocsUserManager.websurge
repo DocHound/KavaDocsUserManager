@@ -8,7 +8,21 @@ Websurge-Request-Name: GetUsersForRepository
 GET http://localhost:55460/api/Repositories/fffead06-a8f4-4d49-bdf5-e942526cc57e HTTP/1.1
 Accept-Encoding: gzip,deflate
 Accept: application/json
+Cookie: Webstorm-ba145dc2=ecdc0cbe-7e63-4f50-9f8e-87a0ce184b6f; wwt=cXy6ARfjS1nP1I4N; __utmz=111872281.1512335283.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _ga=GA1.1.1213106729.1505027822; __utma=111872281.1213106729.1505027822.1516012439.1516667084.4; WebStoreUser=e2793428; .AspNetCore.Antiforgery.O3K_2fZKjmg=CfDJ8NkQCYYxXgNPh5ZMhASSTEV6HEkuaoZfFHmX2kiXvFPFxh8BFwp6PUj7MwfVI_D_5Aav-MaBUra9qZL2lBfwQQ9SToZZqZSemOyHlhM2w88sPRRnD7a96Vs4Z5UQpUeDAsMi8peWIO5l_DZFr3ceiSw; .AspNetCore.Cookies=CfDJ8NkQCYYxXgNPh5ZMhASSTEUXTUvV0Pdf8cqZ5L26xfrE4AS9KnjXT3C3cdDUnoI50NWtCWKoJ0yNd2PfkQjuiG5M1tIQ66zkYSaGJbfrYpDZ2SvCqY91f5sgTMPh8nXDbG_Os9qp4o89yfXIx5p_8B0hi2W4rJTBXw5gR5pnxqgK89_ZxPscoTbJtJ7wyZ80CcYiY9dM0_XztC8q3qmTryq3cR3YN8XzJ3WUlZBll6huKNJE3p_dURlEAetMUIZiB3eJyLF0CMfdb7aywJlmmDxwbPxVUgcM2rBGvZ7IErOwLLybmaaltmFYCmvzzWjO6NWZ1bnVjBbYTFPc-cKh-hvmOCIn5Xao8wSlez6C1el-axH1wqpRZ6gC5J7OlXcJ0qK1QJxBoL1ruXjj4SFVq9IFLwtlYmsOV6mqRbB47kVBfwGvGXz02ygjLtrf71t9_N7vuEz8l5Lbep42cxnT6ob5Z2pBCcCuGjgknrBqysDDkmO9kVJD-qX01oTclyTZnISJyDxVfsIuDcPqSbs8sAk
 Websurge-Request-Name: GetRepository
+
+------------------------------------------------------------------
+
+GET http://localhost:55460/api/repositories/searchusers/rick HTTP/1.1
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36
+Upgrade-Insecure-Requests: 1
+Accept: application/json
+Referer: http://localhost:55460/Repositories
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9,de;q=0.8
+Cookie: Webstorm-ba145dc2=ecdc0cbe-7e63-4f50-9f8e-87a0ce184b6f; wwt=cXy6ARfjS1nP1I4N; __utmz=111872281.1512335283.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _ga=GA1.1.1213106729.1505027822; __utma=111872281.1213106729.1505027822.1516012439.1516667084.4; WebStoreUser=e2793428; .AspNetCore.Antiforgery.O3K_2fZKjmg=CfDJ8NkQCYYxXgNPh5ZMhASSTEV6HEkuaoZfFHmX2kiXvFPFxh8BFwp6PUj7MwfVI_D_5Aav-MaBUra9qZL2lBfwQQ9SToZZqZSemOyHlhM2w88sPRRnD7a96Vs4Z5UQpUeDAsMi8peWIO5l_DZFr3ceiSw; .AspNetCore.Cookies=CfDJ8NkQCYYxXgNPh5ZMhASSTEUXTUvV0Pdf8cqZ5L26xfrE4AS9KnjXT3C3cdDUnoI50NWtCWKoJ0yNd2PfkQjuiG5M1tIQ66zkYSaGJbfrYpDZ2SvCqY91f5sgTMPh8nXDbG_Os9qp4o89yfXIx5p_8B0hi2W4rJTBXw5gR5pnxqgK89_ZxPscoTbJtJ7wyZ80CcYiY9dM0_XztC8q3qmTryq3cR3YN8XzJ3WUlZBll6huKNJE3p_dURlEAetMUIZiB3eJyLF0CMfdb7aywJlmmDxwbPxVUgcM2rBGvZ7IErOwLLybmaaltmFYCmvzzWjO6NWZ1bnVjBbYTFPc-cKh-hvmOCIn5Xao8wSlez6C1el-axH1wqpRZ6gC5J7OlXcJ0qK1QJxBoL1ruXjj4SFVq9IFLwtlYmsOV6mqRbB47kVBfwGvGXz02ygjLtrf71t9_N7vuEz8l5Lbep42cxnT6ob5Z2pBCcCuGjgknrBqysDDkmO9kVJD-qX01oTclyTZnISJyDxVfsIuDcPqSbs8sAk
+Websurge-Request-Name: Autocomplete
 
 ------------------------------------------------------------------
 
@@ -23,7 +37,7 @@ Websurge-Request-Name: GetRepository
   "MaxResponseSize": 0,
   "ReplaceQueryStringValuePairs": null,
   "ReplaceDomain": null,
-  "ReplaceCookieValue": null,
+  "ReplaceCookieValue": "Webstorm-ba145dc2=ecdc0cbe-7e63-4f50-9f8e-87a0ce184b6f; wwt=cXy6ARfjS1nP1I4N; __utmz=111872281.1512335283.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _ga=GA1.1.1213106729.1505027822; __utma=111872281.1213106729.1505027822.1516012439.1516667084.4; WebStoreUser=e2793428; .AspNetCore.Antiforgery.O3K_2fZKjmg=CfDJ8NkQCYYxXgNPh5ZMhASSTEV6HEkuaoZfFHmX2kiXvFPFxh8BFwp6PUj7MwfVI_D_5Aav-MaBUra9qZL2lBfwQQ9SToZZqZSemOyHlhM2w88sPRRnD7a96Vs4Z5UQpUeDAsMi8peWIO5l_DZFr3ceiSw; .AspNetCore.Cookies=CfDJ8NkQCYYxXgNPh5ZMhASSTEUXTUvV0Pdf8cqZ5L26xfrE4AS9KnjXT3C3cdDUnoI50NWtCWKoJ0yNd2PfkQjuiG5M1tIQ66zkYSaGJbfrYpDZ2SvCqY91f5sgTMPh8nXDbG_Os9qp4o89yfXIx5p_8B0hi2W4rJTBXw5gR5pnxqgK89_ZxPscoTbJtJ7wyZ80CcYiY9dM0_XztC8q3qmTryq3cR3YN8XzJ3WUlZBll6huKNJE3p_dURlEAetMUIZiB3eJyLF0CMfdb7aywJlmmDxwbPxVUgcM2rBGvZ7IErOwLLybmaaltmFYCmvzzWjO6NWZ1bnVjBbYTFPc-cKh-hvmOCIn5Xao8wSlez6C1el-axH1wqpRZ6gC5J7OlXcJ0qK1QJxBoL1ruXjj4SFVq9IFLwtlYmsOV6mqRbB47kVBfwGvGXz02ygjLtrf71t9_N7vuEz8l5Lbep42cxnT6ob5Z2pBCcCuGjgknrBqysDDkmO9kVJD-qX01oTclyTZnISJyDxVfsIuDcPqSbs8sAk",
   "ReplaceAuthorization": null,
   "Username": null,
   "Password": null,
@@ -35,7 +49,7 @@ Websurge-Request-Name: GetRepository
   "FormattedPreviewTheme": "visualstudio",
   "LastThreads": 8,
   "IgnoreCertificateErrors": false,
-  "TrackPerSessionCookies": true,
+  "TrackPerSessionCookies": false,
   "LastSecondsToRun": 15
 }
 

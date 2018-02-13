@@ -2,16 +2,41 @@
 /// <reference path="../lib/ww.jquery.js" />
 var vm = {}
 
+
 vm = {
     repository: {},
     newUser: {
-        username: "Phantomias",
+        awesomplete: null,
+        username: "",        
         type: 'contributor',
-        visible: false
+        visible: false,
+        userList: [],        
+        getName: function(item) {
+            return item.name;
+        },
+        getUserSearchList: function (event) {
+            if (event.key == "ArrowDown" || event.Key == "ArrowUp" || event.Key == "Enter")
+                return;
+
+            console.log("user search list" + new Date(), event);
+            if (!vm.newUser.username || vm.newUser.username.length < 2)
+                return;
+            
+            ajaxJson("/api/repositories/searchusers/" + vm.newUser.username,
+                null,
+                function (list) {
+                    console.log(list);
+                    vm.newUser.userList = list;
+                    vm.newUser.awesomplete.list = list;
+                },
+                function () {
+
+                }, { method: "GET" });
+        },
     },
     initialize: function() {
         vm.repository = globals.repository;
-
+        $("#Repository_Prefix").focus();
     },
     highlightCode: function() {
         $("pre code")
@@ -36,16 +61,16 @@ vm = {
         preview$.html(code$.val());
         setTimeout(vm.highlightCode,10);
     },
+   
     addUserToRepo: function (repository, username) {        
         ajaxJson("/api/repositories/" + repository.id + "/add/" + username, null,
-            function (repoUser) {
-                debugger;
+            function (repoUser) {                
                 repository.users.push(repoUser);
                 vm.newUser.visible = false;
                 vm.newUser.username = null;
             },
             function(error) {
-               vm.status("Unable to add user");
+               vm.status(error.message);
             });
     },
     removeUserFromRepo: function(user, repository) {
@@ -60,17 +85,51 @@ vm = {
                     vm.status("Updated failed: " + error.message);
                 });                
     },
+    deleteRepository: function() {
+        if (!confirm("Are you sure you want to delete this repository?"))
+            return;
+
+        ajaxJson("/api/repositories/" + vm.repository.id,
+            null,
+            function(result) {
+                window.location = "/repositories";
+            },
+            function(error) {
+                status(error.message);
+            },
+            { method: "DELETE" });
+    },
     status: function (message) {
         if (message)
             alert(message);
     }
 
 }
-vm.initialize();
 
+vm.initialize();
 var app = new Vue({
     el: "#RepositoryPage",
     data: function() {
          return vm;
     }
 });
+//Vue.use(VAutocomplete.default);
+
+setTimeout(function () {
+    var el = document.getElementById("UserToAdd");
+    vm.newUser.awesomplete =
+        new Awesomplete(el,
+            {
+                list: vm.newUser.userList,
+                selectcomplete: function(item) {
+                    console.writeline(item);
+                    vm.newUser.searchname = item.text;
+                }
+            });
+    el.addEventListener("awesomplete-selectcomplete",
+        function(event) {
+            var item = event.text;  // selected 'item'
+            vm.newUser.username = item.value; 
+        });
+}, 2000);
+

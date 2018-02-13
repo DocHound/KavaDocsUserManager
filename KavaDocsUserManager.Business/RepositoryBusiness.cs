@@ -52,7 +52,24 @@ namespace KavaDocsUserManager.Business
             }
 
 
-            return true;
+            if (string.IsNullOrEmpty(repo.Title))
+                ValidationErrors.Add("Title can't be left blank", "Title");
+            
+            // TODO: Force JSON Configuration and Validation JSON
+
+            bool? isNew = IsNewEntity(repo);
+
+            if (isNew.HasValue && isNew.Value)
+            {
+                if (Context.Repositories.Any(r => r.Prefix == safeTitle))
+                {
+                    ValidationErrors.Add("The repository prefix " + safeTitle +
+                                         " already exists. Please choose another prefix.","Prefix");
+                }
+            }
+
+
+            return ValidationErrors.Count == 0;
         }
 
         public Repository GetRepository(Guid id)
@@ -102,8 +119,15 @@ namespace KavaDocsUserManager.Business
                 return null;
             }
 
-            var map = Context.UserRepositories.Include(ur=> ur.User).FirstOrDefault(c => c.RepositoryId == repoId && c.UserId == userId);
-            if (map != null) return map; ; // already an owner or contributor
+            var map = Context.UserRepositories
+                .Include(ur=> ur.User)
+                .FirstOrDefault(c => c.RepositoryId == repoId && c.UserId == userId);
+            if (map != null)
+            {
+                SetError("User is already a contributor or owner of this repository");
+                return null;
+                ; // already an owner or contributor
+            }
 
             map = new RepositoryUser()
             {
@@ -217,12 +241,25 @@ namespace KavaDocsUserManager.Business
         }
 
         public async Task<List<Repository>> GetRepositoriesForUserAsync(Guid userId)
-        {
-            return await Context.Repositories
+        {            
+
+            var list = await Context.Repositories
                 .Include(c=> c.Users)
-                .Where(r => r.Users.Any(u=> u.UserId == userId))       
-                .OrderBy(r=> r.Users.FirstOrDefault(ur=> !ur.IsOwner))                
+                .Where(r => r.Users.Any(u=> u.UserId == userId))                
                 .ToListAsync();
+
+            list = list
+                .OrderBy(r =>
+                {                       
+                    if (r.Users == null)
+                        return 1;
+                    bool isOwner = r.Users
+                            .Any(ur => ur.IsOwner && ur.UserId == userId);
+                    return isOwner ? 0 : 1;
+                })                
+                .ToList();
+
+            return list;
         }
 
         public async Task<List<RepositoryUser>> GetUsersForRepositoryAsync(Guid repoId)

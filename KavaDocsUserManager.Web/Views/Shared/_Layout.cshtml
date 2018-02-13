@@ -64,9 +64,10 @@
                 </a>
 
 
-                <button id="btnProfileDropDown" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button id="btnProfileDropDown" type="button" class="btn btn-secondary dropdown-toggle" 
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="@appUser.Username">
                     <img src="@Gravatar.GetGravatarLink(appUser.Email, 23)"/>
-                    @appUser.Username
+                    <span class="hidable-xs">@appUser.Username</span>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="btnProfileDropDown">
                     <a href="@Url.Action("Profile", "Account", new { id=appUser.UserId})"

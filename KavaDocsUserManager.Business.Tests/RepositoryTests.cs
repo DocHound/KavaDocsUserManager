@@ -41,7 +41,7 @@ namespace KavaDocsUserManager.Business.Tests
         }
 
         [Test]
-        public async Task GetRepositoriesForUserTest()
+        public async void GetRepositoriesForUserTest()
         {
             var repoBus = TestHelper.GetRepositoryBusiness();
 

@@ -9,12 +9,13 @@
   "author": "Rick Strahl, Markus Egger",
   "license": "ISC",
   "dependencies": {
+    "awesomplete": "^1.1.2",
     "bootstrap": "^4.0.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
     "popper": "^1.0.1",
     "popper.js": "^1.12.9",
-    "vue": "^2.5.13",
-    "vuew": "^1.0.0-security"
+    "v-autocomplete": "^1.8.2",
+    "vue": "^2.5.13"
   }
 }
