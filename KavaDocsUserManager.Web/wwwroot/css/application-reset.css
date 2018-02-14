@@ -52,93 +52,14 @@ a.dark,a.dark:visited {
         text-decoration: none;
     }
 
-
-@media(max-width: 767px) {
-    .hidable {
-        display: none !important;
-    }
+[v-cloak] > * {
+    display: none
 }
 
-@media(max-width: 500px) {
-    .hidable-xs {
-        display: none !important;
-    }
+[v-cloak]::before {
+    content: "loading…"
 }
 
-.right-align {
-    text-align: right;
-}
-.margin-top {
-    margin-top: 1em;
-}
-.margin-top-2x {
-    margin-top: 2em;
-}
-
-.margin-bottom {
-    margin-bottom: 1em;
-}
-
-.margin-bottom-2x {
-    margin-bottom: 2em;
-}
-
-.indented {
-    margin-left: 4%;
-    margin-right: 4%;
-}
-
-.indented-2x {
-    margin-left: 8%;
-    margin-right: 8%;
-}
-@media(max-width: 768px) {
-    .indented {
-        margin-left: 2%;
-        margin-right: 2%;
-    }
-
-    .indented-2x {
-        margin-left:4%;
-        margin-right:4%;
-    }
-}
-
-.green-text {
-    color: rgb(22, 191, 22) !important;
-}
-.orange-text {
-    color: organge;
-}
-.red-text  {
-    color: firebrick;
-}
-.error {
-    font-weight: bold !important;
-    color: firebrick !important;
-}
-
-.visible {
-    display: block !important;
-}
-.hidden {
-    display: none !important;
-}
-.invisible  {
-    opacity: 0;
-}
-.visually-hidden {
-    /* hides an element without taking it out of the document flow 
-        parsers see it as still present and 'visible' but it doesn't render */
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-}
 
 /* flows child elements evenly to fill 100%*/
 .responsive-container {
@@ -159,6 +80,116 @@ a.dark,a.dark:visited {
         margin-top: 4px;
         width: 100% !important;
     }
+}
+
+
+
+@media(max-width: 767px) {
+    .hidable {
+        display: none !important;
+    }
+}
+
+@media(max-width: 500px) {
+    .hidable-xs {
+        display: none !important;
+    }
+}
+
+.right-align {
+    text-align: right;
+}
+
+.margin-top {
+    margin-top: 1em;
+}
+
+.margin-top-2x {
+    margin-top: 2em;
+}
+
+.margin-bottom {
+    margin-bottom: 1em;
+}
+
+.margin-bottom-2x {
+    margin-bottom: 2em;
+}
+
+.margin-right {
+    margin-right: 1.2em;
+}
+
+.margin-right-2x {
+    margin-right: 2.4em;
+}
+
+.indented {
+    margin-left: 4%;
+    margin-right: 4%;
+}
+
+.indented-2x {
+    margin-left: 8%;
+    margin-right: 8%;
+}
+
+@media(max-width: 768px) {
+    .indented {
+        margin-left: 2%;
+        margin-right: 2%;
+    }
+
+    .indented-2x {
+        margin-left: 4%;
+        margin-right: 4%;
+    }
+}
+
+.green-text {
+    color: rgb(22, 191, 22) !important;
+}
+
+.orange-text {
+    color: organge;
+}
+
+.red-text {
+    color: firebrick;
+}
+.gray-text {
+    color: #999;
+}
+
+
+.error {
+    font-weight: bold !important;
+    color: firebrick !important;
+}
+
+.visible {
+    display: block !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.invisible {
+    opacity: 0;
+}
+
+.visually-hidden {
+    /* hides an element without taking it out of the document flow 
+        parsers see it as still present and 'visible' but it doesn't render */
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
 }
 
 .subtle-highlight {
@@ -240,14 +271,14 @@ input[type=checkbox].with-font {
 
     input[type=radio].with-font:checked ~ label:before,
     input[type=checkbox].with-font:checked ~ label:before {
-        content: "\f00c"; /* fa-check */
+        content: "\f14a"; /* fa-check */
         font-size: 1.2em;
         color: darkgreen;
         letter-spacing: 5px;
     }
 
     input[type=checkbox].with-font ~ label:before {
-        content: "\f096"; /* fa-square-o */
+        content: "\f0c8"; /* fa-square-o */
     }
 
     input[type=checkbox].with-font:checked ~ label:before {

@@ -128,8 +128,7 @@ setTimeout(function () {
         new Awesomplete(el,
             {
                 list: vm.newUser.userList,
-                selectcomplete: function(item) {
-                    console.writeline(item);
+                selectcomplete: function(item) {                    
                     vm.newUser.searchname = item.text;
                 }
             });

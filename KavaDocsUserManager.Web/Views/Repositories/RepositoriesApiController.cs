@@ -13,7 +13,7 @@ namespace KavaDocsUserManager.Web.Views.Repositories
 {
 
     [Authorize]
-    [ApiExceptionFilter]
+    [UnhandledApiExceptionFilter]
     public class RepositoriesApiController :Controller
     {
         private readonly RepositoryBusiness _repoBusiness;

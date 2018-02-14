@@ -107,14 +107,14 @@
 
         </div>
 
-        <div class="responsive-container">
-            <div class="form-check">
-                <input type="checkbox" asp-for="Repository.IsActive" class="form-check-input with-font" id="IsActive">
+        <div class="responsive-container" >
+            <div class="form-check margin-right"  >
+                <input type="checkbox" asp-for="Repository.IsActive" class="form-check-input" id="IsActive">
                 <label class="form-check-label" for="IsActive">Repository Active</label>
             </div>
 
             <div class="form-check">
-                <input type="checkbox" asp-for="Repository.IncludeInSearchResults" class="form-check-input with-font" id="IncludeInSearchResults">
+                <input type="checkbox" asp-for="Repository.IncludeInSearchResults" class="form-check-input" id="IncludeInSearchResults">
                 <label class="form-check-label" for="IncludeInSearchResults">Include in Search Results</label>
             </div>
         </div>
@@ -122,14 +122,14 @@
         <div class="margin-top-2x">
             @if (!Model.IsNewUser)
         {
-            <a class="btn btn-sm btn-warning float-right" v-on:click="deleteRepository">
+            <a class="btn btn-sm btn-warning float-right" v-on:click="deleteRepository" title="Delete repository">
                 <i class="fa fa-times-circle"></i>
-                Delete Repository
+                Delete
             </a>
     }
             <button class="btn btn-primary" type="submit">
                 <i class="fas fa-check-circle "></i>
-                &nbsp;Save Repository
+                Save Repository
             </button>
         </div>
 
@@ -140,14 +140,14 @@
 
     </form>
 
-
-
-
-    <div class="list indented v-clo">
+    <hr  class="margin-top-2x margin-bottom-2x"/>
+    
+    <div class="list" v-cloak>
         <div class="list-header" style="font-weight: bold;">
 
             <button class="btn btn-secondary btn-sm float-right"
                     style="margin-top: -5px;"
+                    v-if="!newUser.visible"
                     v-on:click="newUser.visible=true;">
                 <i class="fa fa-plus-circle"></i>
                 Add User
@@ -157,12 +157,15 @@
             Repository Contributors
         </div>
         <div v-show="newUser.visible">
-            <a v-on:click="newUser.visible = false;" style="display:block; padding: 10px 0"><i class="fa fa-times red-text float-right"></i></a>
-            <div class="list-item responsive-container">
-                <input id="UserToAdd" class="awesomplete form-control"
-                       v-model="newUser.username"
-                       v-on:keyup="newUser.getUserSearchList" />
+            <a v-on:click="newUser.visible = false;"
+               class="float-right"
+               style="display:block; padding: 10px 5px"><i class="far fa-times gray-text "></i></a>
 
+            <div class="list-item responsive-container" >                
+                <input id="UserToAdd" class="awesomplete form-control" style="width: 300px"
+                       placeholder="search for Kava Docs users..."
+                        v-model="newUser.username"
+                        v-on:keyup="newUser.getUserSearchList"/>                
                 <button class="btn btn-outline-primary" v-on:click="addUserToRepo(repository,newUser.username)">Add</button>
             </div>
         </div>
@@ -170,6 +173,7 @@
              class="list-item" v-bind:class="{'subtle-highlight': user.isOwner}">
             <div class="float-right">
                 <span v-if="user.isOwner">Owner&nbsp;</span>
+                <span v-if="!user.isOwner">Contributor&nbsp;</span>
                 <a v-on:click="removeUserFromRepo(user.user, repository)">
                     <i class="fas fa-times-circle red-text"></i>
                 </a>
