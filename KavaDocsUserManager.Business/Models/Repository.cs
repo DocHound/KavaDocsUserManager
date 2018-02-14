@@ -63,6 +63,11 @@ namespace KavaDocsUserManager.Business.Models
         /// </summary>
         public string TableOfContents { get; set; }
 
+
+        /// <summary>
+        /// Allows specifying CSS Overrides when you can't access the site
+        /// </summary>
+        public string CssOverrides { get; set; }
         
         public bool IsActive { get; set; }
 
