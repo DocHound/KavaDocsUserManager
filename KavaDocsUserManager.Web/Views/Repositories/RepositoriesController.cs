@@ -174,10 +174,17 @@ namespace KavaDocsUserManager.Web.Views.Repositories
         public Repository Repository { get; set; }
 
         public bool IsOwner { get; set; }
+        public bool IsNewUser { get; set; }
+
 
         public string SettingsJson { get; set; }
-
         public string TableOfContentsJson { get; set; }
-        public bool IsNewUser { get; set; }
+        public string CssOverride { get; set; }
+
+        public string SelectedOptionalField { get; set; } = "TableOfContents";
+
+
+
+
     }
 }

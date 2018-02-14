@@ -73,7 +73,7 @@ namespace KavaDocsUserManager.Web.Views.Account
         public async Task<IActionResult> Signout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Signin");
+            return Redirect("~/");
         }
 
         [AllowAnonymous]

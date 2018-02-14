@@ -77,16 +77,34 @@
             <textarea class="form-control code-editing" id="SettingsJson"
                       asp-for="SettingsJson"
                       placeholder="Settings for this repository (JSON format)">
-                </textarea>
+            </textarea>
         </div>
 
-        <div class="form-group">
-            <label>Table of Contents <small style="font-weight: normal">(optional)</small></label>
-            @*<pre><code class="language-json">@Model.TocJson</code></pre>*@
-            <textarea class="form-control code-editing"
-                      asp-for="TableOfContentsJson"
-                      placeholder="No table of contents JSON - uses remote _toc.json repository">
-                </textarea>
+        <div class="form-group optional-field-group">
+            <label>
+                Optional Fields &nbsp;
+                @*<pre><code class="language-json">@Model.TocJson</code></pre>*@
+
+
+                <select asp-for="SelectedOptionalField"
+                        class="form-control d-inline"
+                        v-on:change="optionalFieldSelection"
+                        style="width: 200px;">
+                    <option value="TableOfContents">Table of Contents</option>
+                    <option value="CssOverrides">Css Overrides</option>
+                </select>
+            </label>
+
+            <textarea class="form-control code-editing @(Model.SelectedOptionalField != "TableOfContents" ? "hidden" : "")"
+                      asp-for="TableOfContentsJson" id="TableOfContents"
+                      placeholder="Table of Contents JSON if a remote _toc.json can't be used">
+            </textarea>
+            
+            <textarea class="form-control code-editing @(Model.SelectedOptionalField != "CssOverrides" ? "hidden" : "")"
+                      asp-for="Repository.CssOverrides" id="CssOverrides"
+                      placeholder="optional CSS to override stock template rendering">
+            </textarea>
+
         </div>
 
         <div class="responsive-container">

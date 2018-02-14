@@ -2,14 +2,23 @@
 @model AppBaseViewModel
 @{
     var appUser = Context.User.GetAppUser();
-
+    var title = ViewData["Title"] as string;
+    if (string.IsNullOrEmpty(title) || title == "Kava Docs")
+    {
+        title = "Kava Docs";
+    }
+    else
+    {
+        title = $"{title} - Kava Docs";
+    }
+    bool isHomePage = Context.Request.Path == "/";
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Kava Docs</title>
+    <title>@title</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome-all.css" />
@@ -37,9 +46,10 @@
     <div class="navbar-header float-left" 
          style="cursor: pointer" aria-controls="button"
          onclick="window.location = '@Url.Content("~/")'">
-        <img src="~/images/KavaDocsHeaderLogo.png" class="navbar-icon"/>
+        <img src="~/images/KavaDocsHeaderLogo.png" 
+             class="navbar-icon @(isHomePage ? "invisible" : "")" />
     </div>
-
+    
     <div class="navbar-links float-right">
         
         <div class="btn-group" role="group" >
@@ -89,7 +99,8 @@
 </nav>    
 
 <div class="body-content">
-    @RenderBody()    
+
+    @RenderBody()
 </div>
 
 

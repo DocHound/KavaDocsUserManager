@@ -2,7 +2,196 @@
     ViewData["Title"] = "Kava Docs";
 }
 
-<div class="jumbotron">
-    Hello from KavaDocs
-</div>
+<style>
+    .intro {
+        background-color: #444;
+        color: #eee;
+        padding: 35px;
+        width: 100%;
+        opacity: 0.9;     
+        position:relative
+    }
+    .intro::after {
+        content: "";
+        background: url(/images/Kavabackground_lores.jpg) no-repeat;
+        opacity: 0.20;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        position: absolute;
+        z-index: -1;        
+    }
+    .intro-image {
+        width: 500px; 
+    }
+    .sub-title {        
+        font-size: 1.27rem; 
+        font-weight: 600;
+        margin: 15px 0;
+    }
+    .intro-text {
+        width: 450px;
+    }
+    .flex-band {
+        justify-content: space-around;
+    }
+    .tile {
+        margin: 15px;
+    }
+    .text-tile {
+        width: 500px;
+        flex: none;
+    }
+    .login-tile {
+        max-width: 400px;
+    }
 
+    @@media(max-width:768px) {
+        .intro {
+            padding: 15px;
+        }
+    }
+</style>
+<div class="body-content" style="max-width: 1278px; margin-left: auto; margin-right: auto; b">
+    <div class=" intro" style="width: 100%; max-width: 1600px; margin: 0 auto;font-size: 1.1em;">
+
+        <div class="responsive-container flex-band">
+            <div class="tile text-tile">
+
+                <img src="~/images/KavaDocsIntro.png" class="intro-image" />
+
+                <p class="sub-title">
+                    a new way of building aggregated documentation
+                </p>
+
+                <p class="intro-text">
+                    Build documentation the easy way using the tools you already use today
+                    and let Kava Docs sniff out your content for you. 
+                    Using simple Markdown or HTML text and an online store like GitHub,
+                    VSTS or a Web site is all you need to create great looking,
+                    highly functional documentation.
+                </p>
+            </div>
+
+
+
+            <div class="tile login-tile">
+                <form name="form1" asp-action="Signin" asp-controller="Account">
+
+                    <div class="form-group">
+
+                        <label>Sign in or Sign up</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <i class="fa fa-fw fa-envelope input-group-text"></i>
+                            </div>
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="Enter your email address"
+                                   name="Email" id="Email"
+                                   aria-label="Email"
+                                   autocapitalize="off"
+                                   autocomplete="off"
+                                   spellcheck="false"
+                                   autocorrect="off" required />
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <i class="fa fa-fw fa-unlock-alt input-group-text"></i>
+                            </div>
+                            <input type="password"
+                                   class="form-control"
+                                   placeholder="Enter your password"
+                                   name="Password" id="Password"
+                                   autocapitalize="off"
+                                   autocomplete="off"
+                                   spellcheck="false"
+                                   autocorrect="off"
+                                   required />
+                        </div>
+                    </div>
+
+
+                    <div class="margin-top">
+                        <button class="btn btn-primary  " style="display: block; width: 210px;"
+                                type="submit"
+                                [disabled]="form1.invalid || form1.pristine">
+                            <i class="far fa-sign-in" style="font-size: 1.1em"></i>
+                            Sign in
+                        </button>
+
+
+                    </div>
+                    <div class="margin-top" *ngIf="!isForgotPassword">
+                        <a asp-action="PasswordRecoverySendEmail" asp-controller="Account">I forgot my password</a>
+                    </div>
+                    <hr />
+
+                    <p>Don't have an account yet? No problem, create one - it's FREE and easy.</p>
+                    <a asp-action="Profile" asp-controller="Account" class="btn btn-primary" routerLink="/profile">
+                        <i class="fa fa-pencil"></i>
+                        Create a new Account
+                    </a>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="responsive-container flex-band" style="padding: 5%;text-align: center">
+        <div>
+            <div style="font-size: 3.4em; font-weight: 300">A better way to build documentation</div>
+
+            <p style="font-size: 1.3em;margin-top: 1.5em;">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+        </div>
+    </div>
+
+
+    <div class="responsive-container flex-band" style="padding: 2% 4%;font-size: 1.2em; ">
+
+        <div style="flex: 1 1 auto;">
+            <h2>
+                <i class="fa fa-check-circle "></i>
+                Markdown
+            </h2>
+            <p>
+                Create your content using easy to use, industry standard Markdown
+                text, that makes it easy to write documentation content.
+            </p>
+        </div>
+
+        <div style="flex: 1 1 auto;">
+            <h2>
+                <i class="fa fa-check-circle"></i>
+                GitHub
+            </h2>
+            <p>
+                Use GitHub or any other Git or VSTS repository to store
+                your documents. Take advantage of automatic
+            </p>
+        </div>
+
+        <div style="flex: 1 1 auto">
+            <h2>
+                <i class="fa fa-check-circle"></i>
+                Multiple Sources
+            </h2>
+            <p>
+                Use GitHub or any other Git or VSTS repository to store
+                your documents. Take advantage of automatic
+            </p>
+        </div>
+    </div>
+</div>

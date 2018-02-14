@@ -17,11 +17,11 @@
 
 */
 .body-content {
-    margin: 80px auto 50px;
+    margin: 90px auto 50px;
     transition: margin-top 0.5s;
 }
 .body-content.reduced {
-    margin: 65px auto 9px;
+    margin: 70px auto 9px;
     
 }
 
@@ -78,7 +78,7 @@
         height: 50px;
     }
     .body-content {
-        margin: 60px auto 9px;
+        margin: 70px auto 9px;
     }
     .content-container {        
         padding: 1px 15px;

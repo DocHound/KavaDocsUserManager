@@ -15,9 +15,7 @@ namespace KavaDocsUserManager.Web.Controllers
         {
             var appUser = User.GetAppUser();
             if (appUser.IsAuthenticated())
-                return RedirectToAction("Index", "Repositories");
-            else
-                return RedirectToAction("Signin", "Account");
+               return RedirectToAction("Index", "Repositories");
             
             var model = CreateViewModel<AppBaseViewModel>();
             return View(model);

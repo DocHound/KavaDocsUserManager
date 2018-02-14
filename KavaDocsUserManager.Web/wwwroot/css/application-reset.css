@@ -124,6 +124,9 @@ a.dark,a.dark:visited {
 .hidden {
     display: none !important;
 }
+.invisible  {
+    opacity: 0;
+}
 .visually-hidden {
     /* hides an element without taking it out of the document flow 
         parsers see it as still present and 'visible' but it doesn't render */
@@ -139,7 +142,7 @@ a.dark,a.dark:visited {
 
 /* flows child elements evenly to fill 100%*/
 .responsive-container {
-    display: flex;    
+    display: flex;        
 }
 .responsive-container>* {
     margin-right: 3px;
@@ -204,11 +207,12 @@ input:not([type=submit]):not([type=button]):not([type=checkbox]):not([type=radio
 }
 
 ::-webkit-input-placeholder {
-    color: #a0a0a0;
-    font-weight: normal;
+    color: #999 !important;
+    font-weight: 300;
+    font-style: italic;
 }
 ::-moz-placeholder {
-    color: #888;
+    color: #999 !important;
 }
 /* Font-awsome based radios and checkboxes */
 input[type=radio].with-font,

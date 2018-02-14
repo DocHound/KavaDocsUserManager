@@ -61,7 +61,14 @@ vm = {
         preview$.html(code$.val());
         setTimeout(vm.highlightCode,10);
     },
-   
+    optionalFieldSelection: function (event) {        
+        var el$ = $(event.currentTarget);
+        var value = el$.val();
+        $(".optional-field-group textarea.code-editing").addClass("hidden");
+        var item$ = $("#" + value);
+        console.log(item$,value);
+        item$.removeClass("hidden");
+    },
     addUserToRepo: function (repository, username) {        
         ajaxJson("/api/repositories/" + repository.id + "/add/" + username, null,
             function (repoUser) {                
