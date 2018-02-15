@@ -159,7 +159,7 @@ namespace KavaDocsUserManager.Web.Views.Account
                 if (string.IsNullOrEmpty(model.Password) || string.IsNullOrEmpty(model.PasswordConfirm) ||
                     model.Password != model.PasswordConfirm)
                 {
-                    _userBus.ValidationErrors.Add("Passwords are missing or don't match");
+                    model.ErrorDisplay.AddMessage("Passwords are missing or don't match","Password");
                     user.Password = null;
                     validationResult = false;
                 }                
@@ -167,7 +167,7 @@ namespace KavaDocsUserManager.Web.Views.Account
 
             if (!validationResult)
             {
-                model.ErrorDisplay.AddMessages(_userBus.ValidationErrors);
+                model.ErrorDisplay.AddMessages(_userBus.ValidationErrors,"User_");
                 model.ErrorDisplay.ShowError("Please fix the following");
                 return View(model);
             }
