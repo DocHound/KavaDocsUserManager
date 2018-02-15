@@ -332,28 +332,26 @@ namespace KavaDocsUserManager.Business
 
             if(!IsValidDisplayName(user.UserDisplayName))
             ValidationErrors.Add(
-                "Invalid display name. Name should contain no spaces contain: only alpha numeric characters and dashes and can't start or end with a dash.");
+                "Invalid display name. Name should contain no spaces contain: only alpha numeric characters and dashes and can't start or end with a dash.","UserDisplayName");
 
             if (Context.Users.Any(usr => usr.Email == user.Email && usr.Id != user.Id))
-                ValidationErrors.Add("Email address is already in use by another user.");
+                ValidationErrors.Add("Email address is already in use by another user.","Email");
             
              if (Context.Users.Any(usr => usr.UserDisplayName == user.UserDisplayName && usr.Id != user.Id))
-                 ValidationErrors.Add("Display name is already in use by another user.");
+                 ValidationErrors.Add("Display name is already in use by another user.","UserDisplayName");
 
 
             if (string.IsNullOrEmpty(user.Email))
-                ValidationErrors.Add("Email address can't be empty.");
+                ValidationErrors.Add("Email address can't be empty.","Email");
 
             if (!IsValidEmailAddress(user.Email))
-                ValidationErrors.Add("Invalid email format.");
-
-
-
+                ValidationErrors.Add("Invalid email format.","Email");
+            
             if (string.IsNullOrEmpty(user.UserDisplayName))
-                ValidationErrors.Add("User display name nan't be empty.");
+                ValidationErrors.Add("User display name nan't be empty.","UserDisplayName");
 
             if (string.IsNullOrEmpty(user.Password) || user.Password.Length < 5)
-                ValidationErrors.Add("Password should be at least 5 characters long.");
+                ValidationErrors.Add("Password should be at least 5 characters long.","Password");
             else
             {
                 // always force password to be updated and hashed even if it was entered as plain text            
