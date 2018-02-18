@@ -67,9 +67,8 @@ namespace KavaDocsUserManager.Web.Views.Repositories
 
             
             // only owner can delete
-            if (!repo.Users.Any(u => u.UserId == appUser.UserId && u.IsOwner))            
-                throw new ApiException("Only the owner can delete this respository.",404);                
-            
+            if (!repo.IsOwner(appUser.UserId))            
+                throw new ApiException("Only the owner can delete this respository.",404);                            
             
             if (!_repoBusiness.DeleteRepository(id))            
                 throw new ApiException($"Can't delete this repository: {_repoBusiness.ErrorMessage}");
