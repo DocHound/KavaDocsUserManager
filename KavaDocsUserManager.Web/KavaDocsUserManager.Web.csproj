@@ -16,12 +16,6 @@
     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="wwwroot\lib\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="wwwroot\js\repository.js" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\KavaDocsUserManager.Business\KavaDocsUserManager.Business.csproj" />
   </ItemGroup>
 </Project>
