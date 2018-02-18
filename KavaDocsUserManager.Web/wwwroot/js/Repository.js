@@ -17,8 +17,7 @@ vm = {
         getUserSearchList: function (event) {
             if (event.key == "ArrowDown" || event.Key == "ArrowUp" || event.Key == "Enter")
                 return;
-
-            console.log("user search list" + new Date(), event);
+            
             if (!vm.newUser.username || vm.newUser.username.length < 2)
                 return;
             
@@ -37,6 +36,9 @@ vm = {
     initialize: function() {
         vm.repository = globals.repository;
         $("#Repository_Prefix").focus();
+
+        toastr.options.closeButton = true;
+        toastr.options.positionClass = "toast-bottom-right";        
     },
     highlightCode: function() {
         $("pre code")
@@ -75,21 +77,24 @@ vm = {
                 repository.users.push(repoUser);
                 vm.newUser.visible = false;
                 vm.newUser.username = null;
+                toastr.success(username + " has been added to this repository");
             },
             function(error) {
-               vm.status(error.message);
+               toastr.error(error.message,"Couldn't add user");
             });
     },
     removeUserFromRepo: function(user, repository) {
         ajaxJson("/api/repositories/" + repository.id + "/remove/" + user.id,
-                null)
-            .then(function () {                    
+                null,
+                function () {
                     repository.users = repository.users.filter(function(u) {
-                        return  u.user !== user;
-                    });                    
+                        return u.user !== user;
+                    });
+                    
+                    toastr.success(user.userDisplayName + " has been removed from the repository.");
                 },
                 function(error) {
-                    vm.status("Updated failed: " + error.message);
+                    toastr.error(error.message, "Couldn't remove user");
                 });                
     },
     deleteRepository: function() {
@@ -106,9 +111,20 @@ vm = {
             },
             { method: "DELETE" });
     },
-    status: function (message) {
-        if (message)
-            alert(message);
+    // info, success, warning*
+    status: function (message, icon, title) {
+        if (!message)
+            return;
+
+        if (!icon)
+            icon = "warning";
+
+        if(this.icon == "info")
+            toastr.info(this.message, title);
+        else if (this.icon == "success")
+            toastr.success(this.message,title);
+        else
+            toastr.warning(this.message, title);
     }
 }
 

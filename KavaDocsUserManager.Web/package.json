@@ -15,6 +15,7 @@
     "jquery": "^3.3.1",
     "popper": "^1.0.1",
     "popper.js": "^1.12.9",
+    "toastr": "^2.1.4",
     "v-autocomplete": "^1.8.2",
     "vue": "^2.5.13"
   }

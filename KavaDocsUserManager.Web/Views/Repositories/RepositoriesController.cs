@@ -174,7 +174,7 @@ namespace KavaDocsUserManager.Web.Views.Repositories
                 return RedirectToAction("Repository", new {id = id, message = "Can't delete this repository."});
 
             // only owner can delete
-            if (!repo.Users.Any(u => u.UserId == appUser.UserId && u.IsOwner))
+            if (!repo.IsOwner(appUser.UserId))
             {
                 return RedirectToAction("Repository", new
                     {

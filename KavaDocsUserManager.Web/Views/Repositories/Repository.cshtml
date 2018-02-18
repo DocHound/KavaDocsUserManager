@@ -4,6 +4,7 @@
 @{
     var repo = Model.Repository;
     ViewData["Title"] = repo.Title ?? "New Repository";
+    var appUser = User.GetAppUser();    
 }
 
 
@@ -81,7 +82,7 @@
 
         <div class="form-group optional-field-group">
             <label>
-                Optional Fields                
+                Optional Fields
                 <select asp-for="SelectedOptionalField"
                         class="form-control d-inline"
                         v-on:change="optionalFieldSelection"
@@ -95,7 +96,7 @@
                       asp-for="TableOfContentsJson" id="TableOfContents"
                       placeholder="Table of Contents JSON if a remote _toc.json can't be used">
             </textarea>
-            
+
             <textarea class="form-control code-editing @(Model.SelectedOptionalField != "CssOverrides" ? "hidden" : "")"
                       asp-for="Repository.CssOverrides" id="CssOverrides"
                       placeholder="optional CSS to override stock template rendering">
@@ -103,8 +104,8 @@
 
         </div>
 
-        <div class="responsive-container" >
-            <div class="form-check margin-right"  >
+        <div class="responsive-container">
+            <div class="form-check margin-right">
                 <input type="checkbox" asp-for="Repository.IsActive" class="form-check-input" id="IsActive">
                 <label class="form-check-label" for="IsActive">Repository Active</label>
             </div>
@@ -116,7 +117,7 @@
         </div>
 
         <div class="margin-top-2x">
-            @if (!Model.IsNewUser)
+            @if (!Model.IsNewUser && Model.Repository.IsOwner(appUser.UserId))
             {
                 <a class="btn btn-sm btn-warning float-right" v-on:click="deleteRepository" title="Delete repository">
                     <i class="fa fa-times-circle"></i>
@@ -129,15 +130,15 @@
             </button>
         </div>
 
-        
+
         @*<input type="hidden" asp-for="Repository.Id" />*@
         <input type="hidden" name="Repository.Id" id="Repository_Id" value="@Model.Repository.Id" />
-        
-    </form>
-    
 
-    <hr  class="margin-top-2x margin-bottom-2x"/>
-    
+    </form>
+
+
+    <hr class="margin-top-2x margin-bottom-2x" />
+
     <div class="list" v-cloak>
         <div class="list-header" style="font-weight: bold;">
 
@@ -157,11 +158,11 @@
                class="float-right"
                style="display:block; padding: 10px 5px"><i class="far fa-times gray-text "></i></a>
 
-            <div class="list-item responsive-container" >                
+            <div class="list-item responsive-container">
                 <input id="UserToAdd" class="awesomplete form-control" style="width: 300px"
                        placeholder="search for Kava Docs users..."
-                        v-model="newUser.username"
-                        v-on:keyup="newUser.getUserSearchList"/>                
+                       v-model="newUser.username"
+                       v-on:keyup="newUser.getUserSearchList" />
                 <button class="btn btn-outline-primary" v-on:click="addUserToRepo(repository,newUser.username)">Add</button>
             </div>
         </div>
@@ -186,7 +187,7 @@
     <input type="hidden" asp-for="Repository.Id" />
 
     @*<pre><code>{{vm}}</code></pre>
-    <pre><code>{{globals.repository}}</code></pre>*@
+        <pre><code>{{globals.repository}}</code></pre>*@
 
 </div>
 @section Scripts
@@ -205,8 +206,8 @@
     }
 
 
-    <link href='~/lib/highlightjs/styles/vs2015.css' rel="stylesheet" />
-    <script src="~/lib/highlightjs/highlight.pack.js"></script>
+    @*<link href='~/lib/highlightjs/styles/vs2015.css' rel="stylesheet" />
+    <script src="~/lib/highlightjs/highlight.pack.js"></script>*@
 
     <script src="~/lib/vue/dist/vue.min.js"></script>
     @*<link rel="stylesheet" href="~/lib/v-autocomplete/dist/v-autocomplete.css" />
@@ -214,22 +215,24 @@
 
     <link rel="stylesheet" href="~/lib/awesomplete/awesomplete.css" />
     <script src="~/lib/awesomplete/awesomplete.min.js"></script>
-    
-    
-    
-    <script>
+
+    <script src="~/lib/toastr/build/toastr.min.js"></script>
+    <link href="~/lib/toastr/build/toastr.min.css" rel="stylesheet"  async />
+
+    @*<script>
         $("pre code")
             .each(function (i, block) {
                 hljs.highlightBlock(block);
             });
-    </script>
+    </script>*@
+
     <script>
     var globals = {
         repository: @Html.Raw(JsonConvert.SerializeObject(Model.Repository, AppUtils.JsonFormatterSettingsForRecursive))
     };
     </script>
 
-    <script src="~/js/repository.js"></script>
+    <script src="~/js/Repository.js"></script>
 
 
 }

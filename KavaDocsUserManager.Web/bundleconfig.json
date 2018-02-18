@@ -44,5 +44,11 @@
     "inputFiles": [
       "wwwroot/js/Repository.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/lib/toastr/build/toastr.min.css",
+    "inputFiles": [
+      "wwwroot/lib/toastr/build/toastr.css"
+    ]
   }
 ]
