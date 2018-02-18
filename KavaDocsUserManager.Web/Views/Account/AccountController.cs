@@ -87,7 +87,7 @@ namespace KavaDocsUserManager.Web.Views.Account
         [AllowAnonymous]
         public ActionResult PasswordRecovery()
         {
-            var model = CreateViewModel<ProfileViewModel>();
+            var model = CreateViewModel<PasswordRecoveryModel>();
             return View(model); 
         }
 

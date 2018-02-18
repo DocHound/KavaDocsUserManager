@@ -117,12 +117,12 @@
 
         <div class="margin-top-2x">
             @if (!Model.IsNewUser)
-        {
-            <a class="btn btn-sm btn-warning float-right" v-on:click="deleteRepository" title="Delete repository">
-                <i class="fa fa-times-circle"></i>
-                Delete
-            </a>
-    }
+            {
+                <a class="btn btn-sm btn-warning float-right" v-on:click="deleteRepository" title="Delete repository">
+                    <i class="fa fa-times-circle"></i>
+                    Delete
+                </a>
+            }
             <button class="btn btn-primary" type="submit">
                 <i class="fas fa-check-circle "></i>
                 Save Repository
@@ -133,8 +133,8 @@
         @*<input type="hidden" asp-for="Repository.Id" />*@
         <input type="hidden" name="Repository.Id" id="Repository_Id" value="@Model.Repository.Id" />
         
-
     </form>
+    
 
     <hr  class="margin-top-2x margin-bottom-2x"/>
     
@@ -214,7 +214,9 @@
 
     <link rel="stylesheet" href="~/lib/awesomplete/awesomplete.css" />
     <script src="~/lib/awesomplete/awesomplete.min.js"></script>
-
+    
+    
+    
     <script>
         $("pre code")
             .each(function (i, block) {

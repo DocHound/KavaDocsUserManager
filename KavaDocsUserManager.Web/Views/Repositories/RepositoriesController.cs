@@ -40,21 +40,24 @@ namespace KavaDocsUserManager.Web.Views.Repositories
 
             return View("Repositories", model);
         }
-
-        [Authorize]
+                
+        
         [Route("Repositories/new")]
         [Route("Repositories/{id}")]
         [Route("Repository/{id?}")]
         [HttpGet]
-        public ActionResult Repository(Guid id)
+        public ActionResult Repository(Guid id, string message = null)
         {
             var model = CreateViewModel<RepositoryViewModel>();
             var appUser = User.GetAppUser();
             bool isNew = id == Guid.Empty;
-
+            
             // just in case - we can't add unless signed in
-            if (!appUser.IsAuthenticated())            
+            if (!isNew && !appUser.IsAuthenticated())            
                 return RedirectToAction("SignIn","Account");            
+            
+            if(!string.IsNullOrEmpty(message))
+                model.ErrorDisplay.ShowError(message);
             
             var repo = _repoBusiness.GetRepository(id);
             if (repo == null)
@@ -158,6 +161,40 @@ namespace KavaDocsUserManager.Web.Views.Repositories
 
             if (!appUser.IsEmpty())
                 model.IsOwner = _repoBusiness.IsOwner(repo, appUser.UserId);
+        }
+
+        [HttpGet]
+        [Route("repositories/{id}/delete")]
+        public ActionResult DeleteRespository(Guid id)
+        {            
+            var appUser = User.GetAppUser();
+
+            var repo = _repoBusiness.Load(id);
+            if (repo == null)            
+                return RedirectToAction("Repository", new {id = id, message = "Can't delete this repository."});
+
+            // only owner can delete
+            if (!repo.Users.Any(u => u.UserId == appUser.UserId && u.IsOwner))
+            {
+                return RedirectToAction("Repository", new
+                    {
+                        id = id,
+                        message = $"Only the owner can delete this respository."
+                    }
+                );
+            }
+            
+            if (!_repoBusiness.DeleteRepository(id))
+            {
+                return RedirectToAction("Repository", new
+                    {
+                        id = id,
+                        message = $"Can't delete this repository: {_repoBusiness.ErrorMessage}"
+                    }
+                );
+            }
+
+            return RedirectToAction("Index");
         }
 
     }

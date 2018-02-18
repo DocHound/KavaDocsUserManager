@@ -195,9 +195,11 @@ namespace KavaDocsUserManager.Business
             if (repo != null)
                 Context.Repositories.Remove(repo);
 
+            var oldValidate = AutoValidate;
             AutoValidate = false;
             return Save();
 
+            AutoValidate = oldValidate;
         }
 
         public string SafeRepositoryName(string title)

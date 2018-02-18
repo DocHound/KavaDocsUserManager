@@ -56,10 +56,28 @@ namespace KavaDocsUserManager.Web.Views.Repositories
         }
 
         [HttpDelete]
-        [Route("api/repositories/{repoId}")]
-        public bool DeleteRepository(Guid repoId)
+        [Route("api/repositories/{id}")]
+        public bool DeleteRepository(Guid id)
         {
-            return _repoBusiness.DeleteRepository(repoId);
+            var appUser = User.GetAppUser();
+
+            var repo = _repoBusiness.GetRepository(id);
+            if (repo == null)            
+                throw new ApiException("Can't delete this repository.",404);
+
+            
+            // only owner can delete
+            if (!repo.Users.Any(u => u.UserId == appUser.UserId && u.IsOwner))            
+                throw new ApiException("Only the owner can delete this respository.",404);                
+            
+            
+            if (!_repoBusiness.DeleteRepository(id))            
+                throw new ApiException($"Can't delete this repository: {_repoBusiness.ErrorMessage}");
+                                   
+            if (!_repoBusiness.DeleteRepository(id))
+                throw new ApiException($"Can't delete this repository: {_repoBusiness.ErrorMessage}",500);
+
+            return true;
         }
 
 

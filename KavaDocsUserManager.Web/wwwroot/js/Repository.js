@@ -94,7 +94,7 @@ vm = {
     },
     deleteRepository: function() {
         if (!confirm("Are you sure you want to delete this repository?"))
-            return;
+            return; 
 
         ajaxJson("/api/repositories/" + vm.repository.id,
             null,
@@ -102,7 +102,7 @@ vm = {
                 window.location = "/repositories";
             },
             function(error) {
-                status(error.message);
+                vm.status(error.message);
             },
             { method: "DELETE" });
     },
@@ -110,7 +110,6 @@ vm = {
         if (message)
             alert(message);
     }
-
 }
 
 vm.initialize();

@@ -57,10 +57,10 @@ namespace KavaDocsUserManager.Business.Tests
 
             var userId = TestHelper.UserId2;
 
-            var repos = repoBus.Context.Repositories
+            var repos = await repoBus.Context.Repositories
                 .Include(c => c.Users)
                 .Where(r => r.Users.Any(u => u.UserId == userId))
-                .ToList();
+                .ToListAsync();
 
             Assert.IsTrue(repos != null && repos.Count > 0, repoBus.ErrorMessage);
 
