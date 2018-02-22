@@ -87,8 +87,8 @@ namespace KavaDocsUserManager.Business
                 return null;
             }
 
+            repo.Users = repo.Users.OrderByDescending(ur => ur.UserType).ToList();
             
-
             // sort owners to the top
             if (repo.Users != null && repo.Users.Count > 0)
                 repo.Users = repo.Users.OrderBy(ur => !ur.IsOwner).ToList();
@@ -103,7 +103,7 @@ namespace KavaDocsUserManager.Business
 
 
 
-        public RepositoryUser AddContributorToRepository(Guid repoId, Guid userId)
+        public RepositoryUser AddContributorToRepository(Guid repoId, Guid userId, RepositoryUserType userType)
         {
             var repo = Context.Repositories.FirstOrDefault(u => u.Id == repoId);
             if (repo == null)
@@ -133,6 +133,7 @@ namespace KavaDocsUserManager.Business
             {
                 RepositoryId = repo.Id,                
                 UserId = user.Id,
+                UserType = userType,
                 IsOwner = false
             };
             repo.Users.Add(map);
@@ -161,8 +162,12 @@ namespace KavaDocsUserManager.Business
             return Context.UserRepositories.Include(ur => ur.User).FirstOrDefault(ur => ur.Id == map.Id);
         }
 
-        public RepositoryUser AddContributorToRepository(Guid repoId, string username)
+        public RepositoryUser AddContributorToRepository(Guid repoId, string username, RepositoryUserType userType)
         {
+
+            if (userType == RepositoryUserType.None)
+                userType = RepositoryUserType.User;
+
             if (string.IsNullOrEmpty(username))
             {
                 SetError("Invalid username");
@@ -180,7 +185,7 @@ namespace KavaDocsUserManager.Business
                 return null;
             }
 
-            return AddContributorToRepository(repoId, userId);
+            return AddContributorToRepository(repoId, userId, userType);
         }
 
 
@@ -244,7 +249,6 @@ namespace KavaDocsUserManager.Business
 
         public async Task<List<Repository>> GetRepositoriesForUserAsync(Guid userId)
         {            
-
             var list = await Context.Repositories
                 .Include(c=> c.Users)
                 .Where(r => r.Users.Any(u=> u.UserId == userId))                
@@ -269,7 +273,7 @@ namespace KavaDocsUserManager.Business
                 var users = await Context.UserRepositories
                                 .Include(c=> c.User)
                                 .Where(rep => rep.RepositoryId == repoId)
-                                .OrderBy(r => r.IsOwner)
+                                .OrderByDescending(r => r.UserType)
                                 .ToListAsync();
             return users;
         }

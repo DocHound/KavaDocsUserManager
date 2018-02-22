@@ -11,9 +11,10 @@ using System;
 namespace KavaDocsUserManager.Business.Migrations
 {
     [DbContext(typeof(KavaDocsContext))]
-    partial class KavaDocsContextModelSnapshot : ModelSnapshot
+    [Migration("20180222073716_Add-UserType-RequiresAuth")]
+    partial class AddUserTypeRequiresAuth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

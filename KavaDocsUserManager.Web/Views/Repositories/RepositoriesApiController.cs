@@ -31,10 +31,12 @@ namespace KavaDocsUserManager.Web.Views.Repositories
         }
         
         [HttpGet]
-        [Route("api/repositories/{repoId}/add/{userName}")]
-        public RepositoryUser AddUserToRespository(Guid repoId, string userName)
-        {
-            var repoUser = _repoBusiness.AddContributorToRepository(repoId, userName);
+        [Route("api/repositories/{repoId}/add/{userName}/{userType}")]
+        public RepositoryUser AddUserToRespository(Guid repoId, string userName, string userType)
+        {            
+            Enum.TryParse<RepositoryUserType>(userType, true, out RepositoryUserType utype);
+            
+            var repoUser = _repoBusiness.AddContributorToRepository(repoId, userName,utype);
             if (repoUser == null)
                 throw new ApiException("Didn't add user to repository: " + _repoBusiness.ErrorMessage);
 
@@ -90,10 +92,8 @@ namespace KavaDocsUserManager.Web.Views.Repositories
 
             // fix circular ref
             foreach (var repoUser in list)
-            {
                 // Why TF are these pulled without an Include?
                 repoUser.User.Repositories = null;
-            }
 
             return Json(list);
         }

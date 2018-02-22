@@ -21,7 +21,7 @@ namespace KavaDocsUserManager.Business.Tests
 
             var prefix = "MyDocs";
             var result = repoBus.SafeRepositoryName(prefix);
-            Assert.AreEqual(prefix, result);
+            Assert.AreEqual(prefix, result);            
 
             prefix = "westwind.mydocs";
             result = repoBus.SafeRepositoryName(prefix);

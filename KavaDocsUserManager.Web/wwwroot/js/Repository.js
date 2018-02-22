@@ -7,8 +7,8 @@ vm = {
     repository: {},
     newUser: {
         awesomplete: null,
-        username: "",        
-        type: 'contributor',
+        username: "",       
+        userType: "contributor",        
         visible: false,
         userList: [],        
         getName: function(item) {
@@ -71,8 +71,8 @@ vm = {
         console.log(item$,value);
         item$.removeClass("hidden");
     },
-    addUserToRepo: function (repository, username) {        
-        ajaxJson("/api/repositories/" + repository.id + "/add/" + username, null,
+    addUserToRepo: function (repository, username, userType) {        
+        ajaxJson("/api/repositories/" + repository.id + "/add/" + username + "/" + userType, null,
             function (repoUser) {                
                 repository.users.push(repoUser);
                 vm.newUser.visible = false;

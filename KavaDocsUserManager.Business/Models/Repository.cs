@@ -71,6 +71,8 @@ namespace KavaDocsUserManager.Business.Models
         
         public bool IsActive { get; set; }
 
+        public bool RequiresAuth { get; set; }
+
         public bool IncludeInSearchResults { get; set; }
 
         /// <summary>

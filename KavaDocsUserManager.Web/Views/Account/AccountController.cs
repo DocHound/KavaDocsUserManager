@@ -189,9 +189,9 @@ The Kava Docs Team
 ";
 
                     AppUtils.SendEmail(user.Email, title, body, out string error);
-                    
+
                     msg +=
-                        " Please check your email account, to validate your account. You'll receive an email from 'info@kavadocs.com' - follow the verification link to complete your account signup.";
+                        $" Please check your email account, to validate your account. You'll receive an email from 'info@kavadocs.com' - follow the verification link to complete your account signup. Didn't get it? Click on 'I forgot my password'.";
 
                     model.ErrorDisplay.ShowSuccess(msg);
 
