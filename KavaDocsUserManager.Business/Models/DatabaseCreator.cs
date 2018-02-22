@@ -94,7 +94,7 @@ namespace KavaDocsUserManager.Business.Models
                 {
                     UserId = markusId,
                     RepositoryId = repository.Id,
-                    IsOwner = true
+                    UserType = RepositoryUserType.Owner
                 };
                 context.UserRepositories.Add(map);
 
@@ -102,7 +102,7 @@ namespace KavaDocsUserManager.Business.Models
                 {
                     UserId = rickId,
                     RepositoryId = repository.Id,
-                    IsOwner = false
+                    UserType = RepositoryUserType.Contributor
                 };
                 context.UserRepositories.Add(map);
                 context.SaveChanges();
@@ -119,7 +119,7 @@ namespace KavaDocsUserManager.Business.Models
                 {
                     UserId = markusId,
                     RepositoryId = repository.Id,
-                    IsOwner = true
+                    UserType = RepositoryUserType.Owner
                 };                
                 context.UserRepositories.Add(map);
                 context.SaveChanges();
@@ -136,7 +136,7 @@ namespace KavaDocsUserManager.Business.Models
                 {
                     UserId = markusId,
                     RepositoryId = repository.Id,
-                    IsOwner = true
+                    UserType = RepositoryUserType.Owner
                 };
                 context.UserRepositories.Add(map);
                 context.SaveChanges();
@@ -153,7 +153,7 @@ namespace KavaDocsUserManager.Business.Models
                 {
                     UserId = markusId,
                     RepositoryId = repository.Id,
-                    IsOwner = true
+                    UserType = RepositoryUserType.Owner
                 };
                 context.UserRepositories.Add(map);
                 context.SaveChanges();
@@ -171,7 +171,7 @@ namespace KavaDocsUserManager.Business.Models
                 {
                     UserId = markusId,
                     RepositoryId = repository.Id,
-                    IsOwner = true
+                    UserType = RepositoryUserType.Owner
                 };
                 context.UserRepositories.Add(map);
                 context.SaveChanges();
@@ -191,7 +191,7 @@ namespace KavaDocsUserManager.Business.Models
                 {
                     UserId = rickId,
                     RepositoryId = repository.Id,
-                    IsOwner = true
+                    UserType = RepositoryUserType.Owner
                 };
                 context.UserRepositories.Add(map);
                 context.SaveChanges();

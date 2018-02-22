@@ -100,8 +100,6 @@ namespace KavaDocsUserManager.Business.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("IsOwner");
-
                     b.Property<Guid>("RepositoryId");
 
                     b.Property<Guid>("UserId");

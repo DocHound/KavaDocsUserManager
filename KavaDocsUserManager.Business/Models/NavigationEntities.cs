@@ -24,7 +24,7 @@ namespace KavaDocsUserManager.Business.Models
 
         public Guid Id { get; set; }
 
-        public bool IsOwner { get; set; }
+        public bool IsOwner => UserType == RepositoryUserType.Owner;
 
         public RepositoryUserType UserType { get; set; } = RepositoryUserType.Owner;
 

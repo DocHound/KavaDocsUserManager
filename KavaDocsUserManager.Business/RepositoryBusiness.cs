@@ -34,7 +34,7 @@ namespace KavaDocsUserManager.Business
             if (repo == null)
                 return null;
 
-            var repoUser = new RepositoryUser { RepositoryId = repo.Id, UserId = uid, IsOwner = true };
+            var repoUser = new RepositoryUser { RepositoryId = repo.Id, UserId = uid, UserType = RepositoryUserType.Owner };
             //Context.UserRepositories.Add(repoUser);
             repo.Users.Add(repoUser);
 
@@ -133,8 +133,7 @@ namespace KavaDocsUserManager.Business
             {
                 RepositoryId = repo.Id,                
                 UserId = user.Id,
-                UserType = userType,
-                IsOwner = false
+                UserType = userType                
             };
             repo.Users.Add(map);
 
