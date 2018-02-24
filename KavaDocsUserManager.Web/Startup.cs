@@ -73,7 +73,7 @@ namespace KavaDocsUserManager
                     o.LoginPath = "/account/signin";
                     o.LogoutPath = "/account/signout";
                     o.SlidingExpiration = true;
-                    o.ExpireTimeSpan = new TimeSpan(2, 0, 0, 0);
+                    o.ExpireTimeSpan = new TimeSpan(2, 0, 0, 0);                    
                 });
 
             services.AddMvc()
