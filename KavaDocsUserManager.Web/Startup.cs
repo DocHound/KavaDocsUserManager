@@ -89,7 +89,8 @@ namespace KavaDocsUserManager
             IHostingEnvironment env, 
             KavaDocsConfiguration config)
 
-        {
+        {            
+
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
@@ -97,6 +98,7 @@ namespace KavaDocsUserManager
             }
             else
             {
+                //app.UseDeveloperExceptionPage();
                 app.UseExceptionHandler("/Home/Error");
             }
 
@@ -106,7 +108,7 @@ namespace KavaDocsUserManager
             app.UseStatusCodePages();
             app.UseStaticFiles();
 
-            app.UseMvcWithDefaultRoute();
+            app.UseMvcWithDefaultRoute();            
         }
     }
 }

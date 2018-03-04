@@ -54,6 +54,8 @@ namespace KavaDocsUserManager.Business.Models
 
         public DbSet<OrganizationRepository> OrganizationRepositories { get; set; }
 
+        public DbSet<AuthToken> AuthTokens { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

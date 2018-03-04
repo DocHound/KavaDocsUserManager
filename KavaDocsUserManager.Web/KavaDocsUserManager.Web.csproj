@@ -18,4 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\KavaDocsUserManager.Business\KavaDocsUserManager.Business.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App\Utilities\" />
+  </ItemGroup>
 </Project>

@@ -12,7 +12,7 @@ using Westwind.AspNetCore.Errors;
 namespace KavaDocsUserManager.Web.Views.Repositories
 {
 
-    [Authorize]
+    [Authorize(Roles="Administrators")]
     [ApiExceptionFilter]
     public class RepositoriesApiController :Controller
     {

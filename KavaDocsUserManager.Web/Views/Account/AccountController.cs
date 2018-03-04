@@ -56,6 +56,7 @@ namespace KavaDocsUserManager.Web.Views.Account
 
             var identity = AppUser.GetClaimsIdentityFromUser(user);
             
+
             // Set cookie and attach claims
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity), new AuthenticationProperties
@@ -64,6 +65,7 @@ namespace KavaDocsUserManager.Web.Views.Account
                     AllowRefresh = true,
                     ExpiresUtc = DateTime.UtcNow.AddDays(2)
                 });
+
             
             if (!string.IsNullOrEmpty(model.ReturnUrl))
                 return Redirect(model.ReturnUrl);
@@ -88,6 +90,17 @@ namespace KavaDocsUserManager.Web.Views.Account
         {
             return User.Identity.IsAuthenticated;
         }
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("api/isAuthenticated/{userToken}")]
+        public bool IsAuthenthenticatedToken(string userToken)
+        {
+            return User.Identity.IsAuthenticated;
+        }
+
+
 
         [AllowAnonymous]
         public ActionResult PasswordRecovery()

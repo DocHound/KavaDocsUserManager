@@ -11,9 +11,10 @@ using System;
 namespace KavaDocsUserManager.Business.Migrations
 {
     [DbContext(typeof(KavaDocsContext))]
-    partial class KavaDocsContextModelSnapshot : ModelSnapshot
+    [Migration("20180303030454_Add-AuthToken-Table")]
+    partial class AddAuthTokenTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

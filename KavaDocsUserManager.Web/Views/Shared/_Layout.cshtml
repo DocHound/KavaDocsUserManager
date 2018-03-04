@@ -83,13 +83,22 @@
                     <a href="@Url.Action("Profile", "Account", new { id=appUser.UserId})"
                        class="dropdown-item">
                         Your Profile
-                    </a>
+                    </a>                    
+                    @if (appUser.IsAdmin)
+                    {
+
+                        <a href="@Url.Action("Index", "Admin")"
+                           class="dropdown-item">
+                            Administration
+                        </a>
+                    }
+                    <hr/>
                     <a href="@Url.Action("Signout", "Account")"
                        class="dropdown-item">
                         Sign out
                     </a>
 
-            
+
                 </div>
             }
         </div>

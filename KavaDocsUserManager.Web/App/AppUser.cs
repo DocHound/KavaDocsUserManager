@@ -33,7 +33,8 @@ namespace KavaDocsUserManager.Web
 
         public string Username => GetClaim("Username");
         public string Email => GetClaim("Email");
-        public bool IsAdmin => HasRole("Admin");
+
+        public bool IsAdmin => HasRole(RoleNames.Administrators);
 
         public static ClaimsIdentity GetClaimsIdentityFromUser(User user )
         {
@@ -43,7 +44,7 @@ namespace KavaDocsUserManager.Web
             identity.AddClaim(new Claim("UserId", user.Id.ToString()));
 
             if (user.IsAdmin)
-                identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+                identity.AddClaim(new Claim(ClaimTypes.Role, RoleNames.Administrators));
 
             return identity;
         }
@@ -57,6 +58,13 @@ namespace KavaDocsUserManager.Web
         {
             return new AppUser(user);
         }
+
+    }
+
+    public struct RoleNames
+    {
+
+        public const string Administrators = "Administrators";
 
     }
 }
