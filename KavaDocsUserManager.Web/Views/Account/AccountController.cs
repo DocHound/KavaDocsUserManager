@@ -31,6 +31,7 @@ namespace KavaDocsUserManager.Web.Views.Account
         public ActionResult Signin()
         {
             var model = CreateViewModel<SigninViewModel>();
+            model.ReturnUrl = Request.Query["ReturnUrl"];
             return View("SignIn",model);
         }
 
