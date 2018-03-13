@@ -261,7 +261,8 @@ namespace KavaDocsUserManager.Business
                     bool isOwner = r.Users
                             .Any(ur => ur.IsOwner && ur.UserId == userId);
                     return isOwner ? 0 : 1;
-                })                
+                })
+                .ThenBy(r=> r.Title)
                 .ToList();
 
             return list;
