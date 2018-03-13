@@ -3,7 +3,9 @@
 @{
     ViewData["Title"] = "My Repositories";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var appUser = User.GetAppUser(); 
+    var appUser = User.GetAppUser();
+    var ownedRepositories = Model.Repositories.Where(r => r.IsOwner(appUser.UserId)).ToList();
+    var contributingRepositories = Model.Repositories.Where(r => !r.IsOwner(appUser.UserId)).ToList();
 }
 
 @section Headers
@@ -50,38 +52,79 @@
     }
     else
     {
-
-        <div class="list indented" >
-            <div href="#" class="list-header">
-                <i class="far fa-archive"></i>
-                Repositories
-            </div>
-
-            @foreach (var repo in Model.Repositories)
+        
+        <div class="list indented">
+            
+            @if (ownedRepositories.Count > 0)
             {
-                var domain = repo.Prefix + "." + repo.Domain;
-
-                <div class="repository-list-item list-item hover" onclick="location='@Url.Content($"~/Repository/{repo.Id}")'">
-                    
-                    <div class="float-right right-align">
-                        <b>@repo.Prefix</b><br/>
-                        @if (repo.IsOwner(appUser.UserId))
-                        {
-                            <small>Owner</small>
-                        }
-                    </div>
-                    
-                    <a href="@Url.Content($"~/repository/{repo.Id}")"
-                       class="repository-list-item-title">@repo.Title</a>
-                    <div class="repository-list-item-content">@repo.Description</div>
-
-                    <div class="font-weight-normal">
-                        <i class="far fa-external-link-alt"></i>
-                        <a class="font-weight-normal" href="http://@(domain)">@domain</a>
-                    </div>
+                <div href="#" class="list-header">
+                    <i class="far fa-archive"></i>
+                    Your Repositories
                 </div>
-            }
 
+                foreach (var repo in ownedRepositories)
+                {
+                    var domain = repo.Prefix + "." + repo.Domain;
+
+                    <div class="repository-list-item list-item hover" onclick="location = '@Url.Content($"~/Repository/{repo.Id}")'">
+
+                        <div class="float-right right-align">
+                            <b>@repo.Prefix</b><br/>
+                            @if (repo.IsOwner(appUser.UserId))
+                            {
+                                <small>Owner</small>
+                            }
+                        </div>
+
+                        <a href="@Url.Content($"~/repository/{repo.Id}")"
+                           class="repository-list-item-title">@repo.Title</a>
+                        <div class="repository-list-item-content">@repo.Description</div>
+
+                        <div class="font-weight-normal">
+                            <i class="far fa-external-link-alt"></i>
+                            <a class="font-weight-normal" href="http://@(domain)">@domain</a>
+                        </div>
+                    </div>
+                }
+            }
         </div>
+
+        <div class="list indented">
+            @if (contributingRepositories.Count > 0)
+            {
+                <div href="#" class="list-header ">
+                    <i class="far fa-archive"></i>
+                    Repositories you contribute to
+                </div>
+
+                 foreach (var repo in contributingRepositories)
+                 {
+                     var domain = repo.Prefix + "." + repo.Domain;
+
+                     <div class="repository-list-item list-item hover" onclick="location = '@Url.Content($"~/Repository/{repo.Id}")'">
+
+                         <div class="float-right right-align">
+                             <b>@repo.Prefix</b><br/>
+                             @if (repo.IsOwner(appUser.UserId))
+                             {
+                                 <small>Owner</small>
+                             }
+                         </div>
+
+                         <a href="@Url.Content($"~/repository/{repo.Id}")"
+                            class="repository-list-item-title">@repo.Title</a>
+                         <div class="repository-list-item-content">@repo.Description</div>
+
+                         <div class="font-weight-normal">
+                             <i class="far fa-external-link-alt"></i>
+                             <a class="font-weight-normal" href="http://@(domain)">@domain</a>
+                         </div>
+                     </div>
+                 }
+            }
+        </div>
+
+
+        
     }
 </div>
