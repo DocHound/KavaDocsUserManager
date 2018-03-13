@@ -71,8 +71,6 @@ namespace KavaDocsUserManager.Web.Views.Account
             if (!string.IsNullOrEmpty(model.ReturnUrl))
                 return Redirect(model.ReturnUrl);
 
-
-
             return Redirect("~/");
         }
 
