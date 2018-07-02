@@ -251,6 +251,13 @@ The Kava Docs Team
             }
 
             var validationId = _userBus.CreateRecoveryValidationId(email);
+            if (string.IsNullOrEmpty(validationId))
+            {
+                //model.ErrorDisplay.ShowError("Email not sent.");
+                model.ErrorDisplay.ShowSuccess("Verification email has been sent. Please check your account for a message from 'kavadocs.com'.");
+                return View(model);
+            }
+
             var url =KavaDocsConfiguration.Current.ApplicationHomeUrl +  Url.Action("PasswordRecovery", new {validationId = validationId});
 
             string title = "Kava Docs Password Recovery";
@@ -265,7 +272,7 @@ The Kava Docs Team
                 model.ErrorDisplay.ShowError("Unable to send email: " + error);
             else
             {
-                model.ErrorDisplay.ShowSuccess("Verification email has been sent. Please check your account for a message from 'kavadocs.com'");                
+                model.ErrorDisplay.ShowSuccess("Verification email has been sent. Please check your account for a message from 'kavadocs.com'.");                
 
                 // always log out user and force them to log back in
                 User.GetAppUser().LogoutUser(HttpContext);

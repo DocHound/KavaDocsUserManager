@@ -81,7 +81,8 @@ namespace KavaDocsUserManager
                 {
                     opt.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                     opt.SerializerSettings.Converters.Add(new StringEnumConverter() {CamelCaseText = true});
-                });
+                })
+                .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
