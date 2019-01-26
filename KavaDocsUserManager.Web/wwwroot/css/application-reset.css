@@ -151,7 +151,7 @@ a.dark,a.dark:visited {
 }
 
 .orange-text {
-    color: organge;
+    color: orange;
 }
 
 .red-text {
@@ -227,6 +227,7 @@ a.dark,a.dark:visited {
 .list-item.active {
     background: lightsteelblue;
 }
+
 label {
     font-weight: 600;
     font-size: 1.1em;

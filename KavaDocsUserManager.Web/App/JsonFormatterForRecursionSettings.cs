@@ -31,8 +31,8 @@ namespace KavaDocsUserManager.Web.App
 #endif
 
                 };
-                settings.Converters.Add(new StringEnumConverter() {CamelCaseText = true});
-
+                settings.Converters.Add(new StringEnumConverter() { CamelCaseText = true });
+                
                 jsonSerializerSettings = settings;
                 return settings;
             }

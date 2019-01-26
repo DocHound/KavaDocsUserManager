@@ -170,6 +170,7 @@
                 <button class="btn btn-outline-primary" v-on:click="addUserToRepo(repository,newUser.username, newUser.userType)">Add</button>
             </div>
         </div>
+
         <div v-for="user in repository.users"
              class="list-item" v-bind:class="{'subtle-highlight': user.isOwner}">
             <div class="float-right">
@@ -179,7 +180,7 @@
                 </a>
             </div>
             <a href=""
-               class="user-list-item ">
+               class="user-list-item">
                 {{user.user.userDisplayName}}
             </a>
 
