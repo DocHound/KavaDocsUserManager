@@ -16,9 +16,10 @@
 
         <h1 class="page-header-text">
             <i class="far fa-archive"></i>
-            @repo.Title
+            @repo.Title 
         </h1>
-
+        
+        
         <error-display error-display-model="Model.ErrorDisplay"></error-display>
 
         <div class="form-group">
@@ -27,12 +28,16 @@
                 <input type="text" class="form-control"
                        asp-for="Repository.Prefix"
                        style="width: 200px;margin-right: 7px"
-                       placeholder="Domain prefix" />
+                       placeholder="Domain prefix" 
+                       ref="domainPrefix"/>
 
                 <input type="text" asp-for="Repository.Domain"
                        class="form-control" readonly
                        placeholder="Kavadocs host domain"
-                       style="width: 300px;" />
+                       style="width: 300px;" 
+                       ref="domainName"
+                       />
+                <a hhref="#0" v-on:click="navigateDomain()" class="btn btn-light" ><i class="far fa-external-link-alt" style="font-size: 1.2em"></i></a>
             </div>
         </div>
 

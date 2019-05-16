@@ -106,10 +106,14 @@ vm = {
             function(result) {
                 window.location = "/repositories";
             },
-            function(error) {
+            function(error) { 
                 vm.status(error.message);
             },
             { method: "DELETE" });
+    },
+    navigateDomain: function (e) {
+        var url = "https://" + this.$refs.domainPrefix.value + "." + this.$refs.domainName.value;
+        window.open(url);
     },
     // info, success, warning*
     status: function (message, icon, title) {
