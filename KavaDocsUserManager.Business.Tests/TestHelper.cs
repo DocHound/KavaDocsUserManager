@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using KavaDocsUserManager.Business.Configuration;
 using KavaDocsUserManager.Business.Models;
 using Microsoft.EntityFrameworkCore;

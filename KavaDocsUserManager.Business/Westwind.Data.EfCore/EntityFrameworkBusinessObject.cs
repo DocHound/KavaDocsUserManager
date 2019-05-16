@@ -166,13 +166,16 @@ namespace Westwind.Data.EfCore
         /// </summary>
         public Exception ErrorException { get; set; }
 
-        #region Create and Load
+        #region CRUD operations
+
+
+        #region Create and Attach
         /// <summary>
         /// Creates a new instance of the entity type 
         /// associated to this Repo
         /// </summary>
         /// <returns></returns>
-        public TEntity Create()
+        public virtual TEntity Create()
         {
             Entity = new TEntity();
 
@@ -182,7 +185,23 @@ namespace Westwind.Data.EfCore
             return Entity;
         }
 
-        
+        /// <summary>
+        /// Attaches an existing entity to the context.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <exception cref="ArgumentException">Thrown on null parameter passed</exception>
+        /// <returns></returns>
+        public virtual TEntity Create(TEntity entity)
+        {
+            if (entity is null)
+                throw new ArgumentException("Can't pass a null reference to Create().");
+
+            Entity = entity;
+            Context.Add<TEntity>(Entity);
+            OnAfterCreated(Entity);
+
+            return Entity;
+        }
         /// <summary>
         /// Creates an instance of an enity type different
         /// than the one associated with this repo. Specify
@@ -190,7 +209,7 @@ namespace Westwind.Data.EfCore
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T Create<T>()
+        public virtual T Create<T>()
           where T : class, new()
         {
             var entity = new T();
@@ -198,7 +217,55 @@ namespace Westwind.Data.EfCore
             return entity;
         }
 
-        
+
+        ///// <summary>
+        ///// Attaches an untracked entity to an entity set and marks it as modified.
+        ///// Note: child elements need to be manually added.
+        ///// </summary>
+        ///// <param name="entity"></param>
+        ///// <param name="entitySet"></param>
+        ///// <param name="markAsModified"></param>
+        ///// <param name="addNew"></param>
+        ///// <returns></returns>
+        //public object Attach(object entity, bool addNew = false, EntityState entityState = EntityState.Modified)
+        //{
+        //    var dbSet = Context.Set(entity.GetType());
+
+        //    if (addNew)
+        //        dbSet.Add(entity);
+        //    else
+        //    {
+        //        dbSet.Attach(entity);
+        //        GetEntityEntry(entity).State = entityState;
+        //    }
+
+        //    return entity;
+        //}
+
+        /// <summary>
+        /// Attaches an untracked to the internal context and 
+        /// marks it as modified optionally
+        /// Note: child elements need to be manually added.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public TEntity Attach(TEntity entity, bool addNew = false)
+        {
+            if (addNew)
+                DbSet.Add(entity);
+            else
+            {
+                var entry = DbSet.Attach(entity);
+                entry.State = EntityState.Modified;
+            }
+
+            Entity = entity;
+
+            return Entity;
+        }
+        #endregion
+
+        #region Load Async
         /// <summary>
         /// Loads an entity by id. Default implementation returns only
         /// the base entity without relationships loaded.
@@ -439,55 +506,8 @@ namespace Westwind.Data.EfCore
         #endregion
 
 
-        #region Attach
-        ///// <summary>
-        ///// Attaches an untracked entity to an entity set and marks it as modified.
-        ///// Note: child elements need to be manually added.
-        ///// </summary>
-        ///// <param name="entity"></param>
-        ///// <param name="entitySet"></param>
-        ///// <param name="markAsModified"></param>
-        ///// <param name="addNew"></param>
-        ///// <returns></returns>
-        //public object Attach(object entity, bool addNew = false, EntityState entityState = EntityState.Modified)
-        //{
-        //    var dbSet = Context.Set(entity.GetType());
 
-        //    if (addNew)
-        //        dbSet.Add(entity);
-        //    else
-        //    {
-        //        dbSet.Attach(entity);
-        //        GetEntityEntry(entity).State = entityState;
-        //    }
 
-        //    return entity;
-        //}
-
-        /// <summary>
-        /// Attaches an untracked to the internal context and 
-        /// marks it as modified optionally
-        /// Note: child elements need to be manually added.
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public TEntity Attach(TEntity entity, bool addNew = false)
-        {            
-            if (addNew)
-               DbSet.Add(entity);
-            else
-            {
-                var entry = DbSet.Attach(entity);
-                entry.State = EntityState.Modified;
-            }
-
-            Entity = entity;
-
-            return Entity;
-        }
-        #endregion
-
-        #region Saving and Deleting
         /// <summary>
         /// Saves changes to the repo
         /// </summary>
@@ -502,7 +522,7 @@ namespace Westwind.Data.EfCore
         /// <param name="useTransaction">
         /// not implemented yet
         /// </param>
-        public async Task<bool> SaveAsync(TEntity entity = null)
+        public virtual async Task<bool> SaveAsync(TEntity entity = null)
         {
             if (entity == null)
                 entity = Entity;
@@ -568,7 +588,7 @@ namespace Westwind.Data.EfCore
         /// <param name="entity"></param>
         /// <param name="useTransaction"></param>
         /// <returns></returns>
-        public async Task<bool> SaveAsync(TEntity entity, bool useTransaction)
+        public virtual async Task<bool> SaveAsync(TEntity entity, bool useTransaction)
         {
             if (useTransaction)
             {
@@ -596,7 +616,7 @@ namespace Westwind.Data.EfCore
         /// For raw saving without pre-/post processing use SaveChanges()
         /// </remarks>
         /// <returns></returns>
-        public bool Save(TEntity entity = null)
+        public virtual bool Save(TEntity entity = null)
         {
             if (entity != null)
             {
@@ -798,12 +818,10 @@ namespace Westwind.Data.EfCore
         /// this method to indicate success or failure.
         /// </summary>
         /// <param name="entity"></param>
-        /// <param name="isNewUser">Pass in optionally to specify whether the item validated is a new item</param>
         /// <returns></returns>
         public virtual bool Validate(TEntity entity)
         {
             ValidationErrors.Clear();
-
 
             bool isValid = OnValidate(entity);
             if (!isValid)
