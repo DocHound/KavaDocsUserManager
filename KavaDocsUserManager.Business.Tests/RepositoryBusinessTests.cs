@@ -59,7 +59,7 @@ namespace KavaDocsUserManager.Business.Tests
             var firstId = repoBus.Context.Repositories.Select(r => r.Id).FirstOrDefault();
             Console.WriteLine(firstId);
 
-            Assert.IsNotNull(repoBus.AddContributorToRepository(firstId, userId,RepositoryUserType.Contributor));
+            Assert.IsNotNull(repoBus.AddContributorToRepository(firstId, userId,RepositoryUserTypes.Contributor));
         }
 
 
@@ -82,7 +82,7 @@ namespace KavaDocsUserManager.Business.Tests
 
             foreach(var ru in list)
             {
-                Console.WriteLine(ru.User.UserDisplayName + " " + ru.UserType);
+                Console.WriteLine(ru.User.UserDisplayName + " " + ru.UserTypes);
             }
 
         }

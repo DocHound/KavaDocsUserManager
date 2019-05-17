@@ -24,9 +24,9 @@ namespace KavaDocsUserManager.Business.Models
 
         public Guid Id { get; set; }
 
-        public bool IsOwner => UserType == RepositoryUserType.Owner;
+        public bool IsOwner => UserTypes == RepositoryUserTypes.Owner;
 
-        public RepositoryUserType UserType { get; set; } = RepositoryUserType.Owner;
+        public RepositoryUserTypes UserTypes { get; set; } = RepositoryUserTypes.Owner;
 
 
         [ForeignKey("User")]
@@ -92,7 +92,7 @@ namespace KavaDocsUserManager.Business.Models
 
     }
 
-    public enum RepositoryUserType
+    public enum RepositoryUserTypes
     {
         None = 0,
         User = 1,

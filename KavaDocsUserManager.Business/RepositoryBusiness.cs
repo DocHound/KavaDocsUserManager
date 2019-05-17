@@ -34,7 +34,7 @@ namespace KavaDocsUserManager.Business
             if (repo == null)
                 return null;
 
-            var repoUser = new RepositoryUser { RepositoryId = repo.Id, UserId = uid, UserType = RepositoryUserType.Owner };
+            var repoUser = new RepositoryUser { RepositoryId = repo.Id, UserId = uid, UserTypes = RepositoryUserTypes.Owner };
             //Context.UserRepositories.Add(repoUser);
             repo.Users.Add(repoUser);
 
@@ -87,7 +87,7 @@ namespace KavaDocsUserManager.Business
                 return null;
             }
 
-            repo.Users = repo.Users.OrderByDescending(ur => ur.UserType).ToList();
+            repo.Users = repo.Users.OrderByDescending(ur => ur.UserTypes).ToList();
             
             // sort owners to the top
             if (repo.Users != null && repo.Users.Count > 0)
@@ -103,7 +103,7 @@ namespace KavaDocsUserManager.Business
 
 
 
-        public RepositoryUser AddContributorToRepository(Guid repoId, Guid userId, RepositoryUserType userType)
+        public RepositoryUser AddContributorToRepository(Guid repoId, Guid userId, RepositoryUserTypes userTypes)
         {
             var repo = Context.Repositories.FirstOrDefault(u => u.Id == repoId);
             if (repo == null)
@@ -133,7 +133,7 @@ namespace KavaDocsUserManager.Business
             {
                 RepositoryId = repo.Id,                
                 UserId = user.Id,
-                UserType = userType                
+                UserTypes = userTypes                
             };
             repo.Users.Add(map);
 
@@ -161,11 +161,11 @@ namespace KavaDocsUserManager.Business
             return Context.UserRepositories.Include(ur => ur.User).FirstOrDefault(ur => ur.Id == map.Id);
         }
 
-        public RepositoryUser AddContributorToRepository(Guid repoId, string username, RepositoryUserType userType)
+        public RepositoryUser AddContributorToRepository(Guid repoId, string username, RepositoryUserTypes userTypes)
         {
 
-            if (userType == RepositoryUserType.None)
-                userType = RepositoryUserType.User;
+            if (userTypes == RepositoryUserTypes.None)
+                userTypes = RepositoryUserTypes.User;
 
             if (string.IsNullOrEmpty(username))
             {
@@ -184,7 +184,7 @@ namespace KavaDocsUserManager.Business
                 return null;
             }
 
-            return AddContributorToRepository(repoId, userId, userType);
+            return AddContributorToRepository(repoId, userId, userTypes);
         }
 
 
@@ -281,7 +281,7 @@ namespace KavaDocsUserManager.Business
                 var users = await Context.UserRepositories
                                 .Include(c=> c.User)
                                 .Where(rep => rep.RepositoryId == repoId)
-                                .OrderByDescending(r => r.UserType)
+                                .OrderByDescending(r => r.UserTypes)
                                 .ToListAsync();
             return users;
         }
@@ -310,14 +310,103 @@ namespace KavaDocsUserManager.Business
         /// <returns></returns>
         public async Task<List<Role>> GetRolesForRepository(Guid repositoryId)
         {
-            return await Context.UserRoles
+            var list = await Context.UserRoles
                 .Include(r => r.Role)
                 .Where(ur => ur.RepositoryId == repositoryId)
-                .Distinct()
                 .Select(ur => ur.Role)
+                .Distinct()
                 .ToListAsync();
+
+            return list;
         }
 
+        /// <summary>
+        /// Gets a list of users for a repository along with its associated roles
+        /// </summary>
+        /// <param name="repositoryId"></param>
+        /// <returns></returns>
+        public async Task<List<UserRolesResponse>> GetUserRolesForRepository(Guid repositoryId)
+        {
+            var userRepoList = await
+                (from uroles in Context.UserRoles
+                    from urepos in Context.UserRepositories
+                    where uroles.RepositoryId == repositoryId &&
+                          urepos.RepositoryId == repositoryId &&
+                          uroles.UserId == urepos.UserId
+
+                    select new
+                    {
+                        UserId = uroles.User.Id,
+                        Username = uroles.User.UserDisplayName,
+                        Rolename = uroles.Role.Name,
+                        RoleId = uroles.Role.Id,
+                        RepositoryName = urepos.Repository.Title,
+                        RepositoryId = repositoryId,
+                        IsOwner = urepos.IsOwner,
+                        UserType = urepos.UserTypes
+                    })
+                .OrderBy(ur => ur.Username)
+                .ToListAsync();
+
+            // get all the roles
+            var roles = await Context.UserRoles
+                .Where(r => r.RepositoryId == repositoryId)
+                .Select(r=> r.Role)
+                .Distinct()
+                .ToListAsync();
+
+
+            
+
+            var result = new List<UserRolesResponse>();
+
+            var uList =
+                userRepoList
+                    .Select(ur => new {ur.UserId, ur.Username, ur.UserType, ur.IsOwner, ur.RepositoryName, ur.RepositoryId})
+                    .Distinct();
+
+            foreach (var user in uList)
+            {
+                var userRole = new UserRolesResponse
+                {
+                    Username = user.Username,
+                    UserId = user.UserId,
+                    Roles = new List<RoleResponse>(),
+                    IsOwner = user.IsOwner,
+                    UserTypes = user.UserType,
+                    RepositoryId = user.RepositoryId,
+                    RepositoryName = user.RepositoryName
+                };
+
+                foreach (var role in roles)
+                {
+                    var roleResponse = new RoleResponse
+                    {
+                        RoleId = role.Id,
+                        Rolename = role.Name,
+                    };
+                    roleResponse.Selected = userRepoList.Any(ur => ur.UserId == user.UserId && ur.RoleId == role.Id);
+
+                    userRole.Roles.Add(roleResponse);
+                }
+
+                //userRole.Roles = userRepoList
+                //    //.Where(ur => ur.UserId == user.UserId)
+                //    .Select(ur => new RoleResponse
+                //    {
+                //        Rolename = ur.Rolename,
+                //        RoleId = ur.RoleId,
+                //        Selected = ur.UserId == user.UserId
+                //    })
+                //    .Distinct()
+                //    .ToList();
+
+                result.Add(userRole);
+            }
+
+            return result;
+        }
+        
 
         public async Task<bool> AddRoleToRepository(Guid repositoryId, Guid roleId, Guid userId)
         {
@@ -386,4 +475,27 @@ namespace KavaDocsUserManager.Business
 
     }
 
+    public class UserRolesResponse
+    {
+        public Guid UserId { get; set; }
+        public string Username { get; set; }
+
+        public bool IsOwner { get; set;  }
+        public RepositoryUserTypes UserTypes { get; set; }
+
+        public Guid RepositoryId { get; set; }
+
+        public string RepositoryName { get; set; }
+
+        public List<RoleResponse> Roles { get; set; } = new List<RoleResponse>();
+        
+    }
+
+    public class RoleResponse
+    {
+        public Guid RoleId { get; set; }
+        public string Rolename { get; set; }
+
+        public bool Selected { get; set; }
+    }
 }

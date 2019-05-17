@@ -2,15 +2,16 @@
 /// <reference path="../lib/ww.jquery.js" />
 var vm = {}
 
-
 vm = {
     repository: {},
+    roles: [],
     newUser: {
         awesomplete: null,
-        username: "",       
-        userType: "contributor",        
+        username: "",
+        userType: "contributor",
         visible: false,
-        userList: [],        
+        userList: [],
+        userRoles: [],
         getName: function(item) {
             return item.name;
         },
@@ -35,7 +36,14 @@ vm = {
     },
     initialize: function() {
         vm.repository = globals.repository;
+
         $("#Repository_Prefix").focus();
+
+        setTimeout(function() {
+                vm.getRoles();
+                vm.getUserRoles();
+            },100);
+    
 
         toastr.options.closeButton = true;
         toastr.options.positionClass = "toast-bottom-right";        
@@ -85,7 +93,7 @@ vm = {
     },
     removeUserFromRepo: function(user, repository) {
         ajaxJson("/api/repositories/" + repository.id + "/remove/" + user.id,
-                null,
+                null, 
                 function () {
                     repository.users = repository.users.filter(function(u) {
                         return u.user !== user;
@@ -110,6 +118,26 @@ vm = {
                 vm.status(error.message);
             },
             { method: "DELETE" });
+    },
+    getRoles: function() {
+        ajaxJson("/api/repositories/" + vm.repository.id + "/roles",
+            null,
+            function(roles) {  
+                vm.roles = roles;
+            },
+            function(error) {
+                toastr.error(error.message,"Couldn't retrieve roles");
+            });
+    },
+    getUserRoles: function() {
+        ajaxJson("/api/repositories/" + vm.repository.id + "/userroles",
+            null,
+            function(userRoles) {
+                vm.userRoles = userRoles;
+            },
+            function (error) {
+                toastr.error(error.message, "Couldn't retrieve user roles");
+            });
     },
     navigateDomain: function (e) {
         var url = "https://" + this.$refs.domainPrefix.value + "." + this.$refs.domainName.value;

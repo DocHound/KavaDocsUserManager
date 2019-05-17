@@ -34,7 +34,7 @@ namespace KavaDocsUserManager.Web.Views.Repositories
         [Route("api/repositories/{repoId}/add/{userName}/{userType}")]
         public RepositoryUser AddUserToRespository(Guid repoId, string userName, string userType)
         {            
-            Enum.TryParse<RepositoryUserType>(userType, true, out RepositoryUserType utype);
+            Enum.TryParse<RepositoryUserTypes>(userType, true, out RepositoryUserTypes utype);
             
             var repoUser = _repoBusiness.AddContributorToRepository(repoId, userName,utype);
             if (repoUser == null)
@@ -104,5 +104,23 @@ namespace KavaDocsUserManager.Web.Views.Repositories
         {
             return Json(_repoBusiness.GetRepository(repoId));
         }
+
+
+        [HttpGet]
+        [Route("api/repositories/{repoId}/roles")]
+        public async Task<List<Role>> RolesForRepository(Guid repoId)
+        {
+            var list = await _repoBusiness.GetRolesForRepository(repoId);
+            return list;
+        }
+
+        [HttpGet]
+        [Route("api/repositories/{repoId}/userroles")]
+        public async Task<List<UserRolesResponse>> UserRolesForRepository(Guid repoId)
+        {
+            var list = await _repoBusiness.GetUserRolesForRepository(repoId);
+            return list;
+        }
+
     }
 }

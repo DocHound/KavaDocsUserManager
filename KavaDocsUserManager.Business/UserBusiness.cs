@@ -219,7 +219,7 @@ namespace KavaDocsUserManager.Business
             {
                 UserId = user.Id,
                 Repository = repository,
-                UserType = RepositoryUserType.Owner
+                UserTypes = RepositoryUserTypes.Owner
             };
             user.Repositories.Add(map);
             
