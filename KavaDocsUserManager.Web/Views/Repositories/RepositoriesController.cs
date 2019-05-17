@@ -46,7 +46,7 @@ namespace KavaDocsUserManager.Web.Views.Repositories
         [Route("Repositories/{id}")]
         [Route("Repository/{id?}")]
         [HttpGet]
-        public ActionResult Repository(Guid id, string message = null)
+        public async Task<ActionResult> Repository(Guid id, string message = null)
         {
             var model = CreateViewModel<RepositoryViewModel>();
             var appUser = User.GetAppUser();
@@ -58,6 +58,7 @@ namespace KavaDocsUserManager.Web.Views.Repositories
             
             if(!string.IsNullOrEmpty(message))
                 model.ErrorDisplay.ShowError(message);
+
             
             var repo = _repoBusiness.GetRepository(id);
             if (repo == null)
@@ -76,13 +77,22 @@ namespace KavaDocsUserManager.Web.Views.Repositories
                 }
             }
             else
+            {
+                model.RepositoryWithUsers = await _repoBusiness.GetRepositoryWithUsersAndRoles(id);
                 model.Repository = repo;
+            }
+
+            //model.Repository.Users = null;
 
             // not a user or contributor
             if (!isNew && !repo.IsUserInRepository(appUser.UserId))           
                 return RedirectToAction("Index");
 
             SharedRepositoryModelDisplay(model);
+
+            // clear out users for inline model since we have them
+            // for repo-user-roles structure
+            //model.RepositoryWithUsers.Repository.Users = null;
 
             return View("Repository",model);
         }      
@@ -207,8 +217,9 @@ namespace KavaDocsUserManager.Web.Views.Repositories
 
     public class RepositoryViewModel : AppBaseViewModel
     {
-        
         public Repository Repository { get; set; }
+
+        public RepositoryResponse RepositoryWithUsers { get; set; }
 
         public bool IsOwner { get; set; }
         public bool IsNewUser { get; set; }

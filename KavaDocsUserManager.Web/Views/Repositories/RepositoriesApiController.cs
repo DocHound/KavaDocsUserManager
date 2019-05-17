@@ -100,11 +100,11 @@ namespace KavaDocsUserManager.Web.Views.Repositories
 
         [HttpGet]
         [Route("api/repositories/{repoId}")]
-        public ActionResult GetUserJson(Guid repoId)
+        public async Task<RepositoryResponse> GetRepository(Guid repoId)
         {
-            return Json(_repoBusiness.GetRepository(repoId));
+            var response = await _repoBusiness.GetRepositoryWithUsersAndRoles(repoId);
+            return response;
         }
-
 
         [HttpGet]
         [Route("api/repositories/{repoId}/roles")]
@@ -116,10 +116,10 @@ namespace KavaDocsUserManager.Web.Views.Repositories
 
         [HttpGet]
         [Route("api/repositories/{repoId}/userroles")]
-        public async Task<List<UserRolesResponse>> UserRolesForRepository(Guid repoId)
+        public async Task<RepositoryResponse> UserRolesForRepository(Guid repoId)
         {
-            var list = await _repoBusiness.GetUserRolesForRepository(repoId);
-            return list;
+            var response = await _repoBusiness.GetRepositoryWithUsersAndRoles(repoId);
+            return response;
         }
 
     }

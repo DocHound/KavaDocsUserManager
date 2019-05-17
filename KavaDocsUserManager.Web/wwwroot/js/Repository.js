@@ -5,17 +5,30 @@ var vm = {}
 vm = {
     repository: {},
     roles: [],
+    userList: [],
+    userRoles: [],
+
+    awesomplete: null,
     newUser: {
-        awesomplete: null,
         username: "",
         userType: "contributor",
-        visible: false,
-        userList: [],
-        userRoles: [],
-        getName: function(item) {
+        visible: false
+    },
+    initialize: function () {
+        vm.repository = globals.repositoryWithUsers.repository;
+        vm.userList = globals.repositoryWithUsers.users;
+        vm.roles = globals.repositoryWithUsers.roles;
+
+        $("#Repository_Prefix").focus();
+
+
+        toastr.options.closeButton = true;
+        toastr.options.positionClass = "toast-bottom-right";
+    },
+    getName: function(item) {
             return item.name;
-        },
-        getUserSearchList: function (event) {
+    },
+    getUserSearchList: function (event) {
             if (event.key == "ArrowDown" || event.Key == "ArrowUp" || event.Key == "Enter")
                 return;
             
@@ -32,22 +45,8 @@ vm = {
                 function () {
 
                 }, { method: "GET" });
-        },
     },
-    initialize: function() {
-        vm.repository = globals.repository;
-
-        $("#Repository_Prefix").focus();
-
-        setTimeout(function() {
-                vm.getRoles();
-                vm.getUserRoles();
-            },100);
-    
-
-        toastr.options.closeButton = true;
-        toastr.options.positionClass = "toast-bottom-right";        
-    },
+  
     highlightCode: function() {
         $("pre code")
             .each(function (i, block) {

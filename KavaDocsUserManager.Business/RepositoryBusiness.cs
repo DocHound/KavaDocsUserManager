@@ -325,7 +325,7 @@ namespace KavaDocsUserManager.Business
         /// </summary>
         /// <param name="repositoryId"></param>
         /// <returns></returns>
-        public async Task<List<UserRolesResponse>> GetUserRolesForRepository(Guid repositoryId)
+        public async Task<RepositoryResponse> GetRepositoryWithUsersAndRoles(Guid repositoryId)
         {
             var userRepoList = await
                 (from uroles in Context.UserRoles
@@ -333,7 +333,6 @@ namespace KavaDocsUserManager.Business
                     where uroles.RepositoryId == repositoryId &&
                           urepos.RepositoryId == repositoryId &&
                           uroles.UserId == urepos.UserId
-
                     select new
                     {
                         UserId = uroles.User.Id,
@@ -355,9 +354,9 @@ namespace KavaDocsUserManager.Business
                 .Distinct()
                 .ToListAsync();
 
-
+            // get the repostory
+            var repository = await Context.Repositories.FirstOrDefaultAsync(r => r.Id == repositoryId);
             
-
             var result = new List<UserRolesResponse>();
 
             var uList =
@@ -404,7 +403,15 @@ namespace KavaDocsUserManager.Business
                 result.Add(userRole);
             }
 
-            return result;
+
+            //repository.Users = null;
+
+            return new RepositoryResponse
+            {
+                Repository = repository,
+                Users = result,
+                Roles = roles
+            };
         }
         
 
@@ -473,6 +480,14 @@ namespace KavaDocsUserManager.Business
 
         #endregion
 
+    }
+
+
+    public class RepositoryResponse
+    {
+        public Repository Repository { get; set; }
+        public List<UserRolesResponse> Users { get; set; }
+        public List<Role> Roles { get; set; }
     }
 
     public class UserRolesResponse

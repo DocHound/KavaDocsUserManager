@@ -176,23 +176,24 @@
                 </div>
             </div>
 
-            <div v-for="user in repository.users"
+            <div v-for="user in userList"
                  class="list-item" v-bind:class="{'subtle-highlight': user.isOwner}">
                 <div class="float-right">
-                    {{user.userType}}
-                    <a v-on:click="removeUserFromRepo(user.user, repository)">
+                    {{user.userTypes}}
+                    <a v-on:click="removeUserFromRepo(user, repository)">
                         <i class="fas fa-times-circle red-text"></i>
                     </a>
                 </div>
 
                 
                 <div class="user-list-item" >
-                    <b style="width:300px">{{user.user.userDisplayName}}</b>
+                    <b style="width:300px">{{user.username}}</b>
 
 
                     <select multiple class="selectpicker form-control d-inline" >
-                        <option v-for="role in roles" style="width: 150px;">
-                            {{role.name}}
+                        <option v-for="role in user.roles" style="width: 150px;" 
+                                :selected="role.selected">
+                                {{role.rolename}}
                         </option>
                     </select>
                 </div>
@@ -266,10 +267,13 @@
                 hljs.highlightBlock(block);
             });
     </script>*@
-
+    @{
+        // don't need users 
+        Model.RepositoryWithUsers.Repository.Users = null;
+    }
     <script>
     var globals = {
-        repository: @Html.Raw(JsonConvert.SerializeObject(Model.Repository, AppUtils.JsonFormatterSettingsForRecursive))
+        repositoryWithUsers: @Html.Raw(JsonConvert.SerializeObject(Model.RepositoryWithUsers, AppUtils.JsonFormatterSettingsForRecursive))
     };
     setTimeout(function() {
         $('.selectpicker').selectpicker();
