@@ -4,14 +4,16 @@ using KavaDocsUserManager.Business.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KavaDocsUserManager.Business.Migrations
 {
     [DbContext(typeof(KavaDocsContext))]
-    partial class KavaDocsContextModelSnapshot : ModelSnapshot
+    [Migration("20190517033533_fix-user-role")]
+    partial class fixuserrole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,7 +148,7 @@ namespace KavaDocsUserManager.Business.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("KavaDocsUserManager.Business.Models.RoleUserRepository", b =>
+            modelBuilder.Entity("KavaDocsUserManager.Business.Models.RoleUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -232,15 +234,15 @@ namespace KavaDocsUserManager.Business.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("KavaDocsUserManager.Business.Models.User", "User")
-                        .WithMany("Repositories")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("KavaDocsUserManager.Business.Models.RoleUserRepository", b =>
+            modelBuilder.Entity("KavaDocsUserManager.Business.Models.RoleUser", b =>
                 {
                     b.HasOne("KavaDocsUserManager.Business.Models.Repository", "Respository")
-                        .WithMany("Roles")
+                        .WithMany()
                         .HasForeignKey("RepositoryId")
                         .OnDelete(DeleteBehavior.Cascade);
 

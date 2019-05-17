@@ -41,7 +41,35 @@ namespace KavaDocsUserManager.Business.Models
 
     }
 
- 
+
+
+
+    public class RoleUserRepository
+    {
+
+        public RoleUserRepository()
+        {
+            Id = Guid.NewGuid();
+        }
+
+        public Guid Id { get; set; }
+
+        [ForeignKey("User")]
+        public Guid UserId { get; set; }
+
+        public User User { get; set; }
+
+        [ForeignKey("Role")]
+        public Guid RoleId { get; set; }
+
+        public Role Role { get; set; }
+
+        [ForeignKey("Repository")]
+        public Guid RepositoryId { get; set; }
+
+        public Repository Respository{ get; set; }
+    }
+
     public class OrganizationRepository
     {
         public OrganizationRepository()

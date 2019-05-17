@@ -808,6 +808,16 @@ namespace Westwind.Data.EfCore
 
             return entry.State == EntityState.Added;
         }
+
+
+        public bool? IsNewEntity(object entity)
+        {
+            var entry = Context.Entry(entity);
+            if (entry == null || entry.State == EntityState.Detached)
+                return null;
+
+            return entry.State == EntityState.Added;
+        }
         #endregion
 
         #region validation

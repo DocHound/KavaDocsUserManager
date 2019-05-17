@@ -25,7 +25,10 @@ namespace KavaDocsUserManager.Business.Configuration
 
         public string ApplicationHomeUrl { get; set; } = "/";
 
+        public static Guid EmptyGuid { get; } = Guid.Empty;
+
         public EmailConfiguration Email { get; set; } = new EmailConfiguration();
+
     }
 
     public class EmailConfiguration

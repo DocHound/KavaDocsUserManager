@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -100,7 +101,8 @@ namespace KavaDocsUserManager.Business
         public User GetUser(Guid id)
         {
             return Context.Users
-                    .Include(b=> b.Repositories)                    
+                    .Include(u=> u.Repositories)
+                    .Include("Repositories.Repository")
                     .FirstOrDefault(usr => usr.Id == id);
         }
 
@@ -248,7 +250,78 @@ namespace KavaDocsUserManager.Business
             AutoValidate = false;
             return Save();
         }
-        
+
+
+        /// <summary>
+        /// Gets a list of roles for the given user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="repositoryId"></param>
+        /// <returns></returns>
+        public List<Role> GetRepositoryRoles(Guid userId, Guid repositoryId)
+        {
+            var list = Context.UserRoles
+                .Include("Role")
+                .Where(ur => ur.RepositoryId == repositoryId && ur.UserId == userId)
+                .Select(ur => ur.Role)
+                .ToList();
+
+            return list;
+        }
+
+        /// <summary>
+        /// Gets a list of roles for the user
+        /// </summary>
+        /// <param name="repositoryId"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public List<Role> GetRepositoryRoles(Guid repositoryId, User user = null)
+        {
+            if (user == null)
+                user = Entity;
+            if (user == null)
+                throw new ArgumentException("To retrieve roles you need to pass a user.");
+
+            var userId = user.Id;
+
+            var list = Context.UserRoles
+                .Include("Role")
+                .Where(ur => ur.RepositoryId == repositoryId && ur.UserId == userId)
+                .Select(ur => ur.Role)
+                .ToList();
+
+            return list;
+        }
+
+        /// <summary>
+        /// Returns repository roles as a string
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="repositoryId"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+        public string GetRepositoryRolesAsString(Guid userId, Guid repositoryId,string separator = ",")
+        {
+            var list = Context.UserRoles
+                .Include("Role")
+                .Where(ur => ur.RepositoryId == repositoryId && ur.UserId == userId)
+                .Select(ur => ur.Role);
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var role in list)
+            {
+                sb.Append(role.Name + separator);
+            }
+
+            if (sb.Length < 1)
+                return null;
+
+            // strip last separator
+            sb.Length--;
+
+            return sb.ToString();
+        }
+
         #endregion
 
 

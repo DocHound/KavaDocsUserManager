@@ -87,11 +87,7 @@ namespace KavaDocsUserManager.Business.Models
         [XmlIgnore]
         private string _password;
 
-        public List<RepositoryUser> Repositories { get; set; }        
+        public List<RepositoryUser> Repositories { get; set; }
 
     }
-
- 
-
-
 }

@@ -246,6 +246,8 @@ namespace KavaDocsUserManager.Business
             return title;
         }
 
+        #region Repository Users
+
         public async Task<List<Repository>> GetRepositoriesForUserAsync(Guid userId)
         {            
             var list = await Context.Repositories
@@ -268,6 +270,12 @@ namespace KavaDocsUserManager.Business
             return list;
         }
 
+
+        /// <summary>
+        /// Returns a list of users for this repository
+        /// </summary>
+        /// <param name="repoId"></param>
+        /// <returns></returns>
         public async Task<List<RepositoryUser>> GetUsersForRepositoryAsync(Guid repoId)
         {
                 var users = await Context.UserRepositories
@@ -277,6 +285,7 @@ namespace KavaDocsUserManager.Business
                                 .ToListAsync();
             return users;
         }
+
 
         
         public bool RemoveUserFromRepository(Guid userId, Guid repoId)
@@ -289,7 +298,92 @@ namespace KavaDocsUserManager.Business
             return Context.SaveChanges() > -1;
         }
 
-        
+#endregion
+
+
+        #region Roles
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="repositoryId"></param>
+        /// <returns></returns>
+        public async Task<List<Role>> GetRolesForRepository(Guid repositoryId)
+        {
+            return await Context.UserRoles
+                .Include(r => r.Role)
+                .Where(ur => ur.RepositoryId == repositoryId)
+                .Distinct()
+                .Select(ur => ur.Role)
+                .ToListAsync();
+        }
+
+
+        public async Task<bool> AddRoleToRepository(Guid repositoryId, Guid roleId, Guid userId)
+        {
+            var role = new RoleUserRepository()
+            {
+                RepositoryId = repositoryId,
+                RoleId = roleId,
+                UserId = userId
+            };
+            Context.UserRoles.Add(role);
+
+            return await SaveAsync();
+        }
+
+        public async Task<int> AddRoleToRepository(Guid repositoryId, Guid userId, Role role)
+        {
+            var existing = Context.UserRoles
+                    .FirstOrDefault(ur => ur.RepositoryId == repositoryId &&
+                                      ur.Role.Name == role.Name);
+
+            if (existing != null)
+                role = existing.Role;
+            
+            var link = new RoleUserRepository()
+            {
+                RepositoryId = repositoryId,
+                RoleId = role.Id,
+                UserId = userId
+            };
+
+            bool exists = await Context.UserRoles.AnyAsync(ur => ur.RepositoryId == link.RepositoryId &&
+                                        ur.RoleId == link.RoleId &&
+                                        ur.UserId == link.UserId);
+            if (!exists)
+                Context.UserRoles.Add(link);
+            else
+                Context.Attach(link);
+
+            return await Context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="repositoryId"></param>
+        /// <param name="userId"></param>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public async Task<bool> RemoveUserRole(Guid repositoryId, Guid userId, Guid roleId)
+        {
+
+           var userRole = await Context.UserRoles.FirstOrDefaultAsync( ur=> ur.RepositoryId == repositoryId &&
+                                                  ur.RoleId == roleId &&
+                                                  ur.UserId == userId);
+            if (userRole == null)
+                return true;
+
+            Context.UserRoles.Remove(userRole);
+
+            int result = await Context.SaveChangesAsync();
+                
+            return result > 0 ? true : false;
+        }
+
+        #endregion
+
     }
 
 }

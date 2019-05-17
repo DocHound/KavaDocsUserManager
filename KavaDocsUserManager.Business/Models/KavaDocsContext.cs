@@ -47,11 +47,15 @@ namespace KavaDocsUserManager.Business.Models
         public DbSet<User> Users { get; set; }
 
         public DbSet<Repository> Repositories { get; set; }
-        
-        public DbSet<Organization> Organizations { get; set; }
 
         public DbSet<RepositoryUser> UserRepositories { get; set; }
 
+        public DbSet<Role> Roles { get; set; }
+
+        public DbSet<RoleUserRepository> UserRoles { get; set; }
+
+        public DbSet<Organization> Organizations { get; set; }
+        
         public DbSet<OrganizationRepository> OrganizationRepositories { get; set; }
 
         public DbSet<AuthToken> AuthTokens { get; set; }

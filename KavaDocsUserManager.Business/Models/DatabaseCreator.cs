@@ -53,15 +53,46 @@ namespace KavaDocsUserManager.Business.Models
                     }
                 }
             }
-    
+
+            
+
+
 
 
             var rickId = new Guid("11111111-0589-4951-ad11-dae7fb1566cb");
             var markusId = new Guid("22222222-0589-4951-ad11-dae7fb1566cb");
 
+            var roleUserId = new Guid("11111111-2222-4951-ad11-dae7fb1566ca");
+            var roleAdminId =    new Guid("22222222-1111-4951-ad11-dae7fb1566cb");
+            var rolePrivateId = new Guid("33333333-3333-4951-ad11-dae7fb1566cc");
+
+
             hasData = context.Users.Any();
             if (!hasData)
             {
+
+                context.Roles.AddRange(new[]
+                {
+                    new Role
+                    {
+                        Id = roleUserId,
+                        Name = "User",
+                        Level = 1
+                    },
+                    new Role
+                    {
+                        Id = roleAdminId,
+                        Name = "RepoAdmin",
+                        Level = 10
+                    },
+                    new Role
+                    {
+                        Id = rolePrivateId,
+                        Name = "Private",
+                        Level = 3
+                    }
+                });
+
                 context.Users.AddRange(new[]
                 {
                     new User()
@@ -107,6 +138,26 @@ namespace KavaDocsUserManager.Business.Models
                 context.UserRepositories.Add(map);
                 context.SaveChanges();
 
+                context.UserRoles.Add(new RoleUserRepository
+                {
+                    UserId = rickId,
+                    RoleId = roleAdminId,
+                    RepositoryId = repository.Id
+                });
+                context.UserRoles.Add(new RoleUserRepository
+                {
+                    UserId = rickId,
+                    RoleId = roleUserId,
+                    RepositoryId = repository.Id
+                });
+                context.UserRoles.Add(new RoleUserRepository
+                {
+                    UserId = markusId,
+                    RoleId = roleUserId,
+                    RepositoryId = repository.Id
+                });
+                context.SaveChanges();
+
                 repository = new Repository()
                 {                    
                     Prefix = "dn2me",
@@ -123,6 +174,23 @@ namespace KavaDocsUserManager.Business.Models
                 };                
                 context.UserRepositories.Add(map);
                 context.SaveChanges();
+
+                context.UserRoles.Add(new RoleUserRepository
+                {
+                    UserId = rickId,
+                    RoleId = roleUserId,
+                    RepositoryId = repository.Id
+                });
+                context.UserRoles.Add(new RoleUserRepository
+                {
+                    UserId = markusId,
+                    RoleId = roleAdminId,
+                    RepositoryId = repository.Id
+                });
+                
+
+                context.SaveChanges();
+
 
                 repository = new Repository()
                 {

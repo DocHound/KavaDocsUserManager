@@ -14,7 +14,7 @@ namespace KavaDocsUserManager.Business.Models
         public Repository()
         {
             Id = Guid.NewGuid();
-            Users = new List<RepositoryUser>();                    
+            Users = new List<RepositoryUser>();
             IsActive = true;
         }
 
@@ -79,8 +79,7 @@ namespace KavaDocsUserManager.Business.Models
         /// Owners and Contributors of this repository
         /// </summary>
         public List<RepositoryUser> Users { get; set; }
-                
-
+        
         /// <summary>
         /// Optional organization that this repository belongs to
         /// </summary>

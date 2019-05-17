@@ -4,14 +4,16 @@ using KavaDocsUserManager.Business.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KavaDocsUserManager.Business.Migrations
 {
     [DbContext(typeof(KavaDocsContext))]
-    partial class KavaDocsContextModelSnapshot : ModelSnapshot
+    [Migration("20190516231503_Add-Roles2")]
+    partial class AddRoles2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,20 +148,16 @@ namespace KavaDocsUserManager.Business.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("KavaDocsUserManager.Business.Models.RoleUserRepository", b =>
+            modelBuilder.Entity("KavaDocsUserManager.Business.Models.RoleUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("RepositoryId");
 
                     b.Property<Guid>("RoleId");
 
                     b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RepositoryId");
 
                     b.HasIndex("RoleId");
 
@@ -237,20 +235,15 @@ namespace KavaDocsUserManager.Business.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("KavaDocsUserManager.Business.Models.RoleUserRepository", b =>
+            modelBuilder.Entity("KavaDocsUserManager.Business.Models.RoleUser", b =>
                 {
-                    b.HasOne("KavaDocsUserManager.Business.Models.Repository", "Respository")
-                        .WithMany("Roles")
-                        .HasForeignKey("RepositoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("KavaDocsUserManager.Business.Models.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("KavaDocsUserManager.Business.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
