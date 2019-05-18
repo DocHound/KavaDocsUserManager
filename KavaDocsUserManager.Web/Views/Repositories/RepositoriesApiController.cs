@@ -25,9 +25,9 @@ namespace KavaDocsUserManager.Web.Views.Repositories
         
         [HttpGet]
         [Route("api/repositories/{repoId}/remove/{userId}")]
-        public bool RemoveUserFromRepository(Guid userId, Guid repoId)
+        public async Task<bool> RemoveUserFromRepository(Guid userId, Guid repoId)
         {
-            return _repoBusiness.RemoveUserFromRepository(userId, repoId);
+            return  await _repoBusiness.RemoveUserFromRepository(userId, repoId);
         }
         
         [HttpGet]
@@ -38,7 +38,7 @@ namespace KavaDocsUserManager.Web.Views.Repositories
             
             var repoUser = _repoBusiness.AddContributorToRepository(repoId, userName,utype);
             if (repoUser == null)
-                throw new ApiException("Didn't add user to repository: " + _repoBusiness.ErrorMessage);
+                throw new ApiException( _repoBusiness.ErrorMessage);
 
             return repoUser;
         }
@@ -120,6 +120,13 @@ namespace KavaDocsUserManager.Web.Views.Repositories
         {
             var response = await _repoBusiness.GetRepositoryWithUsersAndRoles(repoId);
             return response;
+        }
+
+        [HttpDelete]
+        [Route("api/repositories/{repoId}/userroles/{roleId}")]
+        public async Task<bool> DeleteRoleFromRepository(Guid repoId,Guid roleId)
+        {
+            return  await _repoBusiness.DeleteRoleFromRepository(repoId, roleId);
         }
 
     }

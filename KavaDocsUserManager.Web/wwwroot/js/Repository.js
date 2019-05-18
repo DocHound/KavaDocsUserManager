@@ -5,36 +5,24 @@ var vm = {}
 vm = {
     repository: {},
     roles: [],
-    userList: [],
-    userRoles: [],
+    roleUsers: [],
+    allUsers: [],
 
     awesomplete: null,
     newUser: {
         username: "",
         userType: "contributor",
-        visible: false
-    },
-    initialize: function () {
-        vm.repository = globals.repositoryWithUsers.repository;
-        vm.userList = globals.repositoryWithUsers.users;
-        vm.roles = globals.repositoryWithUsers.roles;
-
-        $("#Repository_Prefix").focus();
-
-
-        toastr.options.closeButton = true;
-        toastr.options.positionClass = "toast-bottom-right";
-    },
-    getName: function(item) {
-            return item.name;
-    },
-    getUserSearchList: function (event) {
+        visible: false,
+        roleUsers: [],
+        
+        // search list related operations
+        getUserSearchList: function (event) {
             if (event.key == "ArrowDown" || event.Key == "ArrowUp" || event.Key == "Enter")
                 return;
-            
+
             if (!vm.newUser.username || vm.newUser.username.length < 2)
                 return;
-            
+
             ajaxJson("/api/repositories/searchusers/" + vm.newUser.username,
                 null,
                 function (list) {
@@ -45,8 +33,24 @@ vm = {
                 function () {
 
                 }, { method: "GET" });
+        },
+        getName: function (item) {
+            return item.name;
+        }
     },
-  
+    initialize: function () {
+        vm.repository = globals.repositoryWithUsers.repository;
+        vm.roleUsers = globals.repositoryWithUsers.users;
+        vm.allUsers = globals.repositoryWithUsers.allUsers;
+        vm.roles = globals.repositoryWithUsers.roles;
+
+        $("#Repository_Prefix").focus();
+
+
+        toastr.options.closeButton = true;
+        toastr.options.positionClass = "toast-bottom-right";
+    },
+   
     highlightCode: function() {
         $("pre code")
             .each(function (i, block) {
@@ -137,6 +141,18 @@ vm = {
             function (error) {
                 toastr.error(error.message, "Couldn't retrieve user roles");
             });
+    },
+    removeRole: function (role) {
+        debugger;
+        ajaxJson("/api/repositories/" + vm.repository.id + "/userroles/" + role.id,
+            null,
+            function(success) {
+                toastr.success("Role " + role.rolename + " removed.");
+            },
+            function (error) {
+                toastr.error(error.message, "Couldn't delete role");
+            },
+            { method: "DELETE" });
     },
     navigateDomain: function (e) {
         var url = "https://" + this.$refs.domainPrefix.value + "." + this.$refs.domainName.value;

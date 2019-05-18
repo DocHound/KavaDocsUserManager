@@ -199,11 +199,8 @@ namespace KavaDocsUserManager.Business
             if (repo != null)
                 Context.Repositories.Remove(repo);
 
-            var oldValidate = AutoValidate;
             AutoValidate = false;
             return Save();
-
-            AutoValidate = oldValidate;
         }
 
         public string SafeRepositoryName(string title)
@@ -287,15 +284,29 @@ namespace KavaDocsUserManager.Business
         }
 
 
-        
-        public bool RemoveUserFromRepository(Guid userId, Guid repoId)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="repoId"></param>
+        /// <returns></returns>
+        public async Task<bool> RemoveUserFromRepository(Guid userId, Guid repoId)
         {
             var userRepo = Context.UserRepositories.FirstOrDefault(ur => ur.UserId == userId && ur.RepositoryId == repoId);
             if (userRepo == null)
                 return true;
 
             Context.UserRepositories.Remove(userRepo);
-            return Context.SaveChanges() > -1;
+
+
+            var roles = await Context.UserRoles
+                .Where(ur => ur.UserId == userId && ur.RepositoryId == repoId)
+                .ToListAsync();
+
+            Context.UserRoles.RemoveRange(roles);
+
+            return await Context.SaveChangesAsync() > -1;
         }
 
 #endregion
@@ -320,6 +331,8 @@ namespace KavaDocsUserManager.Business
             return list;
         }
 
+       
+
         /// <summary>
         /// Gets a list of users for a repository along with its associated roles
         /// </summary>
@@ -327,12 +340,11 @@ namespace KavaDocsUserManager.Business
         /// <returns></returns>
         public async Task<RepositoryResponse> GetRepositoryWithUsersAndRoles(Guid repositoryId)
         {
-            var userRepoList = await
+            var userRepoRolesList = await
                 (from uroles in Context.UserRoles
-                    from urepos in Context.UserRepositories
-                    where uroles.RepositoryId == repositoryId &&
-                          urepos.RepositoryId == repositoryId &&
-                          uroles.UserId == urepos.UserId
+                 from urepos in Context.UserRepositories
+                    where urepos.RepositoryId == repositoryId &&
+                          urepos.UserId == uroles.UserId
                     select new
                     {
                         UserId = uroles.User.Id,
@@ -354,13 +366,25 @@ namespace KavaDocsUserManager.Business
                 .Distinct()
                 .ToListAsync();
 
-            // get the repostory
+            // get all users
+            var allUsers = await Context.UserRepositories
+                .Where(ur => ur.RepositoryId == repositoryId)
+                .Select(ur=> new UserResponse
+                    { UserDisplayName = ur.User.UserDisplayName,
+                        Id = ur.UserId,
+                        IsOwner = ur.IsOwner,
+                        UserTypes = ur.UserTypes
+                    })
+                .ToListAsync();
+
+
+            // get the repository
             var repository = await Context.Repositories.FirstOrDefaultAsync(r => r.Id == repositoryId);
             
             var result = new List<UserRolesResponse>();
 
             var uList =
-                userRepoList
+                userRepoRolesList
                     .Select(ur => new {ur.UserId, ur.Username, ur.UserType, ur.IsOwner, ur.RepositoryName, ur.RepositoryId})
                     .Distinct();
 
@@ -384,7 +408,7 @@ namespace KavaDocsUserManager.Business
                         RoleId = role.Id,
                         Rolename = role.Name,
                     };
-                    roleResponse.Selected = userRepoList.Any(ur => ur.UserId == user.UserId && ur.RoleId == role.Id);
+                    roleResponse.Selected = userRepoRolesList.Any(ur => ur.UserId == user.UserId && ur.RoleId == role.Id);
 
                     userRole.Roles.Add(roleResponse);
                 }
@@ -410,6 +434,7 @@ namespace KavaDocsUserManager.Business
             {
                 Repository = repository,
                 Users = result,
+                AllUsers = allUsers,
                 Roles = roles
             };
         }
@@ -478,7 +503,56 @@ namespace KavaDocsUserManager.Business
             return result > 0 ? true : false;
         }
 
+        
+
+        /// <summary>
+        /// Delete a Role from a specific repository deleting all related
+        /// roles that are assigned to users
+        /// </summary>
+        /// <param name="repoId"></param>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteRoleFromRepository(Guid repoId, Guid roleId)
+        {
+            var role = await Context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
+            if (role == null)
+                return true;  // doesn't exist
+            
+            var userRoles = await Context.UserRoles.Where(ur => ur.RepositoryId == repoId && ur.RoleId == roleId)
+                .ToListAsync();
+
+            Context.UserRoles.RemoveRange(userRoles);
+
+            Context.Roles.Remove(role);
+
+            int result = await Context.SaveChangesAsync();
+
+            return result > 0 ? true : false;
+        }
+
+        /// <summary>
+        /// Removes a user from a specific role in a repository
+        /// </summary>
+        /// <param name="repoId"></param>
+        /// <param name="roleId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteUserFromFromRepositoryRole(Guid repoId, Guid roleId, Guid userId)
+        {
+            var userRoles = await Context.UserRoles
+                                        .Where(ur => ur.RepositoryId == repoId && 
+                                                                ur.RoleId == roleId && 
+                                                                ur.UserId == userId )
+                                        .ToListAsync();
+
+            Context.UserRoles.RemoveRange(userRoles);
+
+            int result = await Context.SaveChangesAsync();
+
+            return result > 0 ? true : false;
+        }
         #endregion
+
 
     }
 
@@ -487,7 +561,9 @@ namespace KavaDocsUserManager.Business
     {
         public Repository Repository { get; set; }
         public List<UserRolesResponse> Users { get; set; }
-        public List<Role> Roles { get; set; }
+
+        public List<UserResponse> AllUsers { get; set; }
+         public List<Role> Roles { get; set; }
     }
 
     public class UserRolesResponse
@@ -513,4 +589,13 @@ namespace KavaDocsUserManager.Business
 
         public bool Selected { get; set; }
     }
+
+    public class UserResponse
+    {
+        public string UserDisplayName { get; set; }
+        public Guid Id { get; set; }
+        public bool IsOwner { get; set; }
+        public RepositoryUserTypes UserTypes { get; set; }
+    }
+
 }

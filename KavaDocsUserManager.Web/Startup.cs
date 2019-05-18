@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace KavaDocsUserManager
 {
@@ -80,7 +81,8 @@ namespace KavaDocsUserManager
                 .AddJsonOptions(opt =>
                 {
                     opt.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                    opt.SerializerSettings.Converters.Add(new StringEnumConverter() {CamelCaseText = true});
+                    opt.SerializerSettings.Converters.Add(new StringEnumConverter()
+                        { NamingStrategy = new CamelCaseNamingStrategy() });
                 })
                 .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -23,5 +24,6 @@ namespace KavaDocsUserManager.Business.Models
         public bool IsGlobalAdmin { get; set; }
 
         public bool IsRepoAdmin { get; set; }
+
     }
 }

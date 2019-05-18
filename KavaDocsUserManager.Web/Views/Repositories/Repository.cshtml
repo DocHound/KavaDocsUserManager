@@ -12,13 +12,10 @@
 
         <form asp-action="SaveRepository">
 
-
-
             <h1 class="page-header-text">
                 <i class="far fa-archive"></i>
                 @repo.Title
             </h1>
-
 
             <error-display error-display-model="Model.ErrorDisplay"></error-display>
 
@@ -161,7 +158,8 @@
             <div v-show="newUser.visible">
                 <a v-on:click="newUser.visible = false;"
                    class="float-right"
-                   style="display:block; padding: 10px 5px"><i class="far fa-times gray-text "></i></a>
+                   style="display:block; padding: 10px 5px"><i class="far fa-times gray-text "></i>
+                </a>
 
                 <div class="list-item responsive-container">
                     <input id="UserToAdd" class="awesomplete form-control" style="width: 300px"
@@ -176,7 +174,7 @@
                 </div>
             </div>
 
-            <div v-for="user in userList"
+            <div v-for="user in allUsers"
                  class="list-item" v-bind:class="{'subtle-highlight': user.isOwner}">
                 <div class="float-right">
                     {{user.userTypes}}
@@ -187,12 +185,12 @@
 
                 
                 <div class="user-list-item" >
-                    <b style="width:300px">{{user.username}}</b>
+                    <b style="width:300px">{{user.userDisplayName}}</b>
 
 
                     <select multiple class="selectpicker form-control d-inline" >
                         <option v-for="role in user.roles" style="width: 150px;" 
-                                :selected="role.selected">
+                                v-bind:selected="role.selected">
                                 {{role.rolename}}
                         </option>
                     </select>
@@ -209,7 +207,14 @@
             Repository Roles
         </div>
         <div v-for="role in roles"
-             class="list-item" >
+             class="list-item">
+            
+            <div class="float-right">
+                <a v-on:click="removeRole(role)">
+                    <i class="fas fa-times-circle red-text"></i>
+                </a>
+            </div>
+
             <a href=""
                class="user-list-item">
                 {{role.name}}

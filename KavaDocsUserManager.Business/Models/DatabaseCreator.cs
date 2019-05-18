@@ -107,6 +107,17 @@ namespace KavaDocsUserManager.Business.Models
                         Email="megger@eps-software.com", Password = "testing", UserDisplayName="MarkusEgger",
                         FirstName = "Markus", LastName = "Egger", Company="EPS Software", IsAdmin = true
                     },
+
+                    new User()
+                    {
+                        Email="duesentriev@eps-software.com", Password = "testing", UserDisplayName="DanielDuesentrieb",
+                        FirstName = "Daniel", LastName = "Duesentrieb", Company="EPS Software", IsAdmin = false
+                    },
+                    new User()
+                    {
+                        Email="dbubb@gorge.net", Password = "testing", UserDisplayName="DanBub",
+                        FirstName = "Dan", LastName = "Bubb", Company="Gorge .NET", IsAdmin = false
+                    },
                 });                
                 context.SaveChanges();
 
@@ -262,6 +273,15 @@ namespace KavaDocsUserManager.Business.Models
                     UserTypes = RepositoryUserTypes.Owner
                 };
                 context.UserRepositories.Add(map);
+
+                map = new RepositoryUser()
+                {
+                    UserId = markusId,
+                    RepositoryId = repository.Id,
+                    UserTypes = RepositoryUserTypes.Contributor
+                };
+                context.UserRepositories.Add(map);
+                
                 context.SaveChanges();
 
             }
