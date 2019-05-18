@@ -85,7 +85,7 @@ vm = {
     addUserToRepo: function (repository, username, userType) {        
         ajaxJson("/api/repositories/" + repository.id + "/add/" + username + "/" + userType, null,
             function (repoUser) {                
-                repository.users.push(repoUser);
+                users.push(repoUser);
                 vm.newUser.visible = false;
                 vm.newUser.username = null;
                 toastr.success(username + " has been added to this repository");
@@ -94,15 +94,15 @@ vm = {
                toastr.error(error.message,"Couldn't add user");
             });
     },
-    removeUserFromRepo: function(user, repository) {
-        ajaxJson("/api/repositories/" + repository.id + "/remove/" + user.id,
+    removeUserFromRepo: function (user) {
+        ajaxJson("/api/repositories/" + vm.repository.id + "/remove/" + user.userId,
                 null, 
                 function () {
-                    repository.users = repository.users.filter(function(u) {
-                        return u.user !== user;
+                    vm.users = vm.users.filter(function(u) {
+                        return u.userId !== user.userId;
                     });
                     
-                    toastr.success(user.userDisplayName + " has been removed from the repository.");
+                    toastr.success(user.username + " has been removed from the repository.");
                 },
                 function(error) {
                     toastr.error(error.message, "Couldn't remove user");

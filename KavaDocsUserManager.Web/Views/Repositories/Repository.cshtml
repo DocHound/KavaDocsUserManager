@@ -177,26 +177,33 @@
 
         <div v-for="user in users"
              class="list-item" v-bind:class="{'subtle-highlight': user.isOwner}">
-            <div class="float-right">
-                {{user.userTypes}}
-                <a v-on:click="removeUserFromRepo(user, repository)">
-                    <i class="fas fa-times-circle red-text"></i>
-                </a>
-            </div>
-
+                
 
             <div class="user-list-item">
-                <b style="width:300px">{{user.username}}</b>
+                <div class="row">
 
+                    <div class="col-md-3">
+                        <b style="width: 300px">{{user.username}}</b>
+                    </div>
 
-                <select multiple class="selectpicker form-control d-inline">
-                    <option v-for="role in user.roles" style="width: 150px;"
-                            v-bind:selected="role.selected">
-                        {{role.rolename}}
-                    </option>
-                </select>
+                    <div class="col-md-6">
+                        <select multiple class="selectpicker form-control d-inline">
+                            <option v-for="role in user.roles" style="width: 150px;"
+                                    v-bind:selected="role.selected">
+                                {{role.rolename}}
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3 right-align">
+                        {{user.userTypes}}
+                        <a v-on:click="removeUserFromRepo(user, repository)">
+                            <i class="fas fa-times-circle red-text"></i>
+                        </a>
+                    </div>
+
+                </div>
             </div>
-
         </div>
     </div>
 

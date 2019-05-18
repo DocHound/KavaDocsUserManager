@@ -32,7 +32,7 @@ namespace KavaDocsUserManager.Web.Views.Repositories
         
         [HttpGet]
         [Route("api/repositories/{repoId}/add/{userName}/{userType}")]
-        public RepositoryUser AddUserToRespository(Guid repoId, string userName, string userType)
+        public UserRolesResponse AddUserToRespository(Guid repoId, string userName, string userType)
         {            
             Enum.TryParse<RepositoryUserTypes>(userType, true, out RepositoryUserTypes utype);
             
@@ -40,7 +40,15 @@ namespace KavaDocsUserManager.Web.Views.Repositories
             if (repoUser == null)
                 throw new ApiException( _repoBusiness.ErrorMessage);
 
-            return repoUser;
+            return new UserRolesResponse
+            {
+                UserId = repoUser.UserId,
+                RepositoryId = repoUser.RepositoryId,
+                Username = repoUser.User.UserDisplayName,
+                IsOwner = repoUser.IsOwner,
+                RepositoryName = repoUser.Repository.Title,
+                UserTypes = repoUser.UserTypes
+            };
         }
 
         

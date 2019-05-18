@@ -178,7 +178,7 @@ namespace KavaDocsUserManager.Business
                 .Select(u => u.Id)
                 .FirstOrDefault();
 
-            if (string.IsNullOrEmpty(username))
+            if (userId == Guid.Empty)
             {
                 SetError("Invalid username");
                 return null;
