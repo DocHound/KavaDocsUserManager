@@ -13,7 +13,7 @@ vm = {
         username: "",
         userType: "contributor",
         visible: false,
-        roleUsers: [],
+        users: [],
         
         // search list related operations
         getUserSearchList: function (event) {
@@ -40,7 +40,7 @@ vm = {
     },
     initialize: function () {
         vm.repository = globals.repositoryWithUsers.repository;
-        vm.roleUsers = globals.repositoryWithUsers.users;
+        vm.users = globals.repositoryWithUsers.users;
         vm.allUsers = globals.repositoryWithUsers.allUsers;
         vm.roles = globals.repositoryWithUsers.roles;
 
@@ -176,11 +176,10 @@ vm = {
 }
 
 vm.initialize();
+
 var app = new Vue({
     el: "#RepositoryPage",
-    data: function() {
-         return vm;
-    }
+    data: vm
 });
 //Vue.use(VAutocomplete.default);
 

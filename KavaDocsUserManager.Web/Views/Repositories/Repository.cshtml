@@ -4,202 +4,203 @@
 @{
     var repo = Model.Repository;
     ViewData["Title"] = repo.Title ?? "New Repository";
-    var appUser = User.GetAppUser();    
+    var appUser = User.GetAppUser();
 }
 
 
-    <div id="RepositoryPage" class="content-container">
+<div id="RepositoryPage" class="content-container">
 
-        <form asp-action="SaveRepository">
+    <form asp-action="SaveRepository">
 
-            <h1 class="page-header-text">
-                <i class="far fa-archive"></i>
-                @repo.Title
-            </h1>
+        <h1 class="page-header-text">
+            <i class="far fa-archive"></i>
+            @repo.Title
+        </h1>
 
-            <error-display error-display-model="Model.ErrorDisplay"></error-display>
+        <error-display error-display-model="Model.ErrorDisplay"></error-display>
 
-            <div class="form-group">
-                <label>Prefix and Domain</label>
-                <div class="responsive-container">
-                    <input type="text" class="form-control"
-                           asp-for="Repository.Prefix"
-                           style="width: 200px;margin-right: 7px"
-                           placeholder="Domain prefix"
-                           ref="domainPrefix" />
-
-                    <input type="text" asp-for="Repository.Domain"
-                           class="form-control" readonly
-                           placeholder="Kavadocs host domain"
-                           style="width: 300px;"
-                           ref="domainName" />
-                    <a hhref="#0" v-on:click="navigateDomain()" class="btn btn-light"><i class="far fa-external-link-alt" style="font-size: 1.2em"></i></a>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" class="form-control"
-                       asp-for="Repository.Title"
-                       placeholder="Title for this Repository" />
-            </div>
-
-            <div class="form-group">
-                <label>Description</label>
-                <textarea class="form-control"
-                          asp-for="Repository.Description"
-                          placeholder="Title for this Repository">
-                </textarea>
-            </div>
-            <div class="form-group">
-                <label>Tags</label>
-                <input type="text" class="form-control"
-                       asp-for="Repository.Tags"
-                       placeholder="Keyword tags for this repository - comma separated." />
-            </div>
-
-            <div class="form-group">
-                <label></label>
-
-            </div>
-
-            <div class="form-group">
-
-
-
-                <label>
-                    Repository Configuration Settings&nbsp;
-                    <a href="http://docs.kavadocs.com/Configuring-Repositories"
-                       title="more info on repository configuration" target="_blank">
-                        <i class="fas fa-info-circle text-info"></i>
-                    </a>
-                </label>
-                @*<pre  ><code id="SettingsJsonPreview"  class="language-json" v-on:mouseenter="editCodeField('SettingsJsonPreview','SettingsJson')">@Model.SettingsJson</code></pre>*@
-                <textarea class="form-control code-editing" id="SettingsJson"
-                          asp-for="SettingsJson"
-                          placeholder="Settings for this repository (JSON format)">
-            </textarea>
-            </div>
-
-            <div class="form-group optional-field-group">
-                <label>
-                    Optional Fields
-                    <select asp-for="SelectedOptionalField"
-                            class="form-control d-inline"
-                            v-on:change="optionalFieldSelection"
-                            style="width: 200px;">
-                        <option value="TableOfContents">Table of Contents</option>
-                        <option value="CssOverrides">Css Overrides</option>
-                    </select>
-                </label>
-
-                <textarea class="form-control code-editing @(Model.SelectedOptionalField != "TableOfContents" ? "hidden" : "")"
-                          asp-for="TableOfContentsJson" id="TableOfContents"
-                          placeholder="Table of Contents JSON if a remote _toc.json can't be used">
-            </textarea>
-
-                <textarea class="form-control code-editing @(Model.SelectedOptionalField != "CssOverrides" ? "hidden" : "")"
-                          asp-for="Repository.CssOverrides" id="CssOverrides"
-                          placeholder="optional CSS to override stock template rendering">
-            </textarea>
-
-            </div>
-
+        <div class="form-group">
+            <label>Prefix and Domain</label>
             <div class="responsive-container">
-                <div class="form-check margin-right">
-                    <input type="checkbox" asp-for="Repository.IsActive" class="form-check-input" id="IsActive">
-                    <label class="form-check-label" for="IsActive">Repository Active</label>
-                </div>
+                <input type="text" class="form-control"
+                       asp-for="Repository.Prefix"
+                       style="width: 200px;margin-right: 7px"
+                       placeholder="Domain prefix"
+                       ref="domainPrefix" />
 
-                <div class="form-check">
-                    <input type="checkbox" asp-for="Repository.IncludeInSearchResults" class="form-check-input" id="IncludeInSearchResults">
-                    <label class="form-check-label" for="IncludeInSearchResults">Include in Search Results</label>
-                </div>
-            </div>
-
-            <div class="margin-top-2x">
-                @if (!Model.IsNewUser && Model.Repository.IsOwner(appUser.UserId))
-                {
-                    <a class="btn btn-sm btn-warning float-right" v-on:click="deleteRepository" title="Delete repository">
-                        <i class="fa fa-times-circle"></i>
-                        Delete
-                    </a>
-                }
-                <button class="btn btn-primary" type="submit">
-                    <i class="fas fa-check-circle "></i>
-                    Save Repository
-                </button>
-            </div>
-
-
-            @*<input type="hidden" asp-for="Repository.Id" />*@
-            <input type="hidden" name="Repository.Id" id="Repository_Id" value="@Model.Repository.Id" />
-
-        </form>
-
-
-        <hr class="margin-top-2x margin-bottom-2x" />
-
-        @*User List*@
-        <div class="list" v-cloak>
-            <div class="list-header" style="font-weight: bold;">
-
-                <button class="btn btn-secondary btn-sm float-right"
-                        style="margin-top: -5px;"
-                        v-if="!newUser.visible"
-                        v-on:click="newUser.visible=true;">
-                    <i class="fa fa-plus-circle"></i>
-                    Add User
-                </button>
-
-                <i class="fa fa-users"></i>
-                Repository Contributors
-            </div>
-            <div v-show="newUser.visible">
-                <a v-on:click="newUser.visible = false;"
-                   class="float-right"
-                   style="display:block; padding: 10px 5px"><i class="far fa-times gray-text "></i>
-                </a>
-
-                <div class="list-item responsive-container">
-                    <input id="UserToAdd" class="awesomplete form-control" style="width: 300px"
-                           placeholder="search for Kava Docs users..."
-                           v-model="newUser.username"
-                           v-on:keyup="newUser.getUserSearchList" />
-                    <select style="width: 200px" class="form-control" v-model="newUser.userType">
-                        <option>contributor</option>
-                        <option>user</option>
-                    </select>
-                    <button class="btn btn-outline-primary" v-on:click="addUserToRepo(repository,newUser.username, newUser.userType)">Add</button>
-                </div>
-            </div>
-
-            <div v-for="user in allUsers"
-                 class="list-item" v-bind:class="{'subtle-highlight': user.isOwner}">
-                <div class="float-right">
-                    {{user.userTypes}}
-                    <a v-on:click="removeUserFromRepo(user, repository)">
-                        <i class="fas fa-times-circle red-text"></i>
-                    </a>
-                </div>
-
-                
-                <div class="user-list-item" >
-                    <b style="width:300px">{{user.userDisplayName}}</b>
-
-
-                    <select multiple class="selectpicker form-control d-inline" >
-                        <option v-for="role in user.roles" style="width: 150px;" 
-                                v-bind:selected="role.selected">
-                                {{role.rolename}}
-                        </option>
-                    </select>
-                </div>
-
+                <input type="text" asp-for="Repository.Domain"
+                       class="form-control" readonly
+                       placeholder="Kavadocs host domain"
+                       style="width: 300px;"
+                       ref="domainName" />
+                <a hhref="#0" v-on:click="navigateDomain()" class="btn btn-light"><i class="far fa-external-link-alt" style="font-size: 1.2em"></i></a>
             </div>
         </div>
 
-        @*Role List*@
+        <div class="form-group">
+            <label>Title</label>
+            <input type="text" class="form-control"
+                   asp-for="Repository.Title"
+                   placeholder="Title for this Repository" />
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea class="form-control"
+                      asp-for="Repository.Description"
+                      placeholder="Title for this Repository">
+                </textarea>
+        </div>
+        <div class="form-group">
+            <label>Tags</label>
+            <input type="text" class="form-control"
+                   asp-for="Repository.Tags"
+                   placeholder="Keyword tags for this repository - comma separated." />
+        </div>
+
+        <div class="form-group">
+            <label></label>
+
+        </div>
+
+        <div class="form-group">
+
+
+
+            <label>
+                Repository Configuration Settings&nbsp;
+                <a href="http://docs.kavadocs.com/Configuring-Repositories"
+                   title="more info on repository configuration" target="_blank">
+                    <i class="fas fa-info-circle text-info"></i>
+                </a>
+            </label>
+            @*<pre  ><code id="SettingsJsonPreview"  class="language-json" v-on:mouseenter="editCodeField('SettingsJsonPreview','SettingsJson')">@Model.SettingsJson</code></pre>*@
+            <textarea class="form-control code-editing" id="SettingsJson"
+                      asp-for="SettingsJson"
+                      placeholder="Settings for this repository (JSON format)">
+            </textarea>
+        </div>
+
+        <div class="form-group optional-field-group">
+            <label>
+                Optional Fields
+                <select asp-for="SelectedOptionalField"
+                        class="form-control d-inline"
+                        v-on:change="optionalFieldSelection"
+                        style="width: 200px;">
+                    <option value="TableOfContents">Table of Contents</option>
+                    <option value="CssOverrides">Css Overrides</option>
+                </select>
+            </label>
+
+            <textarea class="form-control code-editing @(Model.SelectedOptionalField != "TableOfContents" ? "hidden" : "")"
+                      asp-for="TableOfContentsJson" id="TableOfContents"
+                      placeholder="Table of Contents JSON if a remote _toc.json can't be used">
+            </textarea>
+
+            <textarea class="form-control code-editing @(Model.SelectedOptionalField != "CssOverrides" ? "hidden" : "")"
+                      asp-for="Repository.CssOverrides" id="CssOverrides"
+                      placeholder="optional CSS to override stock template rendering">
+            </textarea>
+
+        </div>
+
+        <div class="responsive-container">
+            <div class="form-check margin-right">
+                <input type="checkbox" asp-for="Repository.IsActive" class="form-check-input" id="IsActive">
+                <label class="form-check-label" for="IsActive">Repository Active</label>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" asp-for="Repository.IncludeInSearchResults" class="form-check-input" id="IncludeInSearchResults">
+                <label class="form-check-label" for="IncludeInSearchResults">Include in Search Results</label>
+            </div>
+        </div>
+
+        <div class="margin-top-2x">
+            @if (!Model.IsNewUser && Model.Repository.IsOwner(appUser.UserId))
+            {
+                <a class="btn btn-sm btn-warning float-right" v-on:click="deleteRepository" title="Delete repository">
+                    <i class="fa fa-times-circle"></i>
+                    Delete
+                </a>
+            }
+            <button class="btn btn-primary" type="submit">
+                <i class="fas fa-check-circle "></i>
+                Save Repository
+            </button>
+        </div>
+
+
+        @*<input type="hidden" asp-for="Repository.Id" />*@
+        <input type="hidden" name="Repository.Id" id="Repository_Id" value="@Model.Repository.Id" />
+
+    </form>
+
+
+    <hr class="margin-top-2x margin-bottom-2x" />
+
+    @*User List*@
+    <div class="list" v-cloak>
+        <div class="list-header" style="font-weight: bold;">
+
+            <button class="btn btn-secondary btn-sm float-right"
+                    style="margin-top: -5px;"
+                    v-if="!newUser.visible"
+                    v-on:click="newUser.visible=true;">
+                <i class="fa fa-plus-circle"></i>
+                Add User
+            </button>
+
+            <i class="fa fa-users"></i>
+            Repository Contributors
+        </div>
+        <div v-show="newUser.visible">
+            <a v-on:click="newUser.visible = false;"
+               class="float-right"
+               style="display:block; padding: 10px 5px">
+                <i class="far fa-times gray-text "></i>
+            </a>
+
+            <div class="list-item responsive-container">
+                <input id="UserToAdd" class="awesomplete form-control" style="width: 300px"
+                       placeholder="search for Kava Docs users..."
+                       v-model="newUser.username"
+                       v-on:keyup="newUser.getUserSearchList" />
+                <select style="width: 200px" class="form-control" v-model="newUser.userType">
+                    <option>contributor</option>
+                    <option>user</option>
+                </select>
+                <button class="btn btn-outline-primary" v-on:click="addUserToRepo(repository,newUser.username, newUser.userType)">Add</button>
+            </div>
+        </div>
+
+        <div v-for="user in users"
+             class="list-item" v-bind:class="{'subtle-highlight': user.isOwner}">
+            <div class="float-right">
+                {{user.userTypes}}
+                <a v-on:click="removeUserFromRepo(user, repository)">
+                    <i class="fas fa-times-circle red-text"></i>
+                </a>
+            </div>
+
+
+            <div class="user-list-item">
+                <b style="width:300px">{{user.username}}</b>
+
+
+                <select multiple class="selectpicker form-control d-inline">
+                    <option v-for="role in user.roles" style="width: 150px;"
+                            v-bind:selected="role.selected">
+                        {{role.rolename}}
+                    </option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+    @*Role List*@
 
     <div class="list" v-cloak>
         <div class="list-header" style="font-weight: bold;">
@@ -208,7 +209,7 @@
         </div>
         <div v-for="role in roles"
              class="list-item">
-            
+
             <div class="float-right">
                 <a v-on:click="removeRole(role)">
                     <i class="fas fa-times-circle red-text"></i>
@@ -223,15 +224,15 @@
         </div>
     </div>
 
-        <input type="hidden" asp-for="Repository.Id" />
+    <input type="hidden" asp-for="Repository.Id" />
 
-        <pre><code>{{vm}}</code></pre>
-        <pre><code>{{globals.repository}}</code></pre>
+    <pre><code>{{vm}}</code></pre>
+    @*<pre><code>{{globals.repository}}</code></pre>*@
 
-    </div> 
-     
+</div>
 
-    @section Scripts
+
+@section Scripts
     {
 
     @{
@@ -248,45 +249,51 @@
 
 
     @*<link href='~/lib/highlightjs/styles/vs2015.css' rel="stylesheet" />
-    <script src="~/lib/highlightjs/highlight.pack.js"></script>*@
+        <script src="~/lib/highlightjs/highlight.pack.js"></script>*@
 
-    <script src="~/lib/vue/dist/vue.min.js"></script>
-    @*<link rel="stylesheet" href="~/lib/v-autocomplete/dist/v-autocomplete.css" />
-        <script src="~/lib/v-autocomplete/dist/v-autocomplete.js"></script>*@
-
-    <link rel="stylesheet" href="~/lib/awesomplete/awesomplete.css" />
-    <script src="~/lib/awesomplete/awesomplete.min.js"></script>
-
-    <script src="~/lib/toastr/build/toastr.min.js"></script>
-    <link href="~/lib/toastr/build/toastr.min.css" rel="stylesheet"  async />
+    <environment include="Development">
+        <script src="~/lib/vue/dist/vue.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/lib/vue/dist/vue.min.js"></script>
+    </environment>
         
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+        @*<link rel="stylesheet" href="~/lib/v-autocomplete/dist/v-autocomplete.css" />
+            <script src="~/lib/v-autocomplete/dist/v-autocomplete.js"></script>*@
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+        <link rel="stylesheet" href="~/lib/awesomplete/awesomplete.css" />
+        <script src="~/lib/awesomplete/awesomplete.min.js"></script>
 
-    @*<script>
-        $("pre code")
-            .each(function (i, block) {
-                hljs.highlightBlock(block);
-            });
-    </script>*@
-    @{
-        // don't need users 
-        Model.RepositoryWithUsers.Repository.Users = null;
-    }
-    <script>
+        <script src="~/lib/toastr/build/toastr.min.js"></script>
+        <link href="~/lib/toastr/build/toastr.min.css" rel="stylesheet" async />
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+        @*<script>
+                $("pre code")
+                    .each(function (i, block) {
+                        hljs.highlightBlock(block);
+                    });
+            </script>*@
+        @{
+            // don't need users
+            Model.RepositoryWithUsers.Repository.Users = null;
+        }
+        <script>
     var globals = {
         repositoryWithUsers: @Html.Raw(JsonConvert.SerializeObject(Model.RepositoryWithUsers, AppUtils.JsonFormatterSettingsForRecursive))
     };
     setTimeout(function() {
         $('.selectpicker').selectpicker();
     },300);
-    
-    </script>
 
-    <script src="~/js/Repository.js"></script>
+        </script>
+
+        <script src="~/js/Repository.js"></script>
 
 
 }

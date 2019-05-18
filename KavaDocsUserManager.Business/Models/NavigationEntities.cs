@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.Text;
 
 namespace KavaDocsUserManager.Business.Models
@@ -43,7 +44,7 @@ namespace KavaDocsUserManager.Business.Models
 
 
 
-
+    [DebuggerDisplay("{User.UserDisplayName} {Repository.Title} {Role.Name}")]
     public class RoleUserRepository
     {
 

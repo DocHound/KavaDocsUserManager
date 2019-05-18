@@ -331,113 +331,173 @@ namespace KavaDocsUserManager.Business
             return list;
         }
 
-       
-
-        /// <summary>
-        /// Gets a list of users for a repository along with its associated roles
-        /// </summary>
-        /// <param name="repositoryId"></param>
-        /// <returns></returns>
         public async Task<RepositoryResponse> GetRepositoryWithUsersAndRoles(Guid repositoryId)
         {
-            var userRepoRolesList = await
-                (from uroles in Context.UserRoles
-                 from urepos in Context.UserRepositories
-                    where urepos.RepositoryId == repositoryId &&
-                          urepos.UserId == uroles.UserId
-                    select new
-                    {
-                        UserId = uroles.User.Id,
-                        Username = uroles.User.UserDisplayName,
-                        Rolename = uroles.Role.Name,
-                        RoleId = uroles.Role.Id,
-                        RepositoryName = urepos.Repository.Title,
-                        RepositoryId = repositoryId,
-                        IsOwner = urepos.IsOwner,
-                        UserType = urepos.UserTypes
-                    })
-                .OrderBy(ur => ur.Username)
+
+            var allUsers = await Context.UserRepositories
+                .Include(ur=> ur.Repository)
+                .Include(ur => ur.User)
+                .Where(ur => ur.RepositoryId == repositoryId)
                 .ToListAsync();
 
-            // get all the roles
-            var roles = await Context.UserRoles
+            var allUserRoles = await Context.UserRoles
+                .Include(r=> r.Role)
                 .Where(r => r.RepositoryId == repositoryId)
-                .Select(r=> r.Role)
                 .Distinct()
                 .ToListAsync();
 
-            // get all users
-            var allUsers = await Context.UserRepositories
-                .Where(ur => ur.RepositoryId == repositoryId)
-                .Select(ur=> new UserResponse
-                    { UserDisplayName = ur.User.UserDisplayName,
-                        Id = ur.UserId,
-                        IsOwner = ur.IsOwner,
-                        UserTypes = ur.UserTypes
-                    })
-                .ToListAsync();
+
+            var allRoles = allUserRoles.Select(r => r.Role).Distinct().ToList();
 
 
-            // get the repository
-            var repository = await Context.Repositories.FirstOrDefaultAsync(r => r.Id == repositoryId);
-            
-            var result = new List<UserRolesResponse>();
+            var userAndRoles = new List<UserRolesResponse>();
 
-            var uList =
-                userRepoRolesList
-                    .Select(ur => new {ur.UserId, ur.Username, ur.UserType, ur.IsOwner, ur.RepositoryName, ur.RepositoryId})
-                    .Distinct();
-
-            foreach (var user in uList)
+            foreach (var userRepo in allUsers)
             {
-                var userRole = new UserRolesResponse
+                var user = new UserRolesResponse()
                 {
-                    Username = user.Username,
-                    UserId = user.UserId,
-                    Roles = new List<RoleResponse>(),
-                    IsOwner = user.IsOwner,
-                    UserTypes = user.UserType,
-                    RepositoryId = user.RepositoryId,
-                    RepositoryName = user.RepositoryName
+                     RepositoryId = repositoryId,
+                     RepositoryName = userRepo.Repository.Title,
+                     UserId = userRepo.UserId,
+                    IsOwner = userRepo.IsOwner,
+                    Username = userRepo.User.UserDisplayName,
+                    UserTypes = userRepo.UserTypes
                 };
 
-                foreach (var role in roles)
+                foreach (var role in allRoles)
                 {
-                    var roleResponse = new RoleResponse
-                    {
-                        RoleId = role.Id,
-                        Rolename = role.Name,
-                    };
-                    roleResponse.Selected = userRepoRolesList.Any(ur => ur.UserId == user.UserId && ur.RoleId == role.Id);
+                    var userRole = allUserRoles.First(ur => ur.Role.Equals(role));
 
-                    userRole.Roles.Add(roleResponse);
+                    var newRole = new RoleResponse
+                    {
+                        RoleId = userRole.RoleId,
+                        Rolename = userRole.Role.Name,
+                        Selected = allUserRoles.Any(ur=> ur.UserId == user.UserId && ur.RoleId == userRole.RoleId)
+                    };
+                    user.Roles.Add(newRole);
                 }
 
-                //userRole.Roles = userRepoList
-                //    //.Where(ur => ur.UserId == user.UserId)
-                //    .Select(ur => new RoleResponse
-                //    {
-                //        Rolename = ur.Rolename,
-                //        RoleId = ur.RoleId,
-                //        Selected = ur.UserId == user.UserId
-                //    })
-                //    .Distinct()
-                //    .ToList();
-
-                result.Add(userRole);
+                userAndRoles.Add(user);
             }
 
-
-            //repository.Users = null;
+            // get the repository
+            var repository = 
+                await Context.Repositories
+                    .Include(r=> r.Users)
+                    .FirstOrDefaultAsync(r => r.Id == repositoryId);
 
             return new RepositoryResponse
             {
                 Repository = repository,
-                Users = result,
-                AllUsers = allUsers,
-                Roles = roles
+                Users = userAndRoles,
+                Roles = allRoles
             };
         }
+
+        ///// <summary>
+        ///// Gets a list of users for a repository along with its associated roles
+        ///// </summary>
+        ///// <param name="repositoryId"></param>
+        ///// <returns></returns>
+        //public async Task<RepositoryResponse> GetRepositoryWithUsersAndRolesX(Guid repositoryId)
+        //{
+        //    var userRepoRolesList = await
+        //        (from uroles in Context.UserRoles
+        //         from urepos in Context.UserRepositories
+        //            where urepos.RepositoryId == repositoryId &&
+        //                  urepos.UserId == uroles.UserId
+        //            select new
+        //            {
+        //                UserId = uroles.User.Id,
+        //                Username = uroles.User.UserDisplayName,
+        //                Rolename = uroles.Role.Name,
+        //                RoleId = uroles.Role.Id,
+        //                RepositoryName = urepos.Repository.Title,
+        //                RepositoryId = repositoryId,
+        //                IsOwner = urepos.IsOwner,
+        //                UserType = urepos.UserTypes
+        //            })
+        //        .OrderBy(ur => ur.Username)
+        //        .ToListAsync();
+
+        //    // get all the roles
+        //    var roles = await Context.UserRoles
+        //        .Where(r => r.RepositoryId == repositoryId)
+        //        .Select(r=> r.Role)
+        //        .Distinct()
+        //        .ToListAsync();
+
+        //    // get all users
+        //    var allUsers = await Context.UserRepositories
+        //        .Where(ur => ur.RepositoryId == repositoryId)
+        //        .Select(ur=> new UserResponse
+        //            { UserDisplayName = ur.User.UserDisplayName,
+        //                Id = ur.UserId,
+        //                IsOwner = ur.IsOwner,
+        //                UserTypes = ur.UserTypes
+        //            })
+        //        .ToListAsync();
+
+
+        //    // get the repository
+        //    var repository = await Context.Repositories.FirstOrDefaultAsync(r => r.Id == repositoryId);
+            
+        //    var result = new List<UserRolesResponse>();
+
+        //    var uList =
+        //        userRepoRolesList
+        //            .Select(ur => new {ur.UserId, ur.Username, ur.UserType, ur.IsOwner, ur.RepositoryName, ur.RepositoryId})
+        //            .Distinct();
+
+        //    foreach (var user in uList)
+        //    {
+        //        var userRole = new UserRolesResponse
+        //        {
+        //            Username = user.Username,
+        //            UserId = user.UserId,
+        //            Roles = new List<RoleResponse>(),
+        //            IsOwner = user.IsOwner,
+        //            UserTypes = user.UserType,
+        //            RepositoryId = user.RepositoryId,
+        //            RepositoryName = user.RepositoryName
+        //        };
+
+        //        foreach (var role in roles)
+        //        {
+        //            var roleResponse = new RoleResponse
+        //            {
+        //                RoleId = role.Id,
+        //                Rolename = role.Name,
+        //            };
+        //            roleResponse.Selected = userRepoRolesList.Any(ur => ur.UserId == user.UserId && ur.RoleId == role.Id);
+
+        //            userRole.Roles.Add(roleResponse);
+        //        }
+
+        //        //userRole.Roles = userRepoList
+        //        //    //.Where(ur => ur.UserId == user.UserId)
+        //        //    .Select(ur => new RoleResponse
+        //        //    {
+        //        //        Rolename = ur.Rolename,
+        //        //        RoleId = ur.RoleId,
+        //        //        Selected = ur.UserId == user.UserId
+        //        //    })
+        //        //    .Distinct()
+        //        //    .ToList();
+
+        //        result.Add(userRole);
+        //    }
+
+
+        //    //repository.Users = null;
+
+        //    return new RepositoryResponse
+        //    {
+        //        Repository = repository,
+        //        Users = result,
+        //        Roles = roles
+        //    };
+        //}
         
 
         public async Task<bool> AddRoleToRepository(Guid repositoryId, Guid roleId, Guid userId)
@@ -562,7 +622,6 @@ namespace KavaDocsUserManager.Business
         public Repository Repository { get; set; }
         public List<UserRolesResponse> Users { get; set; }
 
-        public List<UserResponse> AllUsers { get; set; }
          public List<Role> Roles { get; set; }
     }
 
