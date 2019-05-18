@@ -141,6 +141,8 @@ namespace KavaDocsUserManager.Business.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<Guid>("RepositoryId");
+
                     b.HasKey("Id");
 
                     b.ToTable("Roles");

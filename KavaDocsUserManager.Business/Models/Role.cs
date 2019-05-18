@@ -24,6 +24,8 @@ namespace KavaDocsUserManager.Business.Models
         public bool IsGlobalAdmin { get; set; }
 
         public bool IsRepoAdmin { get; set; }
-
+        
+        public Guid RepositoryId { get; set; }
+     
     }
 }

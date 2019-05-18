@@ -71,27 +71,7 @@ namespace KavaDocsUserManager.Business.Models
             if (!hasData)
             {
 
-                context.Roles.AddRange(new[]
-                {
-                    new Role
-                    {
-                        Id = roleUserId,
-                        Name = "User",
-                        Level = 1
-                    },
-                    new Role
-                    {
-                        Id = roleAdminId,
-                        Name = "RepoAdmin",
-                        Level = 10
-                    },
-                    new Role
-                    {
-                        Id = rolePrivateId,
-                        Name = "Private",
-                        Level = 3
-                    }
-                });
+            
 
                 context.Users.AddRange(new[]
                 {
@@ -131,6 +111,32 @@ namespace KavaDocsUserManager.Business.Models
                     Title = "Kava Docs Documentation"
                 };
                 context.Repositories.Add(repository);
+
+
+                context.Roles.AddRange(new[]
+                {
+                    new Role
+                    {
+                        Id = roleUserId,
+                        Name = "User",
+                        Level = 1,
+                        RepositoryId = repository.Id
+                    },
+                    new Role
+                    {
+                        Id = roleAdminId,
+                        Name = "RepoAdmin",
+                        Level = 10,
+                        RepositoryId = repository.Id
+                    },
+                    new Role
+                    {
+                        Id = rolePrivateId,
+                        Name = "Private",
+                        Level = 3,
+                        RepositoryId = repository.Id
+                    }
+                });
 
                 var map = new RepositoryUser()
                 {
@@ -265,6 +271,28 @@ namespace KavaDocsUserManager.Business.Models
 
                 };
                 context.Repositories.Add(repository);
+
+                context.Roles.AddRange(new[]
+                {
+                    new Role
+                    {
+                        Name = "User",
+                        Level = 1,
+                        RepositoryId = repository.Id
+                    },
+                    new Role
+                    {
+                        Name = "RepoAdmin",
+                        Level = 10,
+                        RepositoryId = repository.Id
+                    },
+                    new Role
+                    {
+                        Name = "PrivateUser",
+                        Level = 3,
+                        RepositoryId = repository.Id
+                    }
+                });
 
                 map = new RepositoryUser()
                 {

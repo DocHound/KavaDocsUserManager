@@ -334,56 +334,56 @@ namespace KavaDocsUserManager.Business
         public async Task<RepositoryResponse> GetRepositoryWithUsersAndRoles(Guid repositoryId)
         {
 
+            // all users assigned to this repo
             var allUsers = await Context.UserRepositories
                 .Include(ur=> ur.Repository)
                 .Include(ur => ur.User)
                 .Where(ur => ur.RepositoryId == repositoryId)
                 .ToListAsync();
 
+            // all users with their assigned roles
             var allUserRoles = await Context.UserRoles
                 .Include(r=> r.Role)
                 .Where(r => r.RepositoryId == repositoryId)
                 .Distinct()
                 .ToListAsync();
-
-
-            var allRoles = allUserRoles.Select(r => r.Role).Distinct().ToList();
-
-
+            
+            // all roles defined for repo (for all users or even if no users)
+            var allRoles = await Context.Roles.Where(r => r.RepositoryId == repositoryId).ToListAsync();
+            
             var userAndRoles = new List<UserRolesResponse>();
 
             foreach (var userRepo in allUsers)
             {
                 var user = new UserRolesResponse()
                 {
-                     RepositoryId = repositoryId,
-                     RepositoryName = userRepo.Repository.Title,
-                     UserId = userRepo.UserId,
+                    RepositoryId = repositoryId,
+                    RepositoryName = userRepo.Repository.Title,
+                    UserId = userRepo.UserId,
                     IsOwner = userRepo.IsOwner,
                     Username = userRepo.User.UserDisplayName,
                     UserTypes = userRepo.UserTypes
                 };
 
+                // add all roles for pick list
                 foreach (var role in allRoles)
                 {
-                    var userRole = allUserRoles.First(ur => ur.Role.Equals(role));
-
                     var newRole = new RoleResponse
                     {
-                        RoleId = userRole.RoleId,
-                        Rolename = userRole.Role.Name,
-                        Selected = allUserRoles.Any(ur=> ur.UserId == user.UserId && ur.RoleId == userRole.RoleId)
+                        RoleId = role.Id,
+                        Rolename = role.Name
                     };
+                    newRole.Selected = allUserRoles.Any(ur => ur.UserId == user.UserId && ur.RoleId == role.Id);
+
                     user.Roles.Add(newRole);
                 }
 
-                userAndRoles.Add(user);
+                userAndRoles.Add(user); 
             }
 
             // get the repository
             var repository = 
                 await Context.Repositories
-                    .Include(r=> r.Users)
                     .FirstOrDefaultAsync(r => r.Id == repositoryId);
 
             return new RepositoryResponse
@@ -441,7 +441,7 @@ namespace KavaDocsUserManager.Business
 
         //    // get the repository
         //    var repository = await Context.Repositories.FirstOrDefaultAsync(r => r.Id == repositoryId);
-            
+
         //    var result = new List<UserRolesResponse>();
 
         //    var uList =
@@ -498,46 +498,98 @@ namespace KavaDocsUserManager.Business
         //        Roles = roles
         //    };
         //}
-        
 
+
+        /// <summary>
+        /// Simplest Add a Role to Repository without user
+        /// </summary>
+        /// <param name="repositoryId"></param>
+        /// <param name="roleId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<bool> AddRoleToRepository(Guid repositoryId, string roleName, int level = 1)
+        {
+            var role = await Context.Roles
+                .FirstOrDefaultAsync(ur => ur.RepositoryId == repositoryId &&
+                                           ur.Name.Equals(roleName, StringComparison.InvariantCultureIgnoreCase));
+
+            if (role == null)
+            {
+                role = new Role()
+                {
+                    RepositoryId = repositoryId,
+                    Name = roleName,
+                    Level = level
+                };
+            }
+            Context.Roles.Add(role);
+            return await SaveAsync();
+        }
+
+        /// <summary>
+        /// Simplest Add Role to Repository routine
+        /// </summary>
+        /// <param name="repositoryId"></param>
+        /// <param name="roleId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<bool> AddRoleToRepository(Guid repositoryId, Guid roleId, Guid userId)
         {
-            var role = new RoleUserRepository()
+            var role = Context.UserRoles
+                .FirstOrDefault(ur => ur.RepositoryId == repositoryId &&
+                                      ur.RoleId == roleId && 
+                                      ur.UserId == userId);
+            if (role == null)
             {
-                RepositoryId = repositoryId,
-                RoleId = roleId,
-                UserId = userId
-            };
+                role = new RoleUserRepository()
+                {
+                    RepositoryId = repositoryId,
+                    RoleId = roleId,
+                    UserId = userId
+                };
+            }
             Context.UserRoles.Add(role);
 
             return await SaveAsync();
         }
 
-        public async Task<int> AddRoleToRepository(Guid repositoryId, Guid userId, Role role)
+       
+
+
+        /// <summary>
+        /// Update a role for a given user. This is usually
+        /// triggered by the checkbox dropdown on the edit
+        /// form.
+        /// </summary>
+        /// <param name="repoId"></param>
+        /// <param name="userId"></param>
+        /// <param name="roleId"></param>
+        /// <param name="isSelected"></param>
+        /// <returns></returns>
+        public async Task<bool> UpdateUserRoleOnRepository(Guid repoId, Guid userId, Guid roleId, bool isSelected = false)
         {
-            var existing = Context.UserRoles
-                    .FirstOrDefault(ur => ur.RepositoryId == repositoryId &&
-                                      ur.Role.Name == role.Name);
+            var userRole = await Context.UserRoles.FirstOrDefaultAsync(ur =>
+                ur.RepositoryId == repoId && 
+                ur.UserId == userId &&
+                ur.RoleId == roleId);
 
-            if (existing != null)
-                role = existing.Role;
-            
-            var link = new RoleUserRepository()
+            if (userRole == null)
             {
-                RepositoryId = repositoryId,
-                RoleId = role.Id,
-                UserId = userId
-            };
-
-            bool exists = await Context.UserRoles.AnyAsync(ur => ur.RepositoryId == link.RepositoryId &&
-                                        ur.RoleId == link.RoleId &&
-                                        ur.UserId == link.UserId);
-            if (!exists)
-                Context.UserRoles.Add(link);
+                userRole = new RoleUserRepository()
+                {
+                    UserId = userId,
+                    RepositoryId = repoId,
+                    RoleId = roleId,
+                };
+                Context.UserRoles.Add(userRole);
+            }
             else
-                Context.Attach(link);
+            {
+                Context.UserRoles.Remove(userRole);
+            }
+            
 
-            return await Context.SaveChangesAsync();
+            return await SaveChangesAsync() > -1;
         }
 
         /// <summary>
@@ -549,8 +601,7 @@ namespace KavaDocsUserManager.Business
         /// <returns></returns>
         public async Task<bool> RemoveUserRole(Guid repositoryId, Guid userId, Guid roleId)
         {
-
-           var userRole = await Context.UserRoles.FirstOrDefaultAsync( ur=> ur.RepositoryId == repositoryId &&
+            var userRole = await Context.UserRoles.FirstOrDefaultAsync( ur=> ur.RepositoryId == repositoryId &&
                                                   ur.RoleId == roleId &&
                                                   ur.UserId == userId);
             if (userRole == null)
@@ -612,8 +663,6 @@ namespace KavaDocsUserManager.Business
             return result > 0 ? true : false;
         }
         #endregion
-
-
     }
 
 

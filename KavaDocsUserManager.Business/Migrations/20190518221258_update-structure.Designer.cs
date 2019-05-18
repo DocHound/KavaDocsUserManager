@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KavaDocsUserManager.Business.Migrations
 {
     [DbContext(typeof(KavaDocsContext))]
-    [Migration("20190517202914_update-structure")]
+    [Migration("20190518221258_update-structure")]
     partial class updatestructure
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -142,6 +142,8 @@ namespace KavaDocsUserManager.Business.Migrations
                     b.Property<int>("Level");
 
                     b.Property<string>("Name");
+
+                    b.Property<Guid>("RepositoryId");
 
                     b.HasKey("Id");
 

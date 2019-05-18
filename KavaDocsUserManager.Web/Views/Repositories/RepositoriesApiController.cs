@@ -137,5 +137,13 @@ namespace KavaDocsUserManager.Web.Views.Repositories
             return  await _repoBusiness.DeleteRoleFromRepository(repoId, roleId);
         }
 
+        [HttpGet]
+        [Route("api/repositories/{repoId}/updaterole/{userId}/{roleId}/{isSelected}")]
+        public async Task<bool> UpdateUserRoleOnRepository(Guid repoId, Guid userId, 
+            Guid roleId, 
+            bool isSelected)
+        {
+            return await _repoBusiness.UpdateUserRoleOnRepository(repoId, userId, roleId, isSelected);
+        }
     }
 }

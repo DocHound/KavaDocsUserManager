@@ -1,6 +1,6 @@
 ﻿/// <reference path="../lib/jquery/dist/jquery.js" />
 /// <reference path="../lib/ww.jquery.js" />
-var vm = {}
+var vm = {};
 
 vm = {
     repository: {},
@@ -46,9 +46,46 @@ vm = {
 
         $("#Repository_Prefix").focus();
 
-
+        setTimeout(function () {
+            $('.selectpicker')
+                .selectpicker()
+                .on("changed.bs.select", vm.updateRoleForUser);
+        }, 300);
+        
         toastr.options.closeButton = true;
         toastr.options.positionClass = "toast-bottom-right";
+    },
+
+    // checkbox click in drop-down
+    updateRoleForUser: function (e, clickedIndex, isSelected, previousValue) {
+        var uid = e.target.dataset["userId"];
+
+        var idx = vm.users.findIndex(function (u) {
+            return u.userId == uid;
+        });
+        if (idx < 0)
+            return;
+
+        var user = vm.users[idx];
+        var role = user.roles[clickedIndex];
+        role.selected = isSelected;
+        var url = "/api/repositories/" +
+            vm.repository.id +
+            "/updaterole/" +
+            uid +
+            "/" +
+            role.roleId +
+            "/" +
+            isSelected;
+        
+        ajaxJson(url, null,
+            function (success) {
+                toastr.success("Role " + role.rolename + (isSelected ? " added to " : " removed from ") + user.username + ".", "Role updated");
+            },
+            function (error) {
+                debugger;
+                toastr.error("Failed to update role.");
+            });
     },
    
     highlightCode: function() {
@@ -173,7 +210,7 @@ vm = {
         else
             toastr.warning(this.message, title);
     }
-}
+};
 
 vm.initialize();
 

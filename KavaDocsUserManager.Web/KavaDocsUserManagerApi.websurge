@@ -48,6 +48,12 @@ Websurge-Request-Name: Get User Roles for Repo (empty roles)
 
 ------------------------------------------------------------------
 
+GET http://localhost:3000/api/repositories/66666666-6666-6666-ad11-dae7fb1566cb/updaterole/22222222-0589-4951-ad11-dae7fb1566cb/22222222-1111-4951-ad11-dae7fb1566cb/true HTTP/1.1
+Accept-Encoding: gzip,deflate
+Cookie: boguse
+
+------------------------------------------------------------------
+
 
 ----- Start WebSurge Options -----
 
