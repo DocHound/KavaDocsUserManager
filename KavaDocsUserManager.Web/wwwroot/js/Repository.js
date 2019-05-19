@@ -61,37 +61,7 @@ vm = {
         toastr.options.positionClass = "toast-bottom-right";
     },
 
-    // checkbox click in drop-down
-    updateRoleForUser: function (e, clickedIndex, isSelected, previousValue) {
-        var uid = e.target.dataset["userId"];
 
-        var idx = vm.users.findIndex(function (u) {
-            return u.userId == uid;
-        });
-        if (idx < 0)
-            return;
-
-        var user = vm.users[idx];
-        var role = user.roles[clickedIndex];
-        role.selected = isSelected;
-        var url = "/api/repositories/" +
-            vm.repository.id +
-            "/updaterole/" +
-            uid +
-            "/" +
-            role.roleId +
-            "/" +
-            isSelected;
-        
-        ajaxJson(url, null,
-            function (success) {
-                toastr.success("Role " + role.rolename + (isSelected ? " added to " : " removed from ") + user.username + ".", "Role updated");
-            },
-            function (error) {
-                debugger;
-                toastr.error("Failed to update role.");
-            });
-    },
    
     highlightCode: function() {
         $("pre code")
@@ -116,13 +86,17 @@ vm = {
         preview$.html(code$.val());
         setTimeout(vm.highlightCode,10);
     },
+    
     optionalFieldSelection: function (event) {        
         var el$ = $(event.currentTarget);
         var value = el$.val();
         $(".optional-field-group textarea.code-editing").addClass("hidden");
         var item$ = $("#" + value);
-        console.log(item$,value);
         item$.removeClass("hidden");
+    },
+    showUserEntry: function() {
+      vm.newUser.visible = true;
+      setTimeout(function() { app.$refs.UserToAdd.focus(); },100);
     },
     addUserToRepo: function (repository, username, userType) {        
         ajaxJson("/api/repositories/" + repository.id + "/add/" + username + "/" + userType, null,
@@ -163,6 +137,44 @@ vm = {
                 vm.status(error.message);
             },
             { method: "DELETE" });
+    },
+    // checkbox click in drop-down
+    updateRoleForUser: function (e, clickedIndex, isSelected, previousValue) {
+        var uid = e.target.dataset["userId"];
+
+        var idx = vm.users.findIndex(function (u) {
+            return u.userId == uid;
+        });
+        if (idx < 0)
+            return;
+
+        var user = vm.users[idx];
+        var role = user.roles[clickedIndex];
+        role.selected = isSelected;
+        var url = "/api/repositories/" +
+            vm.repository.id +
+            "/updaterole/" +
+            uid +
+            "/" +
+            role.roleId +
+            "/" +
+            isSelected;
+
+        ajaxJson(url, null,
+            function (success) {
+                toastr.success("Role " + role.rolename + (isSelected ? " added to " : " removed from ") + user.username + ".", "Role updated");
+            },
+            function (error) {
+                debugger;
+                toastr.error("Failed to update role.");
+            });
+    },
+    showRoleEntry: function() {
+      vm.newRole.visible = true;
+        
+      setTimeout( function() {
+          app.$refs.RoleName.focus();
+      },100);
     },
     getRoles: function() {
         ajaxJson("/api/repositories/" + vm.repository.id + "/roles",

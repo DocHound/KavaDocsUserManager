@@ -145,7 +145,7 @@ namespace KavaDocsUserManager.Business
         /// <returns></returns>
         public User SaveUser(User user)
         {
-            bool isNewUser = false;
+            //bool isNewUser = false;
 
             var curUser = Context.Users.FirstOrDefault(usr => usr.Email == user.Email);
 

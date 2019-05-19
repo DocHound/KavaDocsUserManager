@@ -5,7 +5,7 @@
         <button class="btn btn-secondary btn-sm float-right"
                 style="margin:-5px;"
                 v-if="!newRole.visible"
-                v-on:click="newRole.visible=true;">
+                v-on:click="showRoleEntry()">
             <i class="fa fa-plus-circle"></i>
             Add Role
         </button>
@@ -22,10 +22,11 @@
         </a>
 
         <div class="list-item responsive-container">
-            <input id="RoleName" class="form-control" style="width: 380px"
+            <input id="RoleName" ref="RoleName" 
+                   class="form-control" style="width: 380px"
                    placeholder="new role name"
                    v-model="newRole.name"
-                   v-on:keyup="newUser.getUserSearchList"/>
+                   v-on:keyup="newUser.getUserSearchList" />
             <button class="btn btn-outline-primary" v-on:click="addRole()">Add</button>
         </div>
     </div>
@@ -34,7 +35,7 @@
     <div v-for="role in roles"
          class="list-item">
 
-        <div class="float-right" v-show:>
+        <div class="float-right">
             <a v-on:click="removeRole(role)">
                 <i class="fas fa-times-circle red-text"></i>
             </a>
