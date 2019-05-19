@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="Westwind.AspNetCore" Version="3.2.8" />
     <PackageReference Include="Westwind.Utilities" Version="3.0.26" />
     <!--<PackageReference Include="Westwind.AspNetCore" Version="3.2.8" />-->
   </ItemGroup>
@@ -17,7 +18,6 @@
     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Westwind.AspNetCore\Westwind.AspNetCore\Westwind.AspNetCore.csproj" />
     <ProjectReference Include="..\KavaDocsUserManager.Business\KavaDocsUserManager.Business.csproj" />
   </ItemGroup>
   <ItemGroup>
