@@ -1,6 +1,7 @@
 ﻿/// <reference path="../lib/jquery/dist/jquery.js" />
 /// <reference path="../lib/ww.jquery.js" />
 var vm = {};
+var app = {};
 
 vm = {
     repository: {},
@@ -37,6 +38,10 @@ vm = {
         getName: function (item) {
             return item.name;
         }
+    },
+    newRole: {
+        name: "",
+        visible: false
     },
     initialize: function () {
         vm.repository = globals.repositoryWithUsers.repository;
@@ -169,27 +174,63 @@ vm = {
                 toastr.error(error.message,"Couldn't retrieve roles");
             });
     },
+    // reload the entire model from the server
     getUserRoles: function() {
         ajaxJson("/api/repositories/" + vm.repository.id + "/userroles",
             null,
-            function(userRoles) {
-                vm.userRoles = userRoles;
+            function(response) {
+                vm.repository = response.repository;
+                vm.users.length = 0;
+                for (var i = 0; i < response.users.length; i++) {
+                    var user = response.users[i];
+                    
+                    // push the new array
+                    vm.users.push(user);
+
+                    app.$set(user, "roles", user.roles);
+                }
+                vm.roles = response.roles;
+
+                setTimeout(function() { $('.selectpicker').selectpicker("refresh"); }, 200);
             },
             function (error) {
                 toastr.error(error.message, "Couldn't retrieve user roles");
             });
     },
     removeRole: function (role) {
-        debugger;
         ajaxJson("/api/repositories/" + vm.repository.id + "/userroles/" + role.id,
             null,
-            function(success) {
-                toastr.success("Role " + role.rolename + " removed.");
+            function (success) {
+
+                vm.getUserRoles();
+
+                toastr.success("Role " + role.name + " removed.");
             },
             function (error) {
                 toastr.error(error.message, "Couldn't delete role");
             },
             { method: "DELETE" });
+    },
+    addRole: function () {
+
+        var roleName = vm.newRole.name;
+        if (!roleName)
+            return;
+
+        ajaxJson("/api/repositories/" + vm.repository.id + "/role/add",
+            { roleName: roleName },
+            function (role) {
+                vm.newRole.name = "";
+                vm.newRole.visible = false;
+
+                vm.getUserRoles();
+
+                toastr.success("Role " + roleName + " added.");
+            },
+            function (error) {
+                toastr.error(error.message, "Couldn't delete role");
+            },
+            {method: "POST"});
     },
     navigateDomain: function (e) {
         var url = "https://" + this.$refs.domainPrefix.value + "." + this.$refs.domainName.value;
@@ -214,7 +255,7 @@ vm = {
 
 vm.initialize();
 
-var app = new Vue({
+app = new Vue({
     el: "#RepositoryPage",
     data: vm
 });

@@ -1,0 +1,50 @@
+﻿<div class="list" v-cloak>
+    
+ 
+    <div class="list-header" style="font-weight: bold;">
+        <button class="btn btn-secondary btn-sm float-right"
+                style="margin:-5px;"
+                v-if="!newRole.visible"
+                v-on:click="newRole.visible=true;">
+            <i class="fa fa-plus-circle"></i>
+            Add Role
+        </button>
+
+
+        <i class="fa fa-users"></i>
+        Repository Roles
+    </div>
+    <div v-show="newRole.visible">
+        <a v-on:click="newRole.visible = false;"
+           class="float-right"
+           style="display: block; padding: 10px 5px">
+            <i class="far fa-times gray-text "></i>
+        </a>
+
+        <div class="list-item responsive-container">
+            <input id="RoleName" class="form-control" style="width: 380px"
+                   placeholder="new role name"
+                   v-model="newRole.name"
+                   v-on:keyup="newUser.getUserSearchList"/>
+            <button class="btn btn-outline-primary" v-on:click="addRole()">Add</button>
+        </div>
+    </div>
+
+
+    <div v-for="role in roles"
+         class="list-item">
+
+        <div class="float-right" v-show:>
+            <a v-on:click="removeRole(role)">
+                <i class="fas fa-times-circle red-text"></i>
+            </a>
+        </div>
+
+        <a href=""
+           class="user-list-item">
+            {{role.name}}
+        </a>
+
+    </div>
+</div>
+

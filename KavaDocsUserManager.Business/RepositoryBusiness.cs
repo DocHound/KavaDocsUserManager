@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using KavaDocsUserManager.Business.Configuration;
 using KavaDocsUserManager.Business.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Westwind.Data.EfCore;
 using Westwind.Utilities;
@@ -507,11 +508,14 @@ namespace KavaDocsUserManager.Business
         /// <param name="roleId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<bool> AddRoleToRepository(Guid repositoryId, string roleName, int level = 1)
+        public async Task<Role> AddRoleToRepository(Guid repositoryId, string roleName, int level = 1)
         {
+            if (string.IsNullOrEmpty(roleName))
+                throw new ArgumentException("Role to add cannot be empty.");
+
             var role = await Context.Roles
                 .FirstOrDefaultAsync(ur => ur.RepositoryId == repositoryId &&
-                                           ur.Name.Equals(roleName, StringComparison.InvariantCultureIgnoreCase));
+                                           ur.Name == roleName);
 
             if (role == null)
             {
@@ -521,9 +525,15 @@ namespace KavaDocsUserManager.Business
                     Name = roleName,
                     Level = level
                 };
+
+                Context.Roles.Add(role);
+                if (!await SaveAsync())
+                    return null;
             }
-            Context.Roles.Add(role);
-            return await SaveAsync();
+
+
+            
+            return role;
         }
 
         /// <summary>

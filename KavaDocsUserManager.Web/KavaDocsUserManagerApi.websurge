@@ -50,7 +50,17 @@ Websurge-Request-Name: Get User Roles for Repo (empty roles)
 
 GET http://localhost:3000/api/repositories/66666666-6666-6666-ad11-dae7fb1566cb/updaterole/22222222-0589-4951-ad11-dae7fb1566cb/22222222-1111-4951-ad11-dae7fb1566cb/true HTTP/1.1
 Accept-Encoding: gzip,deflate
-Cookie: boguse
+Cookie: ss-opt=perm; X-UAId=2; ss-pid=qEDXtcpQw0mrOEyjGzaB; _ga=GA1.1.1889832416.1555703968; wwt=GjOq91jeKOMKhR5d; __utmz=111872281.1557021709.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utma=111872281.1889832416.1555703968.1557021709.1557052276.2; WebStoreUser=10551537; .AspNetCore.Antiforgery.O3K_2fZKjmg=CfDJ8KYnKMJHxi5DnBFtXzsNm3QHnch3ti6NcN9GVQjcaQhymuoJPCI42VHtNWgnYo0uYln4xPrWe26NtYrkMobvt-475L38sGZHWpErz_39S2WwvGFbZY8lZ9z0g4PGggkCI0OA6UofoXh5Ony0Ft-oqkM; .AspNetCore.Cookies=CfDJ8KYnKMJHxi5DnBFtXzsNm3R7tAquVkXfPNCGsIE2mnE-oCP7vEEE8c-OCHQ4oq8AVR456dqok72NJ6TCmLjW-iofuC2gbCaHlr4gBHip11DQJTJKgYnuJnM8YgEp12uBFMAdsfeNYllVZsoqqo3I5YF2bHhQt_No7c5sqDWqv4bnYbrQ09x-Hdk_S3rKR17z95IKZdczdg4HCytn5NurJTlrq_LrC54YPpekY8NYREg8mt-H9ccQ0eakFQtNfmYLVahd0Jhutx5gL4Dfl6cWFxxVU3w29LMS0XYZ8Tt5Oq8C_e62lllkxCv-iJfq2ZIpBvz9nIIWYFu36lRw9CBT2ELeM2rqf_0q_lBI4G6NM-uSHBdyIGJclq_57bSA1o4o3Erq-9lXa8YCBlYplOzHgF4dOxXbNItY1mUZU99ibhAh-kV4FW3j3RP-ENGrPxRdkOe7MFUuJWl7GMdLYMwgPZU
+
+------------------------------------------------------------------
+
+POST http://localhost:3000/api/repositories/66666666-6666-6666-ad11-dae7fb1566cb/role/add HTTP/1.1
+Accept-Encoding: gzip,deflate
+Cookie: ss-opt=perm; X-UAId=2; ss-pid=qEDXtcpQw0mrOEyjGzaB; _ga=GA1.1.1889832416.1555703968; wwt=GjOq91jeKOMKhR5d; __utmz=111872281.1557021709.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utma=111872281.1889832416.1555703968.1557021709.1557052276.2; WebStoreUser=10551537; .AspNetCore.Antiforgery.O3K_2fZKjmg=CfDJ8KYnKMJHxi5DnBFtXzsNm3QHnch3ti6NcN9GVQjcaQhymuoJPCI42VHtNWgnYo0uYln4xPrWe26NtYrkMobvt-475L38sGZHWpErz_39S2WwvGFbZY8lZ9z0g4PGggkCI0OA6UofoXh5Ony0Ft-oqkM; .AspNetCore.Cookies=CfDJ8KYnKMJHxi5DnBFtXzsNm3R7tAquVkXfPNCGsIE2mnE-oCP7vEEE8c-OCHQ4oq8AVR456dqok72NJ6TCmLjW-iofuC2gbCaHlr4gBHip11DQJTJKgYnuJnM8YgEp12uBFMAdsfeNYllVZsoqqo3I5YF2bHhQt_No7c5sqDWqv4bnYbrQ09x-Hdk_S3rKR17z95IKZdczdg4HCytn5NurJTlrq_LrC54YPpekY8NYREg8mt-H9ccQ0eakFQtNfmYLVahd0Jhutx5gL4Dfl6cWFxxVU3w29LMS0XYZ8Tt5Oq8C_e62lllkxCv-iJfq2ZIpBvz9nIIWYFu36lRw9CBT2ELeM2rqf_0q_lBI4G6NM-uSHBdyIGJclq_57bSA1o4o3Erq-9lXa8YCBlYplOzHgF4dOxXbNItY1mUZU99ibhAh-kV4FW3j3RP-ENGrPxRdkOe7MFUuJWl7GMdLYMwgPZU
+Content-Type: application/json
+Websurge-Request-Name: Add Role to Repository
+
+{ roleName: "Private 10", repoId: "66666666-6666-6666-ad11-dae7fb1566cb" }
 
 ------------------------------------------------------------------
 

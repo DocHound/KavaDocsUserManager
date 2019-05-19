@@ -7,6 +7,7 @@ using KavaDocsUserManager.Business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using Westwind.AspNetCore.Errors;
 
 namespace KavaDocsUserManager.Web.Views.Repositories
@@ -145,5 +146,29 @@ namespace KavaDocsUserManager.Web.Views.Repositories
         {
             return await _repoBusiness.UpdateUserRoleOnRepository(repoId, userId, roleId, isSelected);
         }
+
+        [HttpPost]
+        [Route("api/repositories/{repoId}/role/add")]
+        public async Task<Role> AddRoleToRepository([FromRoute] Guid repoId, [FromBody] Dictionary<string, object> parameters)
+        {
+
+            var roleName = parameters["roleName"] as string;
+            if (string.IsNullOrEmpty(roleName))
+                throw new ApiException("Role to add cannot be empty.");
+            
+            var role = await _repoBusiness.AddRoleToRepository(repoId, roleName);
+            if(role == null)
+                throw new ApiException(_repoBusiness.ErrorMessage);
+
+
+            return role;
+        }
+            
+        public class AddRoleRequestModel
+        {
+            public string roleName { get; set; }
+        }
+
+
     }
 }

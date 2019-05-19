@@ -1,0 +1,71 @@
+﻿<div class="list" v-cloak>
+    
+    <div class="list-header" style="font-weight: bold;">
+
+        <button class="btn btn-secondary btn-sm float-right"
+                style="margin-top: -5px;"
+                v-if="!newUser.visible"
+                v-on:click="newUser.visible=true;">
+            <i class="fa fa-plus-circle"></i>
+            Add User
+        </button>
+
+        <i class="fa fa-users"></i>
+        Repository Contributors
+    </div>
+    <div v-show="newUser.visible">
+        <a v-on:click="newUser.visible = false;"
+           class="float-right"
+           style="display: block; padding: 10px 5px">
+            <i class="far fa-times gray-text "></i>
+        </a>
+
+        <div class="list-item responsive-container">
+            <input id="UserToAdd" class="awesomplete form-control" style="width: 300px"
+                   placeholder="search for Kava Docs users..."
+                   v-model="newUser.username"
+                   v-on:keyup="newUser.getUserSearchList"/>
+            <select style="width: 200px" class="form-control" v-model="newUser.userType">
+                <option>contributor</option>
+                <option>user</option>
+            </select>
+            <button class="btn btn-outline-primary" v-on:click="addUserToRepo(repository,newUser.username, newUser.userType)">Add</button>
+        </div>
+    </div>
+
+    <div v-for="user in users"
+         class="list-item" v-bind:class="{'subtle-highlight': user.isOwner}">
+
+
+        <div class="user-list-item">
+            <div class="row">
+
+                <div class="col-md-3">
+                    <b style="width: 300px">{{user.username}}</b>
+                </div>
+
+                <div class="col-md-6">
+                    <select multiple
+                            v-bind:data-user-id="user.userId"
+                            class="selectpicker form-control d-inline" 
+                            title="Select roles for this repository">
+                        <option v-for="role in user.roles"
+                                style="width: 150px;"
+                                v-bind:value="role.rolename"
+                                v-bind:selected="role.selected">
+                            {{role.rolename}}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 right-align">
+                    {{user.userTypes}}
+                    <a v-on:click="removeUserFromRepo(user, repository)">
+                        <i class="fas fa-times-circle red-text"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
