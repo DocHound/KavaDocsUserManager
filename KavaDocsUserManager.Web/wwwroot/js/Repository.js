@@ -180,17 +180,20 @@ vm = {
             null,
             function(response) {
                 vm.repository = response.repository;
+                vm.roles = response.roles;
+
+                // we have to explicitly rebuild the nested items
                 vm.users.length = 0;
                 for (var i = 0; i < response.users.length; i++) {
                     var user = response.users[i];
-                    
-                    // push the new array
                     vm.users.push(user);
 
-                    app.$set(user, "roles", user.roles);
+                    // this is the important one - otherwise roles doesn't refresh
+                    Vue.set(user, "roles", user.roles);
                 }
-                vm.roles = response.roles;
+                
 
+                // make sure the select picker gets updated otherwise values aren't refreshed.
                 setTimeout(function() { $('.selectpicker').selectpicker("refresh"); }, 200);
             },
             function (error) {

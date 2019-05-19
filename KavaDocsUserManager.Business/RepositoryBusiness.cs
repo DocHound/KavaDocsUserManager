@@ -350,7 +350,10 @@ namespace KavaDocsUserManager.Business
                 .ToListAsync();
             
             // all roles defined for repo (for all users or even if no users)
-            var allRoles = await Context.Roles.Where(r => r.RepositoryId == repositoryId).ToListAsync();
+            var allRoles = await Context.Roles
+                .Where(r => r.RepositoryId == repositoryId)
+                .OrderBy( r=> r.Name.ToLowerInvariant())
+                .ToListAsync();
             
             var userAndRoles = new List<UserRolesResponse>();
 
@@ -680,8 +683,7 @@ namespace KavaDocsUserManager.Business
     {
         public Repository Repository { get; set; }
         public List<UserRolesResponse> Users { get; set; }
-
-         public List<Role> Roles { get; set; }
+        public List<Role> Roles { get; set; }
     }
 
     public class UserRolesResponse
