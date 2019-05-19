@@ -10,12 +10,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="Westwind.AspNetCore" Version="3.2.8" />
     <PackageReference Include="Westwind.Utilities" Version="3.0.26" />
-    <!--<PackageReference Include="Westwind.AspNetCore" Version="3.2.8" />-->
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
-    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
-    <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KavaDocsUserManager.Business\KavaDocsUserManager.Business.csproj" />
