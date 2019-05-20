@@ -45,6 +45,7 @@ namespace KavaDocsUserManager
                 var connStr = config.ConnectionString;
                 if (string.IsNullOrEmpty(connStr))
                     connStr = "server=.;database=KavaDocs; integrated security=true;MultipleActiveResultSets=true";
+                    //connStr = "";
 
                 builder.UseSqlServer(connStr, opt =>
                 {

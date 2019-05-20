@@ -124,7 +124,7 @@ namespace KavaDocsUserManager.Business.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    UserTypes = table.Column<int>(nullable: false),
+                    UserType = table.Column<int>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
                     RepositoryId = table.Column<Guid>(nullable: false)
                 },

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KavaDocsUserManager.Business.Migrations
 {
     [DbContext(typeof(KavaDocsContext))]
-    [Migration("20190520000559_fix-usertypes-field")]
-    partial class fixusertypesfield
+    [Migration("20190520012703_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
