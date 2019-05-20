@@ -19,6 +19,9 @@
 
             <error-display error-display-model="Model.ErrorDisplay"></error-display>
 
+
+            
+
             <div class="form-group">
                 <label>Prefix and Domain</label>
                 <div class="responsive-container">
@@ -119,12 +122,12 @@
 
             <div class="margin-top-2x">
                 @if (!Model.IsNewUser && Model.Repository.IsOwner(appUser.UserId))
-            {
-                <a class="btn btn-sm btn-warning float-right" v-on:click="deleteRepository" title="Delete repository">
-                    <i class="fa fa-times-circle"></i>
-                    Delete
-                </a>
-            }
+                {
+                    <a class="btn btn-sm btn-warning float-right" v-on:click="deleteRepository" title="Delete repository">
+                        <i class="fa fa-times-circle"></i>
+                        Delete
+                    </a>
+                }
                 <button class="btn btn-primary" type="submit">
                     <i class="fas fa-check-circle "></i>
                     Save Repository
@@ -187,8 +190,8 @@
     @*<link rel="stylesheet" href="~/lib/v-autocomplete/dist/v-autocomplete.css" />
             <script src="~/lib/v-autocomplete/dist/v-autocomplete.js"></script>*@
 
-    <link rel="stylesheet" href="~/lib/awesomplete/awesomplete.css"/>
-    <script src="~/lib/awesomplete/awesomplete.min.js"></script>
+    @*<link rel="stylesheet" href="~/lib/awesomplete/awesomplete.css"/>
+    <script src="~/lib/awesomplete/awesomplete.min.js"></script>*@
 
     <script src="~/lib/toastr/build/toastr.min.js"></script>
     <link href="~/lib/toastr/build/toastr.min.css" rel="stylesheet" async/>

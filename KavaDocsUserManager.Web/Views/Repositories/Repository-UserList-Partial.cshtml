@@ -21,11 +21,20 @@
         </a>
 
         <div class="list-item responsive-container">
-            <input id="UserToAdd" class="awesomplete form-control" style="width: 300px"
+
+            <input id="UserToAdd" class="form-control" style="width: 300px"
                    placeholder="search for Kava Docs users..."
                    v-model="newUser.username"
                    ref="UserToAdd"
-                   v-on:keyup="newUser.getUserSearchList"/>
+                   v-on:keyup="newUser.getUserSearchList"
+                   list="user-list" autocomplete="off"/>
+            <datalist id="user-list">
+                <option v-for="searchUser in vm.newUser.userList">
+                    {{searchUser}}
+                </option>
+            </datalist>
+
+
             <select style="width: 200px" class="form-control" v-model="newUser.userType">
                 <option>contributor</option>
                 <option>user</option>

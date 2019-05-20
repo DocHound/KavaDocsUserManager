@@ -8,6 +8,7 @@ vm = {
     roles: [],
     roleUsers: [],
     allUsers: [],
+    userSearchList: [],
 
     awesomplete: null,
     newUser: {
@@ -15,6 +16,7 @@ vm = {
         userType: "contributor",
         visible: false,
         users: [],
+        userList: [],
         
         // search list related operations
         getUserSearchList: function (event) {
@@ -27,6 +29,7 @@ vm = {
             ajaxJson("/api/repositories/searchusers/" + vm.newUser.username,
                 null,
                 function (list) {
+                    console.log(list);
                     vm.newUser.userList = list;
                     vm.newUser.awesomplete.list = list;
                 },
@@ -277,20 +280,20 @@ app = new Vue({
 });
 //Vue.use(VAutocomplete.default);
 
-setTimeout(function () {
-    var el = document.getElementById("UserToAdd");
-    vm.newUser.awesomplete =
-        new Awesomplete(el,
-            {
-                list: vm.newUser.userList,
-                selectcomplete: function(item) {                    
-                    vm.newUser.searchname = item.text;
-                }
-            });
-    el.addEventListener("awesomplete-selectcomplete",
-        function(event) {
-            var item = event.text;  // selected 'item'
-            vm.newUser.username = item.value; 
-        });
-}, 2000);
+//setTimeout(function () {
+//    var el = document.getElementById("UserToAdd");
+//    vm.newUser.awesomplete =
+//        new Awesomplete(el,
+//            {
+//                list: vm.newUser.userList,
+//                selectcomplete: function(item) {                    
+//                    vm.newUser.searchname = item.text;
+//                }
+//            });
+//    el.addEventListener("awesomplete-selectcomplete",
+//        function(event) {
+//            var item = event.text;  // selected 'item'
+//            vm.newUser.username = item.value; 
+//        });
+//}, 2000);
 
