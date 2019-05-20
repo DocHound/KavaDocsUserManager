@@ -82,7 +82,7 @@ namespace KavaDocsUserManager.Business.Tests
 
             foreach(var ru in list)
             {
-                Console.WriteLine(ru.User.UserDisplayName + " " + ru.UserTypes);
+                Console.WriteLine(ru.User.UserDisplayName + " " + ru.UserType);
             }
 
         }

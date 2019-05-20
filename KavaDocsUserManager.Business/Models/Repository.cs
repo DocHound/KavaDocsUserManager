@@ -92,7 +92,7 @@ namespace KavaDocsUserManager.Business.Models
 
         public bool IsOwner(Guid userId)
         {
-            return Users.Any(ru => ru.UserId == userId && ru.UserTypes == RepositoryUserTypes.Owner);
+            return Users.Any(ru => ru.UserId == userId && ru.UserType == RepositoryUserTypes.Owner);
         }
     }
 }

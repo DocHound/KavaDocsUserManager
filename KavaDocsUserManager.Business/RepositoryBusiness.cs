@@ -34,7 +34,7 @@ namespace KavaDocsUserManager.Business
             if (repo == null)
                 return null;
 
-            var repoUser = new RepositoryUser { RepositoryId = repo.Id, UserId = uid, UserTypes = RepositoryUserTypes.Owner };
+            var repoUser = new RepositoryUser { RepositoryId = repo.Id, UserId = uid, UserType = RepositoryUserTypes.Owner };
             //Context.UserRepositories.Add(repoUser);
             repo.Users.Add(repoUser);
 
@@ -87,7 +87,7 @@ namespace KavaDocsUserManager.Business
                 return null;
             }
 
-            repo.Users = repo.Users.OrderByDescending(ur => ur.UserTypes).ToList();
+            repo.Users = repo.Users.OrderByDescending(ur => ur.UserType).ToList();
             
             // sort owners to the top
             if (repo.Users != null && repo.Users.Count > 0)
@@ -133,7 +133,7 @@ namespace KavaDocsUserManager.Business
             {
                 RepositoryId = repo.Id,                
                 UserId = user.Id,
-                UserTypes = userTypes                
+                UserType = userTypes                
             };
             repo.Users.Add(map);
 
@@ -278,7 +278,7 @@ namespace KavaDocsUserManager.Business
                 var users = await Context.UserRepositories
                                 .Include(c=> c.User)
                                 .Where(rep => rep.RepositoryId == repoId)
-                                .OrderByDescending(r => r.UserTypes)
+                                .OrderByDescending(r => r.UserType)
                                 .ToListAsync();
             return users;
         }
@@ -365,7 +365,7 @@ namespace KavaDocsUserManager.Business
                     UserId = userRepo.UserId,
                     IsOwner = userRepo.IsOwner,
                     Username = userRepo.User.UserDisplayName,
-                    UserTypes = userRepo.UserTypes
+                    UserType = userRepo.UserType
                 };
 
                 // add all roles for pick list
@@ -691,7 +691,7 @@ namespace KavaDocsUserManager.Business
         public string Username { get; set; }
 
         public bool IsOwner { get; set;  }
-        public RepositoryUserTypes UserTypes { get; set; }
+        public RepositoryUserTypes UserType { get; set; }
 
         public Guid RepositoryId { get; set; }
 

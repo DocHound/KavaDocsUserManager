@@ -48,7 +48,7 @@ namespace KavaDocsUserManager.Web.Views.Repositories
                 Username = repoUser.User.UserDisplayName,
                 IsOwner = repoUser.IsOwner,
                 RepositoryName = repoUser.Repository.Title,
-                UserTypes = repoUser.UserTypes
+                UserType = repoUser.UserType
             };
         }
 
