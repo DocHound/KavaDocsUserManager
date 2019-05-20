@@ -339,6 +339,7 @@ namespace KavaDocsUserManager.Business
                 .Include(ur=> ur.Repository)
                 .Include(ur => ur.User)
                 .Where(ur => ur.RepositoryId == repositoryId)
+                .OrderByDescending(r => r.UserType)
                 .ToListAsync();
 
             // all users with their assigned roles

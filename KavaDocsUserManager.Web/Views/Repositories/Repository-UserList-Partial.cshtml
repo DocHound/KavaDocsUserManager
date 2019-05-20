@@ -48,7 +48,7 @@
                 <div class="col-md-6">
                     <select multiple
                             v-bind:data-user-id="user.userId"
-                            class="selectpicker form-control d-inline" 
+                            class="selectpicker form-control d-inline"
                             title="Select roles for this repository">
                         <option v-for="role in user.roles"
                                 style="width: 150px;"
@@ -59,7 +59,11 @@
                     </select>
                 </div>
 
-                <div class="col-md-3 right-align">
+
+                <div class="col-md-3 right-align" v-if="user.isOwner">
+                    <b class="text-secondary">{{user.userType}}</b>
+                </div>
+                <div class="col-md-3 right-align" v-if="!user.isOwner">
                     {{user.userType}}
                     <a v-on:click="removeUserFromRepo(user, repository)">
                         <i class="fas fa-times-circle red-text"></i>

@@ -27,7 +27,6 @@ vm = {
             ajaxJson("/api/repositories/searchusers/" + vm.newUser.username,
                 null,
                 function (list) {
-                    console.log(list);
                     vm.newUser.userList = list;
                     vm.newUser.awesomplete.list = list;
                 },
@@ -100,8 +99,10 @@ vm = {
     },
     addUserToRepo: function (repository, username, userType) {        
         ajaxJson("/api/repositories/" + repository.id + "/add/" + username + "/" + userType, null,
-            function (repoUser) {                
-                users.push(repoUser);
+            function (repoUser) {
+                // refresh full display
+                vm.getUserRoles();
+
                 vm.newUser.visible = false;
                 vm.newUser.username = null;
                 toastr.success(username + " has been added to this repository");

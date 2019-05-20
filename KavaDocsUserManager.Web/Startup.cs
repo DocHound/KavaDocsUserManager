@@ -105,13 +105,18 @@ namespace KavaDocsUserManager
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            Console.WriteLine("\r\nPlatform: " + System.Runtime.InteropServices.RuntimeInformation.OSDescription);
+            Console.WriteLine("Connection: " + KavaDocsConfiguration.Current.ConnectionString);
+            
             app.UseAuthentication();
 
             app.UseDatabaseErrorPage();
             app.UseStatusCodePages();
             app.UseStaticFiles();
 
-            app.UseMvcWithDefaultRoute();            
+            app.UseMvcWithDefaultRoute();   
+            
+
         }
     }
 }
