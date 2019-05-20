@@ -16,7 +16,7 @@ namespace KavaDocsUserManager.Business.Models
                     _connectionString = conn?.ConnectionString;
                     conn = null;
                 }
-                return _connectionString;
+                return _connectionString; 
             }
             set { _connectionString = value; }
         }

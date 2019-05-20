@@ -68,7 +68,12 @@ namespace KavaDocsUserManager.Web.Views.Repositories
                     repo = _repoBusiness.Create();
                     repo.Title = "New Documentation Repository";                    
                     model.Repository = repo;
+
+                    model.RepositoryWithUsers = await _repoBusiness.GetRepositoryWithUsersAndRoles(repo.Id);
+                    model.RepositoryWithUsers.Repository = repo;
+
                     model.IsNewUser = true;
+                    id = repo.Id;
                 }
                 else
                 {
@@ -78,11 +83,9 @@ namespace KavaDocsUserManager.Web.Views.Repositories
             }
             else
             {
-                model.RepositoryWithUsers = await _repoBusiness.GetRepositoryWithUsersAndRoles(id);
                 model.Repository = repo;
+                model.RepositoryWithUsers = await _repoBusiness.GetRepositoryWithUsersAndRoles(repo.Id);
             }
-
-            //model.Repository.Users = null;
 
             // not a user or contributor
             if (!isNew && !repo.IsUserInRepository(appUser.UserId))           
@@ -100,7 +103,7 @@ namespace KavaDocsUserManager.Web.Views.Repositories
         
         [Route("Repositories/{id?}")]
         [HttpPost]
-        public ActionResult SaveRepository(RepositoryViewModel model, Guid id)
+        public async Task<ActionResult> SaveRepository(RepositoryViewModel model, Guid id)
         {
             InitializeViewModel(model);
 
@@ -124,25 +127,37 @@ namespace KavaDocsUserManager.Web.Views.Repositories
             {
                 model.ErrorDisplay.AddMessages(_repoBusiness.ValidationErrors);
                 model.ErrorDisplay.ShowError("Please fix the following");
-                return View("Repository",model);
+                
             }
-
-            
-            _repoBusiness.AutoValidate = false;
-            if (!_repoBusiness.Save())
-                model.ErrorDisplay.ShowError(_repoBusiness.ErrorMessage, "Couldn't save Repository.");
-            else            
-                model.ErrorDisplay.ShowSuccess("Repository info saved.");
+            else
+            {
+                _repoBusiness.AutoValidate = false;
+                if (!_repoBusiness.Save())
+                    model.ErrorDisplay.ShowError(_repoBusiness.ErrorMessage, "Couldn't save Repository.");
+                else
+                    model.ErrorDisplay.ShowSuccess("Repository info saved.");
+            }
 
 
             if (model.IsNewUser)
             {
                 model.IsNewUser = false;
                 // do a full reload to ensure all dependencies get loaded
-                repo = _repoBusiness.GetRepository(repo.Id);                
+                repo = _repoBusiness.GetRepository(repo.Id);
+                model.RepositoryWithUsers = await _repoBusiness.GetRepositoryWithUsersAndRoles(repo.Id);
+                model.RepositoryWithUsers.Repository = repo;
             }
+            else
+            {
+                model.Repository = repo;
+                model.RepositoryWithUsers = await _repoBusiness.GetRepositoryWithUsersAndRoles(repo.Id);
+            }
+            model.RepositoryWithUsers = await _repoBusiness.GetRepositoryWithUsersAndRoles(repo.Id);
+
 
             model.Repository = repo;
+
+            
             SharedRepositoryModelDisplay(model);
 
             return View("Repository", model);
